@@ -35,6 +35,11 @@ public class UIGameIceCream : UIGameBase
 {
     public const string STR_KEYNAME_VIEWALERT_SAVE_FINISH = "STR_KEYNAME_VIEWALERT_SAVE_FINISH";
 
+    UIGameTopBar uiGameTopBarPrefab;
+    UIGameTopBar uiGameTopBar;
+
+
+
     // bool isFirstUseStraw
     // {
     //     get
@@ -54,22 +59,11 @@ public class UIGameIceCream : UIGameBase
 
     void Awake()
     {
-        LoadPrefab();
 
-        ParseGuanka();
-        AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_GAME_BG);
-
-
-
-
-        //ShowFPS();
     }
     // Use this for initialization
     void Start()
     {
-
-
-        UpdateGuankaLevel(GameManager.gameLevel);
     }
     // Update is called once per frame
     void Update()
@@ -79,87 +73,33 @@ public class UIGameIceCream : UIGameBase
     }
 
 
-    void LoadPrefab()
+    public void LoadPrefabBase()
     {
 
-        // {
-        //     GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/UIColorBoard");
-        //     if (obj != null)
-        //     {
-        //         uiColorBoardPrefab = obj.GetComponent<UIColorBoard>();
-        //         uiColorBoard = (UIColorBoard)GameObject.Instantiate(uiColorBoardPrefab);
-        //         uiColorBoard.gameObject.SetActive(false);
-        //         RectTransform rctranPrefab = uiColorBoardPrefab.transform as RectTransform;
-        //         AppSceneBase.main.AddObjToMainCanvas(uiColorBoard.gameObject);
+        {
+            GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/UIGameTopBar");
+            if (obj != null)
+            {
+                uiGameTopBarPrefab = obj.GetComponent<UIGameTopBar>();
+                uiGameTopBar = (UIGameTopBar)GameObject.Instantiate(uiGameTopBarPrefab);
 
-        //         RectTransform rctran = uiColorBoard.transform as RectTransform;
-        //         // 初始化rect
-        //         rctran.offsetMin = rctranPrefab.offsetMin;
-        //         rctran.offsetMax = rctranPrefab.offsetMax;
+                RectTransform rctranPrefab = uiGameTopBarPrefab.transform as RectTransform;
+                //  AppSceneBase.main.AddObjToMainCanvas(uiGameTopBar.gameObject);
+                uiGameTopBar.transform.parent = this.transform;
+                RectTransform rctran = uiGameTopBar.transform as RectTransform;
+                // 初始化rect
+                rctran.offsetMin = rctranPrefab.offsetMin;
+                rctran.offsetMax = rctranPrefab.offsetMax;
 
-        //         uiColorBoard.callBackClick = OnUIColorBoardDidClick;
+            }
 
-        //     }
-        // }
-        // {
-        //     GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/UIColorInput");
-        //     if (obj != null)
-        //     {
-        //         uiColorInputPrefab = obj.GetComponent<UIColorInput>();
-        //         uiColorInput = (UIColorInput)GameObject.Instantiate(uiColorInputPrefab);
-        //         uiColorInput.gameObject.SetActive(false);
+        }
 
-        //         RectTransform rctranPrefab = uiColorInputPrefab.transform as RectTransform;
-        //         Debug.Log("uiColorInputPrefab :offsetMin=" + rctranPrefab.offsetMin + " offsetMax=" + rctranPrefab.offsetMax);
 
-        //         AppSceneBase.main.AddObjToMainCanvas(uiColorInput.gameObject);
-        //         RectTransform rctran = uiColorInput.transform as RectTransform;
-        //         Debug.Log("uiColorInput 1:offsetMin=" + rctran.offsetMin + " offsetMax=" + rctran.offsetMax);
-        //         // 初始化rect
-        //         rctran.offsetMin = rctranPrefab.offsetMin;
-        //         rctran.offsetMax = rctranPrefab.offsetMax;
-        //         Debug.Log("uiColorInput 2:offsetMin=" + rctran.offsetMin + " offsetMax=" + rctran.offsetMax);
-        //         uiColorInput.callBackUpdateColor = OnUIColorInputUpdateColor;
-        //     }
-        // }
 
-        // {
-        //     GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/UILineSetting");
-        //     if (obj != null)
-        //     {
-        //         uiLineSettingPrefab = obj.GetComponent<UILineSetting>();
-        //         uiLineSetting = (UILineSetting)GameObject.Instantiate(uiLineSettingPrefab);
-        //         uiLineSetting.gameObject.SetActive(false);
-        //         RectTransform rctranPrefab = uiLineSettingPrefab.transform as RectTransform;
-        //         AppSceneBase.main.AddObjToMainCanvas(uiLineSetting.gameObject);
-        //         RectTransform rctran = uiLineSetting.transform as RectTransform;
-        //         // 初始化rect
-        //         rctran.offsetMin = rctranPrefab.offsetMin;
-        //         rctran.offsetMax = rctranPrefab.offsetMax;
-
-        //         uiLineSetting.callBackSettingLineWidth = OnUILineSettingLineWidth;
-
-        //     }
-        // }
     }
 
-    public override void UpdateGuankaLevel(int level)
-    {
-        InitUI();
-    }
-
-    void InitUI()
-    {
-
-
-        LayOut();
-
-
-        OnUIDidFinish();
-    }
-
-
-    public override void LayOut()
+    public void LayOutBase()
     {
         float x = 0, y = 0, z = 0, w = 0, h = 0;
         float scalex = 0, scaley = 0, scale = 0;
@@ -192,65 +132,6 @@ public class UIGameIceCream : UIGameBase
             return listGuanka.Count;
         }
         return 0;
-    }
-
-    public override void CleanGuankaList()
-    {
-        if (listGuanka != null)
-        {
-            listGuanka.Clear();
-        }
-    }
-
-    public override int ParseGuanka()
-    {
-        int count = 0;
-
-        if ((listGuanka != null) && (listGuanka.Count != 0))
-        {
-            return listGuanka.Count;
-        }
-
-        listGuanka = new List<object>();
-        int idx = GameManager.placeLevel;
-        string fileName = Common.GAME_RES_DIR + "/guanka/guanka_list" + idx + ".json";
-        //FILE_PATH
-        string json = FileUtil.ReadStringAsset(fileName);//((TextAsset)Resources.Load(fileName, typeof(TextAsset))).text;
-        // Debug.Log("json::"+json);
-        JsonData root = JsonMapper.ToObject(json);
-        string strPlace = (string)root["place"];
-        JsonData items = root["list"];
-        for (int i = 0; i < items.Count; i++)
-        {
-            JsonData item = items[i];
-            ColorItemInfo info = new ColorItemInfo();
-            string strdir = Common.GAME_RES_DIR + "/image/" + strPlace;
-
-            info.id = (string)item["id"];
-            info.pic = strdir + "/draw/" + info.id + ".png";
-
-            info.picmask = strdir + "/mask/" + info.id + ".png";
-            info.colorJson = strdir + "/json/" + info.id + ".json";
-            info.icon = strdir + "/thumb/" + info.id + ".png";
-
-            //info.pic = info.picmask;
-
-            // string filepath = GetFileSave(info);
-            // info.fileSave = filepath;
-
-            // string picname = (i + 1).ToString("d3");
-            // info.pic = Common.GAME_RES_DIR + "/animal/draw/" + picname + ".png";
-            // info.picmask = Common.GAME_RES_DIR + "/animal/mask/" + picname + ".png";
-            // info.colorJson = Common.GAME_RES_DIR + "/animal/draw/" + picname + ".json";
-            // info.icon = Common.GAME_RES_DIR + "/animal/thumb/" + picname + ".png";
-
-            listGuanka.Add(info);
-        }
-
-        count = listGuanka.Count;
-
-        // Debug.Log("ParseGame::count=" + count);
-        return count;
     }
 
 

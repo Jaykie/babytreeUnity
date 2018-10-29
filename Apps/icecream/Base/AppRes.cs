@@ -10,6 +10,9 @@ public class AppRes
     public const int GOLD_COMMENT = 3;
     public const int GOLD_INIT_VALUE = 10;
     public const int GOLD_GUANKA_STEP = 4;
+
+    //game name
+    public const string GAME_IronIceCream = "IronIceCream";
     //color
     //f88816 248,136,22
     static public Color colorTitle = new Color(248 / 255f, 136 / 255f, 22 / 255f);
@@ -58,9 +61,9 @@ public class AppRes
     public const string IMAGE_CELL_BG_YELLOW = "App/UI/Setting/SettingCellBgYellow";
     static public Vector4 borderCellSettingBg = new Vector4(18f, 18f, 18f, 18f);
 
-    public const string IMAGE_GAME_BG = "App/UI/Game/GameBg";
+    public const string IMAGE_GAME_BG = IMAGE_HOME_BG;
 
-    
+
 
 
     //string 

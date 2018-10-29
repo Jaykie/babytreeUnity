@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine; 
-public class GameIceCream : UIView
+using UnityEngine;
+public class UIPopSelectBar : UIView
 {
-  
+
+
+
 }

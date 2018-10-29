@@ -35,9 +35,8 @@ public class UIHomeIceCream : UIHomeBase
         float x = 0, y = 0, w = 0, h = 0;
 
         Vector2 sizeCanvas = this.frame.size;
-        float h_play = 0;
         RectTransform rctranAppIcon = uiHomeAppCenter.transform as RectTransform;
- 
+
 
         LayoutChildBase();
 
@@ -81,37 +80,14 @@ public class UIHomeIceCream : UIHomeBase
     public void OnClickBtnPlay()
     {
 
-    }
-    public void GotoGame(int mode)
-    {
-
-        UIViewController controller = null;
-
-
-        {
-
-            int total = GameManager.placeTotal;
-            if (total > 1)
-            {
-                controller = PlaceViewController.main;
-            }
-            else
-            {
-                controller = GuankaViewController.main;
-            }
-        }
-
-
-        AudioPlay.main.PlayFile(AppRes.AUDIO_BTN_CLICK);
+        UIViewController controller = PlaceViewController.main;
         if (this.controller != null)
         {
             NaviViewController navi = this.controller.naviController;
-            navi.source = AppRes.SOURCE_NAVI_GUANKA;
+            //navi.source = AppRes.SOURCE_NAVI_GUANKA;
             navi.Push(controller);
 
         }
-
-
     }
 
 
