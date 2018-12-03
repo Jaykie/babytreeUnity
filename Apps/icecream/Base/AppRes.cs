@@ -63,7 +63,7 @@ public class AppRes
 
     public const string IMAGE_GAME_BG = IMAGE_HOME_BG;
 
-
+    public const string IMAGE_HAND= "App/UI/Game/hand";
 
 
     //string 

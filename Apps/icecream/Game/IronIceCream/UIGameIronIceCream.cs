@@ -9,32 +9,31 @@ using UnityEngine.UI;
 
 public class UIGameIronIceCream : UIGameIceCream
 {
-
-
+    public UITopFoodToolBar uiTopFoodToolBar;//
+    public UIPopSelectBar uiPopSelectBar;
     UITopFoodBar uiTopFoodBarPrefab;
     UITopFoodBar uiTopFoodBar;
-
+    UITopFoodItem uiTopFoodItemPrefab;
     GameIronIceCream gameIronIceCreamPrefab;
     GameIronIceCream gameIronIceCream;
 
     UITopFoodItem uiCup;//倒液体的杯子
+    public Button btnNext;
     void Awake()
     {
         LoadPrefab();
 
         ParseGuanka();
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_GAME_BG);
-
-
-
-
+        uiPopSelectBar.gameObject.SetActive(false);
+        uiTopFoodToolBar.gameObject.SetActive(false);
+        //  btnNext.gameObject.SetActive(false);
+        UpdateCup(0);
         //ShowFPS();
     }
     // Use this for initialization
     void Start()
     {
-
-
         UpdateGuankaLevel(GameManager.gameLevel);
     }
     // Update is called once per frame
@@ -56,7 +55,7 @@ public class UIGameIronIceCream : UIGameIceCream
             {
                 uiTopFoodBarPrefab = obj.GetComponent<UITopFoodBar>();
                 uiTopFoodBar = (UITopFoodBar)GameObject.Instantiate(uiTopFoodBarPrefab);
-
+                uiTopFoodBar.callBackDidClick = OnUITopFoodBarDidClick;
                 RectTransform rctranPrefab = uiTopFoodBarPrefab.transform as RectTransform;
                 //  AppSceneBase.main.AddObjToMainCanvas(uiGameTopBar.gameObject);
                 uiTopFoodBar.transform.parent = this.transform;
@@ -70,14 +69,13 @@ public class UIGameIronIceCream : UIGameIceCream
         }
 
 
-
         {
             GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/IronIceCream/GameIronIceCream");
             if (obj != null)
             {
                 gameIronIceCreamPrefab = obj.GetComponent<GameIronIceCream>();
                 gameIronIceCream = (GameIronIceCream)GameObject.Instantiate(gameIronIceCreamPrefab);
-
+                gameIronIceCream.callBackDidUpdateStatus = OnGameIronIceCreamDidUpdateStatus;
                 RectTransform rctranPrefab = gameIronIceCreamPrefab.transform as RectTransform;
                 gameIronIceCream.transform.parent = GameViewController.main.objController.transform;
                 AppSceneBase.main.AddObjToMainWorld(gameIronIceCream.gameObject);
@@ -90,6 +88,12 @@ public class UIGameIronIceCream : UIGameIceCream
             }
 
         }
+        //cup
+        {
+
+            GameObject obj = PrefabCache.main.Load(UITopFoodItem.PREFAB_TopFoodItem);
+            uiTopFoodItemPrefab = obj.GetComponent<UITopFoodItem>();
+        }
     }
 
     public override void UpdateGuankaLevel(int level)
@@ -97,10 +101,32 @@ public class UIGameIronIceCream : UIGameIceCream
         InitUI();
     }
 
+    void UpdateCup(int idx)
+    {
+        if (uiCup == null)
+        {
+            uiCup = (UITopFoodItem)GameObject.Instantiate(uiTopFoodItemPrefab);
+            uiCup.transform.parent = this.transform;
+            uiCup.transform.localScale = new Vector3(1, 1, 1);
+            uiCup.transform.localPosition = new Vector3(0, 0, 0);
+            uiCup.callBackDidClick = OnUITopFoodItemDidClick;
+            uiCup.gameObject.SetActive(false);
+            uiCup.width = 320;
+            uiCup.height = uiCup.width;
+            uiCup.enableLock = false;
+            RectTransform rctran = uiCup.GetComponent<RectTransform>();
+            rctran.sizeDelta = new Vector2(uiCup.width, uiCup.height);
+        }
+
+        uiCup.index = idx;
+        uiCup.UpdateItem();
+        uiCup.ShowHand(true, true);
+
+    }
     void InitUI()
     {
 
-
+        gameIronIceCream.RunSetp(0);
         LayOut();
 
 
@@ -202,19 +228,72 @@ public class UIGameIronIceCream : UIGameIceCream
         return count;
     }
 
+    public void OnGameIronIceCreamDidUpdateStatus(UIView ui, int status)
+    {
+        if (status == IronIceCreamStepBase.STATUS_Liquid_Finish)
+        {
+            if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAO)
+            {
+                uiCup.gameObject.SetActive(false);
+            }
+        }
 
+        if (status == IronIceCreamStepBase.STATUS_STEP_END)
+        {
+            btnNext.gameObject.SetActive(true);
+        }
+    }
+    public void OnUITopFoodBarDidClick(UITopFoodBar bar, UITopFoodItem item)
+    {
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAO)
+        {
+            if (GameIronIceCream.status == IronIceCreamStepBase.STATUS_STEP_NONE)
+            {
+                UpdateCup(item.index);
+                uiCup.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                uiCup.gameObject.SetActive(true);
+                gameIronIceCream.ResetStep();
+            }
 
+        }
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
+        {
+            gameIronIceCream.OnUITopFoodItemDidClick(item);
+        }
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
+        {
+            uiPopSelectBar.UpdateItem();
+        }
+    }
+
+    public void OnUIPopSelectBarDidClick(UIPopSelectBar bar, UITopFoodItem item)
+    {
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
+        {
+            gameIronIceCream.OnUITopFoodItemDidClick(item);
+        }
+    }
+
+    public void OnUITopFoodItemDidClick(UITopFoodItem item)
+    {
+        Debug.Log("OnUITopFoodItemDidClick gameIronIceCream.indexStep=" + gameIronIceCream.indexStep);
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAO)
+        {
+            uiCup.transform.localRotation = Quaternion.Euler(0, 0, -45);
+            uiCup.ShowHand(false, false);
+            gameIronIceCream.OnUITopFoodItemDidClick(item);
+        }
+
+    }
 
     void DoBtnBack()
     {
         base.OnClickBtnBack();
-        ShowAdInsert(1);
+
     }
 
     public override void OnClickBtnBack()
     {
-
-
         DoBtnBack();
     }
 
@@ -252,10 +331,43 @@ public class UIGameIronIceCream : UIGameIceCream
         // }
     }
 
-    public void OnClickBtnStraw()
+    public void OnClickBtnNext()
     {
+        // btnNext.gameObject.SetActive(false);
+        gameIronIceCream.OnNextStep();
+        uiTopFoodBar.type = UITopFoodItem.Type.CUP;
 
+        uiPopSelectBar.gameObject.SetActive(false);
+        uiTopFoodToolBar.gameObject.SetActive(false);
+        uiTopFoodBar.gameObject.SetActive(true);
 
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
+        {
+            uiTopFoodBar.type = UITopFoodItem.Type.WAN;
+        }
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
+        {
+            uiTopFoodBar.type = UITopFoodItem.Type.FOOD;
+            uiPopSelectBar.gameObject.SetActive(true);
+            uiTopFoodToolBar.gameObject.SetActive(true);
+            UIPopSelectBar.indexFoodSort = 0;
+            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0];
+            uiPopSelectBar.UpdateItem();
+            UITopFoodItem item = uiPopSelectBar.GetItem(0);
+            if (item != null)
+            {
+                // item.UpdateItem();
+                OnUIPopSelectBarDidClick(uiPopSelectBar, item);
+            }
+
+        }
+
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHI)
+        {
+            uiTopFoodBar.gameObject.SetActive(false);
+        }
+
+        uiTopFoodBar.UpdateType(uiTopFoodBar.type);
     }
 
 

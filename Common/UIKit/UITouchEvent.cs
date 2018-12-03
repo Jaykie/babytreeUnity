@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public delegate void OnUITouchEventDelegate(UITouchEvent ev,PointerEventData eventData, int status);
-public class UITouchEvent: MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IDragHandler
+public class UITouchEvent: MonoBehaviour, IPointerUpHandler, IPointerDownHandler//, IDragHandler
 {
     public const int STATUS_TOUCH_DOWN = 0;
     public const int STATUS_TOUCH_MOVE = 1;
@@ -28,13 +28,6 @@ public class UITouchEvent: MonoBehaviour, IPointerUpHandler, IPointerDownHandler
             callBackTouch(this,eventData, STATUS_TOUCH_UP);
         }
     }
-    //相当于touchMove
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (callBackTouch != null)
-        {
-            callBackTouch(this,eventData, STATUS_TOUCH_MOVE);
-        }
-    }
+ 
 
 }

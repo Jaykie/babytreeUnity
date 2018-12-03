@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
-public class MeshTexture : MonoBehaviour
+public class BlockItemChan : UIView
 {
-    public GameObject objGame;
-    public Camera mainCam;
     private Mesh mesh;
     MeshRenderer meshRender;
-    Material mat;
+    Material meshMat;
     private Vector3[] vertices;
     private int[] triangles;
     public List<Vector3> listPoint;
     public float width = 2f;
     public float height = 2f;
-    //BoxCollider boxCollider;
-    MeshCollider meshCollider;
-    public Material matDefault;
+    BoxCollider boxCollider;
 
+    public int indexRow = 0;
+    public int indexCol = 0;
+    public int row;
+    public int col;
+    public Vector3 posCenter = Vector3.zero;
+    public int percent = 100;
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -27,14 +29,18 @@ public class MeshTexture : MonoBehaviour
         mesh = GetComponent<MeshFilter>().mesh;
         meshRender = GetComponent<MeshRenderer>();
 
-        matDefault = new Material(Shader.Find("Custom/MeshTexture"));
-        meshRender.material = matDefault;
+        string strshader = "Custom/MeshTexture";
+        meshMat = new Material(Shader.Find(strshader));
+        meshRender.material = meshMat;
         AddPoint(Vector3.zero);
+        boxCollider = this.gameObject.AddComponent<BoxCollider>();
 
+        //indexCol = 0;
+        //indexRow = 0;
 
-
-
+        Debug.Log("col =" + col + " indexCol=" + indexCol);
     }
+
     // Use this for initialization
     void Start()
     {
@@ -48,21 +54,7 @@ public class MeshTexture : MonoBehaviour
 
     }
 
-    public void EnableTouch(bool enable)
-    {
-        if (!enabled)
-        {
-            return;
-        }
-        if (meshCollider == null)
-        {
-            //boxCollider = this.gameObject.AddComponent<BoxCollider>();
-            //设置网格碰撞体才能通过射线实时获取纹理的uv坐标
-            meshCollider = this.gameObject.AddComponent<MeshCollider>();
-            meshCollider.sharedMesh = mesh;
-        }
 
-    }
     public void AddPoint(Vector3 vec)
     {
         if (listPoint == null)
@@ -82,28 +74,24 @@ public class MeshTexture : MonoBehaviour
         float z = 0f;
         Vector3[] v = new Vector3[count];
 
+        float y_bottom = (pt.y - height / 2) + height * (100 - percent) / 100f;
         //left_bottom
-        v[0] = new Vector3(pt.x - width / 2, pt.y - height / 2, z);
+        v[0] = new Vector3(pt.x - width / 2, y_bottom, z);
 
         //right_bottom
-        v[1] = new Vector3(pt.x + width / 2, pt.y - height / 2, z);
+        v[1] = new Vector3(pt.x + width / 2, y_bottom, z);
+
+
+        float y_top = (pt.y + height / 2);
         //top_left
-        v[2] = new Vector3(pt.x - width / 2, pt.y + height / 2, z);
+        //v[2] = new Vector3(pt.x - width / 2, pt.y + height / 2, z);
+        v[2] = new Vector3(pt.x - width / 2, y_top, z);
+
         //top_right
-        v[3] = new Vector3(pt.x + width / 2, pt.y + height / 2, z);
+        v[3] = new Vector3(pt.x + width / 2, y_top, z);
 
 
         return v;
-    }
-
-    public Material GetMaterial()
-    {
-        Material mat = null;
-        if (meshRender != null)
-        {
-            mat = meshRender.material;
-        }
-        return mat;
     }
 
     public void UpdateMaterial(Material mat)
@@ -113,45 +101,34 @@ public class MeshTexture : MonoBehaviour
             meshRender.material = mat;
         }
     }
-    public void UpdateTexture(Texture tex)
-    {
-        if (meshRender != null)
-        {
-            meshRender.material.SetTexture("_MainTex", tex);
-            UpdateSize(tex.width / 100f, tex.height / 100f);
-            Draw();
-        }
-
-    }
-
     public void UpdateSize(float w, float h)
     {
         width = w;
         height = h;
-        //boxColliderboxCollider.size = new Vector2(w, h);
+        boxCollider.size = new Vector2(w, h);
+        RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
+        rctran.sizeDelta = new Vector2(w, h);
         Draw();
     }
     public void Draw()
     {
-
-        if (listPoint == null)
+        if ((row == 0) || (col == 0))
         {
             return;
         }
-        if (mesh == null)
-        {
-            return;
-        }
-
+        //sideWidth = 0;
         mesh.Clear();
-        int count = listPoint.Count;
+        int count = 1;
         vertices = new Vector3[count * 4];
         triangles = new int[count * 6];
         Vector2[] uvs = new Vector2[count * 4];
         int tri_index = 0;
-        for (int i = 0; i < listPoint.Count; i++)
+        int i = 0;
+
+        Debug.Log("Draw col =" + col + " indexCol=" + indexCol);
+        float x, y;
         {
-            Vector3[] v = GetverticeOfPoint(listPoint[i]);
+            Vector3[] v = GetverticeOfPoint(posCenter);
 
             for (int j = 0; j < 4; j++)
             {
@@ -161,16 +138,32 @@ public class MeshTexture : MonoBehaviour
 
             //纹理坐标
             {
+                float tex_w = 1.0f / col;
+                float tex_h = 1.0f / row;
+
+                float y_bottom = (indexRow * tex_h) + tex_h * (100 - percent) / 100f;
                 //left_bottom 
-                uvs[i * 4 + 0] = new Vector2(0f, 0f);
+                x = indexCol * tex_w;
+                y = y_bottom;
+                uvs[i * 4 + 0] = new Vector2(x, y);//0f, 0f
 
                 //right_bottom
-                uvs[i * 4 + 1] = new Vector2(1f, 0f);
-                //top_left
-                uvs[i * 4 + 2] = new Vector2(0f, 1f);
-                //top_right
-                uvs[i * 4 + 3] = new Vector2(1f, 1f);
+                x = (indexCol + 1) * tex_w;
+                y = y_bottom;
+                uvs[i * 4 + 1] = new Vector2(x, y);//(1f, 0f
 
+                //top_left
+                x = indexCol * tex_w;
+                y = (indexRow + 1) * tex_h;
+                uvs[i * 4 + 2] = new Vector2(x, y);//(0f, 1f
+
+                //top_right
+                x = (indexCol + 1) * tex_w;
+                y = (indexRow + 1) * tex_h;
+                uvs[i * 4 + 3] = new Vector2(x, y);//1f, 1f
+
+                // meshMat.SetFloat("uvCenterX", indexCol * tex_w + tex_w / 2);
+                //  meshMat.SetFloat("uvCenterY", indexRow * tex_h + tex_h / 2);
             }
 
             int idx = 0;
@@ -210,12 +203,24 @@ public class MeshTexture : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
-
-        //需要同步更新网格碰撞体 才能通过射线实时获取纹理的uv坐标
-        if (meshCollider != null)
-        {
-            meshCollider.sharedMesh = mesh;
-        }
-
     }
+
+    public void UpdateTexture(Texture2D tex)
+    {
+        meshMat.SetTexture("_MainTex", tex);
+        // meshMat.SetInt("indexRow", indexRow);
+        // meshMat.SetInt("indexCol", indexCol);
+        // meshMat.SetInt("row", row);
+        // meshMat.SetInt("col", col);
+
+        meshRender.material = meshMat;
+        Draw();
+    }
+
+    public void UpdatePercent(int value)
+    {
+        percent = value;
+        Draw();
+    }
+
 }

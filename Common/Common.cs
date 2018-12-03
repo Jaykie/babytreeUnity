@@ -22,9 +22,11 @@ public enum UIOrientation
 
 public class Common
 {
-    public const string GAME_DATA_DIR = "GameData";//游戏配置等数据
+    public const string GAME_DATA_DIR = "GameData";//streamingAssetsPath下的游戏配置等数据
     public const string GAME_DATA_DIR_COMMON = Common.GAME_DATA_DIR + "/common";
-    public const string GAME_RES_DIR = "GameRes";//游戏图片等资源
+    public const string GAME_RES_DIR = "GameRes";//streamingAssetsPath 下的游戏图片等资源
+    public const string RES_CONFIG_DATA = "ConfigData";//Resources 下的 配置等数据
+    public const string RES_CONFIG_DATA_COMMON = "ConfigDataCommon";//Resources 下的 配置等数据
     public const string THUMB_SUFFIX = "_thumb";//小图片后缀
 
     public const float TOUCH_MOVE_STEP_MIN = 3.0f;//6.0f
@@ -33,11 +35,11 @@ public class Common
     {
         get
         {
-            string str = Common.GAME_DATA_DIR + "/app_center";
-            if (!Directory.Exists(str))
-            {
-                str = Common.GAME_DATA_DIR_COMMON + "/app_center";
-            }
+            string str = Common.RES_CONFIG_DATA + "/app_center";
+            // if (!Directory.Exists(str))
+            // {
+            //     str = Common.GAME_DATA_DIR_COMMON + "/app_center";
+            // }
             return str;
         }
     }
@@ -78,6 +80,18 @@ public class Common
         {
             bool ret = false;
 #if UNITY_ANDROID && !UNITY_EDITOR
+            ret = true;
+#endif
+            return ret;
+        }
+    }
+
+    static public bool isWeb
+    {
+        get
+        {
+            bool ret = false;
+#if UNITY_WEBGL && !UNITY_EDITOR
             ret = true;
 #endif
             return ret;
@@ -200,25 +214,25 @@ public class Common
 
     }
 
-    static public float GetBestFitScale(float w, float h, float w_rect, float h_rect)
+    static public float GetBestFitScale(float w_content, float h_content, float w_rect, float h_rect)
     {
         if ((w_rect == 0) || (h_rect == 0))
         {
             return 1f;
         }
-        float scalex = w_rect / w;
-        float scaley = h_rect / h;
+        float scalex = w_rect / w_content;
+        float scaley = h_rect / h_content;
         float scale = Mathf.Min(scalex, scaley);
         return scale;
     }
-    static public float GetMaxFitScale(float w, float h, float w_rect, float h_rect)
+    static public float GetMaxFitScale(float w_content, float h_content, float w_rect, float h_rect)
     {
         if ((w_rect == 0) || (h_rect == 0))
         {
             return 1f;
         }
-        float scalex = w_rect / w;
-        float scaley = h_rect / h;
+        float scalex = w_rect / w_content;
+        float scaley = h_rect / h_content;
         float scale = Mathf.Max(scalex, scaley);
         return scale;
     }
@@ -605,6 +619,13 @@ public class Common
         }
         return pos;
     }
+    static public Vector3 GetInputPositionWorld(Camera cam)
+    {
+        Vector2 pos = GetInputPosition();
+        Vector3 posWorld = cam.ScreenToWorldPoint(pos);
+        return posWorld;
+    }
+
 
     static public string GetAppName()
     {
@@ -619,13 +640,14 @@ public class Common
             appname = Config.main.GetAppNameJson(Device.isLandscape);
         }
         //string appname = Language.main.GetString(AppString.APP_NAME);
+
         //去除hd
-        int idxtmp = appname.IndexOf("HD");
-        if (idxtmp > 0)
-        {
-            string strtmp = appname.Substring(0, idxtmp);
-            appname = strtmp;
-        }
+        // int idxtmp = appname.IndexOf("HD");
+        // if (idxtmp > 0)
+        // {
+        //     string strtmp = appname.Substring(0, idxtmp);
+        //     appname = strtmp;
+        // }
 
         return appname;
     }
@@ -638,7 +660,10 @@ public class Common
 
     static public void CleanCache()
     {
-
+        if (Common.isWeb)
+        {
+            return;
+        }
         string path = GetCachePath();
         if (BlankString(path))
         {
