@@ -142,23 +142,7 @@ public class UIGameIronIceCream : UIGameIceCream
 
 
     }
-
-
-    ColorItemInfo GetItemInfo()
-    {
-        int idx = GameManager.gameLevel;
-        if (listGuanka == null)
-        {
-            return null;
-        }
-        if (idx >= listGuanka.Count)
-        {
-            return null;
-        }
-        ColorItemInfo info = listGuanka[idx] as ColorItemInfo;
-        return info;
-    }
-
+ 
     public override int GetGuankaTotal()
     {
         ParseGuanka();
@@ -198,28 +182,17 @@ public class UIGameIronIceCream : UIGameIceCream
         for (int i = 0; i < items.Count; i++)
         {
             JsonData item = items[i];
-            ColorItemInfo info = new ColorItemInfo();
-            string strdir = Common.GAME_RES_DIR + "/image/" + strPlace;
+            // ColorItemInfo info = new ColorItemInfo();
+            // string strdir = Common.GAME_RES_DIR + "/image/" + strPlace;
 
-            info.id = (string)item["id"];
-            info.pic = strdir + "/draw/" + info.id + ".png";
+            // info.id = (string)item["id"];
+            // info.pic = strdir + "/draw/" + info.id + ".png";
 
-            info.picmask = strdir + "/mask/" + info.id + ".png";
-            info.colorJson = strdir + "/json/" + info.id + ".json";
-            info.icon = strdir + "/thumb/" + info.id + ".png";
-
-            //info.pic = info.picmask;
-
-            // string filepath = GetFileSave(info);
-            // info.fileSave = filepath;
-
-            // string picname = (i + 1).ToString("d3");
-            // info.pic = Common.GAME_RES_DIR + "/animal/draw/" + picname + ".png";
-            // info.picmask = Common.GAME_RES_DIR + "/animal/mask/" + picname + ".png";
-            // info.colorJson = Common.GAME_RES_DIR + "/animal/draw/" + picname + ".json";
-            // info.icon = Common.GAME_RES_DIR + "/animal/thumb/" + picname + ".png";
-
-            listGuanka.Add(info);
+            // info.picmask = strdir + "/mask/" + info.id + ".png";
+            // info.colorJson = strdir + "/json/" + info.id + ".json";
+            // info.icon = strdir + "/thumb/" + info.id + ".png";
+ 
+            // listGuanka.Add(info);
         }
 
         count = listGuanka.Count;

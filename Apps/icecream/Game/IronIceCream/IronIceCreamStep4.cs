@@ -162,7 +162,7 @@ public class IronIceCreamStep4 : IronIceCreamStepBase
     public override void ResetStep()
     {
         int index = 0;
-        string pic = UITopFoodItem.IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (index + 1).ToString();
+        string pic = IronIceCreamStepBase.GetImageOfWan(index);
         UpdateWan(pic);
 
     }

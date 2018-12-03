@@ -6,8 +6,18 @@ using DG.Tweening;
 2,装淇淋卷到碗里
 */
 public delegate void OnGameIronIceCreamDidUpdateStatusDelegate(UIView ui, int status);
+
+
+public class TopFoodItemInfo
+{
+    public GameObject obj;
+    public string name;
+    public Vector3 pt; //world
+    public int type;
+}
 public class IronIceCreamStepBase : UIView
 {
+    public const string IMAGE_WAN_DIR_ROOT = "App/UI/Game/TopFoodBar/Wan";
     public const int STATUS_STEP_NONE = 0;
     public const int STATUS_STEP_START = 1;
     public const int STATUS_STEP_END = 2;
@@ -24,7 +34,7 @@ public class IronIceCreamStepBase : UIView
     //碗
     static public string GetImageOfWan(int idx)
     {
-        return UITopFoodItem.IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString();
+        return IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString();
     }
     public void UpdateRect()
     {

@@ -29,7 +29,7 @@ public class UITopFoodItem : UIView
     string strImageDirRoot = "App/UI/Game/TopFoodBar/CupFood";
     string strImageCup = "App/UI/Game/TopFoodBar/Cup";
     string strImageLock = "App/UI/Game/TopFoodBar/Lock";
-    public const string IMAGE_WAN_DIR_ROOT = "App/UI/Game/TopFoodBar/Wan";
+
     public const string IMAGE_WAN_BG = "App/UI/Game/TopFoodBar/Wan/WanBg";
 
     //顶料
@@ -37,6 +37,7 @@ public class UITopFoodItem : UIView
 
 
     public string strImageWan;
+    public string strPic;
     UITouchEvent uITouchEvent;
     Tween tweenAlpha;
 
@@ -71,7 +72,7 @@ public class UITopFoodItem : UIView
                     break;
                 case Type.WAN:
                     imageCup.gameObject.SetActive(false);
-                    pic = IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (index + 1).ToString();
+                    pic = IronIceCreamStepBase.GetImageOfWan(index);
                     strImageWan = pic;
                     break;
                 case Type.FOOD:
@@ -85,6 +86,7 @@ public class UITopFoodItem : UIView
                     pic = IMAGE_TOPFOOD_DIR_ROOT + "/" + namesort + "/" + index.ToString();
                     break;
             }
+            strPic = pic;
             TextureUtil.UpdateImageTexture(imageFood, pic, true);
             w = imageFood.sprite.texture.width;
             h = imageFood.sprite.texture.height;

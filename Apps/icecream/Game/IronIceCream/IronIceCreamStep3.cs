@@ -18,15 +18,15 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
     public GameObject objWanItem3;
     public GameObject objWanItem4;
     public GameObject objWanItem5;
-
-
-
+    public List<TopFoodItemInfo> listItem;
     public GameObject objHand;//操作提示的手 
     int indexStep = 0;
     int totalStep = 4;
-
+    Vector3 posLocalTouchDown;
+    Vector3 posInputTouchDown;
     void Awake()
     {
+        listItem = new List<TopFoodItemInfo>();
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
         TextureUtil.UpdateSpriteTexture(objWanBg, UITopFoodItem.IMAGE_WAN_BG);
         ResetStep();
@@ -112,6 +112,32 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
         UpdateWanItem(objWanItem4);
         UpdateWanItem(objWanItem5);
     }
+
+    public void OnAddTopFood(string pic)
+    {
+        TopFoodItemInfo info = new TopFoodItemInfo();
+        info.name = FileUtil.GetFileName(pic);
+
+        GameObject obj = new GameObject(info.name);
+        SpriteRenderer rd = obj.AddComponent<SpriteRenderer>();
+        Texture2D tex = TextureCache.main.Load(pic);
+        rd.sprite = LoadTexture.CreateSprieFromTex(tex);
+
+        BoxCollider box = obj.AddComponent<BoxCollider>();
+        box.size = new Vector2(tex.width / 100f, tex.height / 100f);
+
+        UITouchEventWithMove ev = obj.AddComponent<UITouchEventWithMove>();
+        ev.callBackTouch = OnUITouchEvent;
+
+        //AppSceneBase.main.AddObjToMainWorld(obj);
+        obj.transform.SetParent(objWan.transform);
+        obj.transform.localPosition = new Vector3(0, 0, -1);
+        obj.transform.localScale = new Vector3(1, 1, 1);
+        info.obj = obj;
+        info.pt = Vector3.zero;
+
+        listItem.Add(info);
+    }
     public void OnDoStep(int idx)
     {
 
@@ -137,21 +163,31 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
     public override void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
         UpdateWan();
+        OnAddTopFood(item.strPic);
         LayOut();
     }
 
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
+        Vector3 posworld = Common.GetInputPositionWorld(mainCam);
+        Vector3 poslocal = objWan.transform.InverseTransformPoint(posworld);
+        poslocal.z = ev.gameObject.transform.localPosition.z;
+
         switch (status)
         {
             case UITouchEvent.STATUS_TOUCH_DOWN:
                 {
-
+                    posInputTouchDown = posworld;
+                    posLocalTouchDown = poslocal;
                 }
                 break;
             case UITouchEvent.STATUS_TOUCH_MOVE:
                 {
+                    Vector3 step = posworld - posInputTouchDown;
 
+                    Vector3 posnow = posLocalTouchDown + step;
+                    posnow.z = poslocal.z;
+                    ev.gameObject.transform.localPosition = posnow;
                 }
                 break;
             case UITouchEvent.STATUS_TOUCH_UP:
