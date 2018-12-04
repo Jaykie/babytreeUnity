@@ -62,16 +62,10 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     public override void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
 
-    }
-    //冰淇凌卷
-    string GetWanJuanPic()
-    {
-        //0-3
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-3";
-    }
+    } 
     void UpdateJuanItem(GameObject obj)
     {
-        Texture2D tex = TextureCache.main.Load(GetWanJuanPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());
         TextureUtil.UpdateSpriteTexture(obj, tex);
     }
     void UpdateBlockItem(GameObject obj, int idx)

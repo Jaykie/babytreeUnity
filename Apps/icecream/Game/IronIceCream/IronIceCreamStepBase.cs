@@ -26,7 +26,8 @@ public class IronIceCreamStepBase : UIView
     //顶料
     public static string[] strTopFoodSort = { "cream", "sugar", "chocolate", "wire", "egg", "fruit", "scoop" };
     public static int[] countTopFoodSort = { 142, 98, 29, 20, 27, 53, 40 };
-
+    static public UIWanIron uiWanIronPrefab;
+    static public UIWanIron uiWanIron;
     public GameObject objPanzi;//盘子
     public Rect rectMain;//local 
     public OnGameIronIceCreamDidUpdateStatusDelegate callBackDidUpdateStatus { get; set; }
@@ -36,6 +37,21 @@ public class IronIceCreamStepBase : UIView
     {
         return IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString();
     }
+    //冰淇凌块
+    static public string GetBlockItemPic()
+    {
+        //0-2
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2";
+    }
+
+    //冰淇凌卷
+    static public string GetWanJuanPic()
+    {
+        //0-3
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-3";
+    }
+
+
     public void UpdateRect()
     {
         float x, y, w, h;
@@ -48,6 +64,7 @@ public class IronIceCreamStepBase : UIView
         x = -w / 2;
         y = rctranMainWorld.rect.height / 2 - oft_h - h;
         rectMain = new Rect(x, y, w, h);
+        uiWanIron.UpdateRect(rectMain);
     }
 
     public void LayOutBase()
