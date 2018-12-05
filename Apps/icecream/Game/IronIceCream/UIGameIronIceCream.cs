@@ -337,6 +337,8 @@ public class UIGameIronIceCream : UIGameIceCream
         {
             IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
             uiTopFoodBar.type = UITopFoodItem.Type.WAN;
+            UITopFoodItem item = uiTopFoodBar.GetItem(0);
+            gameIronIceCream.OnUITopFoodItemDidClick(item);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {

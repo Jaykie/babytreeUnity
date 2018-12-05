@@ -111,7 +111,15 @@ public class UITopFoodBar : UIView
         listItem.Add(item);
     }
 
-
+    public UITopFoodItem GetItem(int idx)
+    {
+        UITopFoodItem item = null;
+        if ((listItem != null) && (listItem.Count != 0))
+        {
+            item = listItem[idx];
+        }
+        return item;
+    }
     public void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
         if (callBackDidClick != null)

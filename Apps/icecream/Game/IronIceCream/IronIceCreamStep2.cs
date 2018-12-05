@@ -129,13 +129,14 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
 
     public override void ResetStep()
     {
-      //  objWan.SetActive(false);
+        //  objWan.SetActive(false);
         IronIceCreamStepBase.uiWanIron.ShowJuan(false);
     }
 
     public override void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
-        UpdateWan(item.strImageWan);
+        string pic = IronIceCreamStepBase.GetImageOfWan(item.index); 
+        UpdateWan(pic);
         LayOut();
     }
 
@@ -172,7 +173,7 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
                 break;
             case UITouchEvent.STATUS_TOUCH_UP:
                 {
-                  //  if (objWan.activeSelf)
+                    //  if (objWan.activeSelf)
                     {
 
                         ev.gameObject.SetActive(false);
