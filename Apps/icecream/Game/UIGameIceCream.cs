@@ -15,23 +15,6 @@ http://app.mi.com/details?id=com.sinyee.babybus.paintingIII&ref=search
 //ps制作线稿教程：https://www.cnblogs.com/lrxsblog/p/6902377.html
 
 
-public class ColorItemInfo : ItemInfo
-{
-    public List<Color> listColor;
-    public string name;
-    public string picmask;
-    public string colorJson;
-    public Vector2 pt;
-    public Color colorOrigin;//填充前原来颜色
-    public Color colorFill;//当前填充颜色
-    public Color colorMask;
-    public Color32 color32Fill;
-    public string fileSave;
-    public string fileSaveWord;
-    public string addtime;
-    public string date;
-    public Rect rectFill;
-}
 public class UIGameIceCream : UIGameBase
 {
     public const string STR_KEYNAME_VIEWALERT_SAVE_FINISH = "STR_KEYNAME_VIEWALERT_SAVE_FINISH";
@@ -109,21 +92,7 @@ public class UIGameIceCream : UIGameBase
 
     }
 
-
-    ColorItemInfo GetItemInfo()
-    {
-        int idx = GameManager.gameLevel;
-        if (listGuanka == null)
-        {
-            return null;
-        }
-        if (idx >= listGuanka.Count)
-        {
-            return null;
-        }
-        ColorItemInfo info = listGuanka[idx] as ColorItemInfo;
-        return info;
-    }
+ 
 
     public override int GetGuankaTotal()
     {

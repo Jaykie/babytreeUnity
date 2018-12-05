@@ -26,6 +26,7 @@ public class UIGameIronIceCream : UIGameIceCream
         ParseGuanka();
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_GAME_BG);
         uiPopSelectBar.gameObject.SetActive(false);
+        uiPopSelectBar.callBackDidClick = OnUIPopSelectBarDidClick;
         uiTopFoodToolBar.gameObject.SetActive(false);
         //  btnNext.gameObject.SetActive(false);
         UpdateCup(0);
@@ -362,6 +363,8 @@ public class UIGameIronIceCream : UIGameIceCream
         }
 
         uiTopFoodBar.UpdateType(uiTopFoodBar.type);
+
+        IronIceCreamStepBase.uiWanIron.UpdateStep(gameIronIceCream.indexStep);
     }
 
 

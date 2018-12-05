@@ -34,6 +34,8 @@ public class UIWanIron : UIView
 
     GameObject[] listJuan = new GameObject[6];
     int indexLayer = 8;//Layer8
+
+    int indexStep = 0;
     void Awake()
     {
         listItem = new List<TopFoodItemInfo>();
@@ -105,6 +107,22 @@ public class UIWanIron : UIView
                 objWanFt.transform.localPosition = new Vector3(rectMain.center.x, rectMain.center.y, z);
             }
         }
+        {
+            SpriteRenderer render = objErase.GetComponent<SpriteRenderer>();
+            if (render.sprite && render.sprite.texture)
+            {
+                w = render.sprite.texture.width / 100f;
+                h = render.sprite.texture.height / 100f;
+                if ((w != 0) && (h != 0))
+                {
+                    scale = (rectMain.width / 10) / w;
+                    objErase.transform.localScale = new Vector3(scale, scale, 1f);
+                }
+
+
+            }
+
+        }
 
 
 
@@ -115,7 +133,34 @@ public class UIWanIron : UIView
         rectMain = rc;
         LayOut();
     }
+
+    public void UpdateStep(int idx)
+    {
+        indexStep = idx;
+        meshTex.EnableTouch(false);
+        if (indexStep == GameIronIceCream.INDEX_STEP_CHI)
+        {
+            meshTex.EnableTouch(true);
+            foreach (TopFoodItemInfo info in listItem)
+            {
+                info.obj.layer = indexLayer;
+            }
+        }
+    }
+
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
+    {
+        if (indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
+        {
+            OnUITouchEventTopFood(ev, eventData, status);
+        }
+        if (indexStep == GameIronIceCream.INDEX_STEP_CHI)
+        {
+            OnUITouchEventEat(ev, eventData, status);
+
+        }
+    }
+    public void OnUITouchEventTopFood(UITouchEvent ev, PointerEventData eventData, int status)
     {
         Vector3 posworld = Common.GetInputPositionWorld(mainCam);
         Vector3 poslocal = this.transform.InverseTransformPoint(posworld);
@@ -146,6 +191,34 @@ public class UIWanIron : UIView
         }
     }
 
+    public void OnUITouchEventEat(UITouchEvent ev, PointerEventData eventData, int status)
+    {
+        Vector3 posworld = Common.GetInputPositionWorld(mainCam);
+        Vector3 poslocal = this.transform.InverseTransformPoint(posworld);
+        poslocal.z = objErase.transform.localPosition.z;
+
+        switch (status)
+        {
+            case UITouchEvent.STATUS_TOUCH_DOWN:
+                {
+                    StartEat();
+
+                }
+                break;
+            case UITouchEvent.STATUS_TOUCH_MOVE:
+                {
+
+                }
+                break;
+            case UITouchEvent.STATUS_TOUCH_UP:
+                {
+
+                }
+                break;
+        }
+
+        objErase.transform.localPosition = poslocal;
+    }
     public void OnAddTopFood(string pic)
     {
         TopFoodItemInfo info = new TopFoodItemInfo();
@@ -164,12 +237,15 @@ public class UIWanIron : UIView
 
         //AppSceneBase.main.AddObjToMainWorld(obj);
         obj.transform.SetParent(objWanItemRoot.transform);
-        obj.transform.localPosition = new Vector3(0, 0, -1);
+
         obj.transform.localScale = new Vector3(1, 1, 1);
+
         info.obj = obj;
         info.pt = Vector3.zero;
 
         listItem.Add(info);
+
+        obj.transform.localPosition = new Vector3(0, 0, -1 * listItem.Count);
     }
 
     void UpdateJuanItem(GameObject obj)
@@ -219,7 +295,6 @@ public class UIWanIron : UIView
     {
         objErase.SetActive(true);
         objWanItemRoot.SetActive(false);
-
     }
 
 }
