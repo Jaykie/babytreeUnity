@@ -83,12 +83,12 @@ public class IronIceCreamStep4 : IronIceCreamStepBase
 
     }
 
-    public override void OnUITopFoodItemDidClick(UITopFoodItem item)
+  
+    public override void UpdateFood(FoodItemInfo info)
     {
-        UpdateWan(item.strImageWan);
+        UpdateWan(info.pic);
         LayOut();
     }
-
 
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {

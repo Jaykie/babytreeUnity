@@ -16,7 +16,8 @@ public class UITopFoodBar : UIView
     public GameObject objScrollViewContent;
     public Image imageBg;
     public Image imageHand;
-    public List<UITopFoodItem> listItem;
+    public List<object> listItem;
+    public List<UITopFoodItem> listTopItem;
     ScrollRect scrollRect;
     UITopFoodItem uiTopFoodItemPrefab;
     float widthItem;
@@ -27,7 +28,8 @@ public class UITopFoodBar : UIView
 
     void Awake()
     {
-        listItem = new List<UITopFoodItem>();
+        listItem = new List<object>();
+        listTopItem = new List<UITopFoodItem>();
         GameObject obj = PrefabCache.main.Load(UITopFoodItem.PREFAB_TopFoodItem);
         uiTopFoodItemPrefab = obj.GetComponent<UITopFoodItem>();
         scrollRect = objScrollView.GetComponent<ScrollRect>();
@@ -73,15 +75,45 @@ public class UITopFoodBar : UIView
 
     void ClearItems()
     {
-        foreach (UITopFoodItem item in listItem)
+        foreach (UITopFoodItem item in listTopItem)
         {
             DestroyImmediate(item.gameObject);
         }
+        listTopItem.Clear();
         listItem.Clear();
     }
-    public void AddItem()
+    public void AddItemInfo()
     {
         int idx = listItem.Count;
+        FoodItemInfo info = new FoodItemInfo();
+        info.type = type;
+        info.index = idx;
+        string pic = "";
+        switch (type)
+        {
+            case UITopFoodItem.Type.CUP:
+                pic = IronIceCreamStepBase.GetImageOfCupFood(idx);
+                break;
+            case UITopFoodItem.Type.WAN:
+                pic = IronIceCreamStepBase.GetImageOfWan(idx);
+                break;
+            case UITopFoodItem.Type.FOOD:
+                pic = IronIceCreamStepBase.GetImageOfTopFood(idx);
+                break;
+            case UITopFoodItem.Type.SUB_FOOD:
+                pic = IronIceCreamStepBase.GetImageOfTopFoodSubFood(idx);
+                break;
+        }
+        info.pic = pic;
+
+        listItem.Add(info);
+    }
+
+
+    public void AddItem()
+    {
+        AddItemInfo();
+        int idx = listTopItem.Count;
         UITopFoodItem item = (UITopFoodItem)GameObject.Instantiate(uiTopFoodItemPrefab);
         item.transform.parent = objScrollViewContent.transform;
         item.callBackDidClick = OnUITopFoodItemDidClick;
@@ -108,15 +140,15 @@ public class UITopFoodBar : UIView
         rctran.sizeDelta = size;
 
         item.UpdateItem();
-        listItem.Add(item);
+        listTopItem.Add(item);
     }
 
-    public UITopFoodItem GetItem(int idx)
+    public FoodItemInfo GetItem(int idx)
     {
-        UITopFoodItem item = null;
+        FoodItemInfo item = null;
         if ((listItem != null) && (listItem.Count != 0))
         {
-            item = listItem[idx];
+            item = listItem[idx] as FoodItemInfo;
         }
         return item;
     }

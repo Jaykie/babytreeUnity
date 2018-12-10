@@ -10,7 +10,8 @@ using UnityEngine.UI;
 public class UIGameIronIceCream : UIGameIceCream
 {
     public UITopFoodToolBar uiTopFoodToolBar;//
-    public UIPopSelectBar uiPopSelectBar;
+    UIPopSelectBar uiPopSelectBarPrefab;
+    UIPopSelectBar uiPopSelectBar;
     UITopFoodBar uiTopFoodBarPrefab;
     UITopFoodBar uiTopFoodBar;
     UITopFoodItem uiTopFoodItemPrefab;
@@ -26,7 +27,6 @@ public class UIGameIronIceCream : UIGameIceCream
         ParseGuanka();
         AppSceneBase.main.UpdateWorldBg(AppRes.IMAGE_GAME_BG);
         uiPopSelectBar.gameObject.SetActive(false);
-        uiPopSelectBar.callBackDidClick = OnUIPopSelectBarDidClick;
         uiTopFoodToolBar.gameObject.SetActive(false);
         //  btnNext.gameObject.SetActive(false);
         UpdateCup(0);
@@ -87,6 +87,25 @@ public class UIGameIronIceCream : UIGameIceCream
 
         }
 
+
+        {
+            GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/UIPopSelectBar/UIPopSelectBar");
+            if (obj != null)
+            {
+                uiPopSelectBarPrefab = obj.GetComponent<UIPopSelectBar>();
+                uiPopSelectBar = (UIPopSelectBar)GameObject.Instantiate(uiPopSelectBarPrefab);
+                uiPopSelectBar.callBackDidClick = OnUIPopSelectBarDidClick;
+                RectTransform rctranPrefab = uiPopSelectBarPrefab.transform as RectTransform;
+                //  AppSceneBase.main.AddObjToMainCanvas(uiGameTopBar.gameObject);
+                uiPopSelectBar.transform.parent = this.transform;
+                RectTransform rctran = uiPopSelectBar.transform as RectTransform;
+                // 初始化rect
+                rctran.offsetMin = rctranPrefab.offsetMin;
+                rctran.offsetMax = rctranPrefab.offsetMax;
+
+            }
+
+        }
 
         {
             GameObject obj = (GameObject)Resources.Load("App/Prefab/Game/IronIceCream/GameIronIceCream");
@@ -248,9 +267,14 @@ public class UIGameIronIceCream : UIGameIceCream
             }
 
         }
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAN)
+        {
+
+        }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
         {
-            gameIronIceCream.OnUITopFoodItemDidClick(item);
+            FoodItemInfo info = bar.GetItem(item.index);
+            gameIronIceCream.UpdateFood(info);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {
@@ -258,11 +282,11 @@ public class UIGameIronIceCream : UIGameIceCream
         }
     }
 
-    public void OnUIPopSelectBarDidClick(UIPopSelectBar bar, UITopFoodItem item)
+    public void OnUIPopSelectBarDidClick(UIPopSelectBar bar, FoodItemInfo info)
     {
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {
-            gameIronIceCream.OnUITopFoodItemDidClick(item);
+            gameIronIceCream.UpdateFood(info);
         }
     }
 
@@ -273,7 +297,8 @@ public class UIGameIronIceCream : UIGameIceCream
         {
             uiCup.transform.localRotation = Quaternion.Euler(0, 0, -45);
             uiCup.ShowHand(false, false);
-            gameIronIceCream.OnUITopFoodItemDidClick(item);
+            FoodItemInfo info = uiTopFoodBar.GetItem(item.index);
+            gameIronIceCream.UpdateFood(info);
         }
 
     }
@@ -333,12 +358,18 @@ public class UIGameIronIceCream : UIGameIceCream
         uiTopFoodToolBar.gameObject.SetActive(false);
         uiTopFoodBar.gameObject.SetActive(true);
         IronIceCreamStepBase.uiWanIron.gameObject.SetActive(false);
+        if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAN)
+        {
+            uiTopFoodBar.type = UITopFoodItem.Type.CUP;
+            FoodItemInfo info = uiTopFoodBar.GetItem(0);
+            gameIronIceCream.UpdateFood(info);
+        }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
         {
             IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
             uiTopFoodBar.type = UITopFoodItem.Type.WAN;
-            UITopFoodItem item = uiTopFoodBar.GetItem(0);
-            gameIronIceCream.OnUITopFoodItemDidClick(item);
+            FoodItemInfo info = uiTopFoodBar.GetItem(0);
+            gameIronIceCream.UpdateFood(info);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {
@@ -349,11 +380,11 @@ public class UIGameIronIceCream : UIGameIceCream
             UIPopSelectBar.indexFoodSort = 0;
             UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0];
             uiPopSelectBar.UpdateItem();
-            UITopFoodItem item = uiPopSelectBar.GetItem(0);
-            if (item != null)
+            FoodItemInfo info = uiPopSelectBar.GetItem(0);
+            if (info != null)
             {
                 // item.UpdateItem();
-                OnUIPopSelectBarDidClick(uiPopSelectBar, item);
+                OnUIPopSelectBarDidClick(uiPopSelectBar, info);
             }
 
         }

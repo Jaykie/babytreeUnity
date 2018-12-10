@@ -80,12 +80,11 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
         uiWanIron.ShowJuan(false);
     }
 
-    public override void OnUITopFoodItemDidClick(UITopFoodItem item)
+ 
+    public override void UpdateFood(FoodItemInfo info)
     {
         UpdateWan();
-        uiWanIron.OnAddTopFood(item.strPic);
+        uiWanIron.OnAddTopFood(info.pic);
         LayOut();
     }
-
-
 }

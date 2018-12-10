@@ -133,13 +133,12 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
         IronIceCreamStepBase.uiWanIron.ShowJuan(false);
     }
 
-    public override void OnUITopFoodItemDidClick(UITopFoodItem item)
+    public override void UpdateFood(FoodItemInfo info)
     {
-        string pic = IronIceCreamStepBase.GetImageOfWan(item.index); 
+        string pic = IronIceCreamStepBase.GetImageOfWan(info.index);
         UpdateWan(pic);
         LayOut();
     }
-
     void CheckFinish()
     {
         if ((objBlockItem0.activeSelf == false) &&

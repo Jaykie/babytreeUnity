@@ -7,14 +7,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
-/*
-宝宝巴士 宝宝涂色 
-http://as.baidu.com/software/23393827.html
-http://app.mi.com/details?id=com.sinyee.babybus.paintingIII&ref=search
-*/
-//ps制作线稿教程：https://www.cnblogs.com/lrxsblog/p/6902377.html
 
-
+public class FoodItemInfo
+{
+    public string pic;
+    public UITopFoodItem.Type type;
+    public int index;
+}
 public class UIGameIceCream : UIGameBase
 {
     public const string STR_KEYNAME_VIEWALERT_SAVE_FINISH = "STR_KEYNAME_VIEWALERT_SAVE_FINISH";
@@ -92,7 +91,7 @@ public class UIGameIceCream : UIGameBase
 
     }
 
- 
+
 
     public override int GetGuankaTotal()
     {

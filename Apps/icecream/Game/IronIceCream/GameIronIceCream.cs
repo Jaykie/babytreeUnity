@@ -103,12 +103,12 @@ public class GameIronIceCream : GameIceCream
         {
             uiStep.ResetStep();
         }
-    }
-    public void OnUITopFoodItemDidClick(UITopFoodItem item)
+    } 
+    public void UpdateFood(FoodItemInfo info)
     {
         if (uiStep != null)
         {
-            uiStep.OnUITopFoodItemDidClick(item);
+            uiStep.UpdateFood(info);
         }
     }
 

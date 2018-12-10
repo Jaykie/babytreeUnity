@@ -6,6 +6,8 @@ using DG.Tweening;
 using UnityEngine.EventSystems;
 
 public delegate void OnUITopFoodItemDidClickDelegate(UITopFoodItem item);
+
+
 public class UITopFoodItem : UIView
 {
 
@@ -26,14 +28,12 @@ public class UITopFoodItem : UIView
     public float width;
     public float height;
     public bool enableLock = true;
-    string strImageDirRoot = "App/UI/Game/TopFoodBar/CupFood";
+
     string strImageCup = "App/UI/Game/TopFoodBar/Cup";
     string strImageLock = "App/UI/Game/TopFoodBar/Lock";
 
     public const string IMAGE_WAN_BG = "App/UI/Game/TopFoodBar/Wan/WanBg";
 
-    //顶料
-    public const string IMAGE_TOPFOOD_DIR_ROOT = "App/UI/Game/IronIceCream/TopFood";
 
 
     public string strImageWan;
@@ -68,7 +68,7 @@ public class UITopFoodItem : UIView
             switch (type)
             {
                 case Type.CUP:
-                    pic = strImageDirRoot + "/" + index.ToString();
+                    pic = IronIceCreamStepBase.GetImageOfCupFood(index);
                     break;
                 case Type.WAN:
                     imageCup.gameObject.SetActive(false);
@@ -77,13 +77,11 @@ public class UITopFoodItem : UIView
                     break;
                 case Type.FOOD:
                     imageCup.gameObject.SetActive(false);
-                    pic = IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[index];
+                    pic = IronIceCreamStepBase.GetImageOfTopFood(index);
                     break;
                 case Type.SUB_FOOD:
                     imageCup.gameObject.SetActive(false);
-                    int indexsort = UIPopSelectBar.indexFoodSort;
-                    string namesort = IronIceCreamStepBase.strTopFoodSort[indexsort];
-                    pic = IMAGE_TOPFOOD_DIR_ROOT + "/" + namesort + "/" + index.ToString();
+                    pic = IronIceCreamStepBase.GetImageOfTopFoodSubFood(index);
                     break;
             }
             strPic = pic;

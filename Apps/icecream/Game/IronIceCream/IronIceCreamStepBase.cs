@@ -18,6 +18,9 @@ public class TopFoodItemInfo
 public class IronIceCreamStepBase : UIView
 {
     public const string IMAGE_WAN_DIR_ROOT = "App/UI/Game/TopFoodBar/Wan";
+
+    //顶料
+    public const string IMAGE_TOPFOOD_DIR_ROOT = "App/UI/Game/IronIceCream/TopFood";
     public const int STATUS_STEP_NONE = 0;
     public const int STATUS_STEP_START = 1;
     public const int STATUS_STEP_END = 2;
@@ -32,19 +35,47 @@ public class IronIceCreamStepBase : UIView
     public Rect rectMain;//local 
     public OnGameIronIceCreamDidUpdateStatusDelegate callBackDidUpdateStatus { get; set; }
 
+    //杯子food
+    static public string GetImageOfCupFood(int idx)
+    {
+        string strImageDirRoot = "App/UI/Game/TopFoodBar/CupFood";
+        return strImageDirRoot + "/" + idx.ToString();
+    }
+
     //碗
     static public string GetImageOfWan(int idx)
     {
         return IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString();
     }
-    //冰淇凌块
+
+    static public string GetImageOfTopFood(int idx)
+    {
+        return IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[idx]; ;
+    }
+    static public string GetImageOfTopFoodSubFood(int idx)
+    {
+        int indexsort = UIPopSelectBar.indexFoodSort;
+        string namesort = IronIceCreamStepBase.strTopFoodSort[indexsort];
+        return IMAGE_TOPFOOD_DIR_ROOT + "/" + namesort + "/" + idx.ToString();
+    }
+
+    //冰淇凌块-2
     static public string GetBlockItemPic()
     {
         //0-2
         return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2";
     }
-
-    //冰淇凌卷
+    //冰淇淋液
+    static public string GetImageOfIcecreemLiquid(int idx)
+    {
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + idx;
+    }
+    //冰淇淋片-1
+    static public string GetImageOfIcecreemPiece(int idx)
+    {
+        return GetImageOfIcecreemLiquid(idx) + "-1";
+    }
+    //冰淇凌卷-3
     static public string GetWanJuanPic()
     {
         //0-3
@@ -91,7 +122,9 @@ public class IronIceCreamStepBase : UIView
     {
 
     }
-    public virtual void OnUITopFoodItemDidClick(UITopFoodItem item)
+
+
+    public virtual void UpdateFood(FoodItemInfo info)
     {
 
     }

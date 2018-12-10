@@ -112,16 +112,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
 
     }
 
-    //冰淇淋液
-    string GetImageOfIcecreemLiquid(int idx)
-    {
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + idx;
-    }
-    //冰淇淋片
-    string GetImageOfIcecreemPiece(int idx)
-    {
-        return GetImageOfIcecreemLiquid(idx) + "-1";
-    }
+   
 
     // 炒冰淇淋
     public void OnDoStep(int idx)
@@ -133,8 +124,8 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         objIcecreemLiquid.SetActive(true);
         objIcecreemBlock.SetActive(true);
         //objChanzi.SetActive(false);
-        TextureUtil.UpdateSpriteTexture(objIcecreemBlock, GetImageOfIcecreemLiquid(indexFood));
-        TextureUtil.UpdateSpriteTexture(objIcecreemPiece, GetImageOfIcecreemPiece(indexFood));
+        TextureUtil.UpdateSpriteTexture(objIcecreemBlock, IronIceCreamStepBase.GetImageOfIcecreemLiquid(indexFood));
+        TextureUtil.UpdateSpriteTexture(objIcecreemPiece, IronIceCreamStepBase.GetImageOfIcecreemPiece(indexFood));
         ActionImage acImage = objIcecreemLiquid.AddComponent<ActionImage>();
         acImage.duration = 1f;
         acImage.isLoop = false;
@@ -173,9 +164,9 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         chanziStatus = CHANZI_STATUS_NONE;
     }
 
-    public override void OnUITopFoodItemDidClick(UITopFoodItem item)
+    public override void UpdateFood(FoodItemInfo info)
     {
-        OnDoStep(item.index);
+        OnDoStep(info.index);
     }
 
     //淇淋液变淇淋片

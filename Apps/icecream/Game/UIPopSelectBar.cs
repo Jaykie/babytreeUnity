@@ -5,16 +5,14 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Tacticsoft;
 
-public delegate void OnUIPopSelectBarDidClickDelegate(UIPopSelectBar bar, UITopFoodItem item);
+public delegate void OnUIPopSelectBarDidClickDelegate(UIPopSelectBar bar, FoodItemInfo info);
 // 顶料
 public class UIPopSelectBar : UIView, ITableViewDataSource
 {
 
-    public const string PREFAB_CELL_ITEM = "App/Prefab/Game/IronIceCream/UIPopSelectBarCellItem";
+    public const string PREFAB_CELL_ITEM = "App/Prefab/Game/UIPopSelectBar/UIPopSelectBarCellItem";
     public const int TOTAL_CUP = 42;
     public const int TOTAL_WAN = 10;
-    public GameObject objScrollView;
-    public GameObject objScrollViewContent;
 
     public TableView tableView;
     public Image imageBg;
@@ -24,7 +22,6 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
     UICellItemBase cellItemPrefab;
     UICellBase cellPrefab;//GuankaItemCell GameObject 
 
-    ScrollRect scrollRect;
     UITopFoodItem uiTopFoodItemPrefab;
     float widthItem;
     Tweener twHand;
@@ -42,11 +39,12 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
     {
         LoadPrefab();
         listItem = new List<object>();
+        heightCell = 160;
         GameObject obj = PrefabCache.main.Load(UITopFoodItem.PREFAB_TopFoodItem);
         uiTopFoodItemPrefab = obj.GetComponent<UITopFoodItem>();
-        scrollRect = objScrollView.GetComponent<ScrollRect>();
+        // scrollRect = objScrollView.GetComponent<ScrollRect>();
 
-        UpdateItem();
+
         TextureUtil.UpdateImageTexture(imageHand, AppRes.IMAGE_HAND, true);
 
         RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
@@ -69,6 +67,10 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
         tableView.dataSource = this;
     }
 
+    void Start()
+    {
+        UpdateItem();
+    }
     void LoadPrefab()
     {
         {
@@ -96,63 +98,53 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
 
     void ClearItems()
     {
-        foreach (UITopFoodItem item in listItem)
-        {
-            DestroyImmediate(item.gameObject);
-        }
+        // foreach (UITopFoodItem item in listItem)
+        // {
+        //     DestroyImmediate(item.gameObject);
+        // }
         listItem.Clear();
     }
-    public UITopFoodItem GetItem(int idx)
+    public FoodItemInfo GetItem(int idx)
     {
-        UITopFoodItem item = null;
+        FoodItemInfo item = null;
         if ((listItem != null) && (listItem.Count != 0))
         {
-            item = listItem[idx] as UITopFoodItem;
+            item = listItem[idx] as FoodItemInfo;
         }
         return item;
     }
     public void AddItem()
     {
         int idx = listItem.Count;
-        UITopFoodItem item = (UITopFoodItem)GameObject.Instantiate(uiTopFoodItemPrefab);
-        item.transform.parent = objScrollViewContent.transform;
-        item.callBackDidClick = OnUITopFoodItemDidClick;
-        //this.transform;
-        item.transform.localScale = new Vector3(1, 1, 1);
-        item.transform.localPosition = new Vector3(0, 0, 0);
-        item.index = idx;
-        // cmdItem.callBackTouch = OnUITouchEvent;
-        item.type = type;
-
-        //更新scrollview 内容的长度
-        RectTransform rctranItem = item.GetComponent<RectTransform>();
-        RectTransform rctran = objScrollViewContent.GetComponent<RectTransform>();
-        RectTransform rctranScroll = objScrollView.GetComponent<RectTransform>();
-        Vector2 size = rctran.sizeDelta;
-        size.x = rctranScroll.rect.width;
-
-        widthItem = size.x;
-        // Debug.Log("widthItem=" + widthItem);
-        size.y = widthItem * (idx + 1);
-
-        item.width = widthItem;
-        item.height = size.x;
-        rctran.sizeDelta = size;
-
-        item.UpdateItem();
-        listItem.Add(item);
-    }
-
-
-    public void OnUITopFoodItemDidClick(UITopFoodItem item)
-    {
-        if (callBackDidClick != null)
+        FoodItemInfo info = new FoodItemInfo();
+        info.type = type;
+        info.index = idx;
+        string pic = "";
+        switch (type)
         {
-            imageHand.gameObject.SetActive(false);
-            twHand.Pause();
-            callBackDidClick(this, item);
+            case UITopFoodItem.Type.CUP:
+                pic = IronIceCreamStepBase.GetImageOfCupFood(idx);
+                break;
+            case UITopFoodItem.Type.WAN:
+                pic = IronIceCreamStepBase.GetImageOfWan(idx);
+                break;
+            case UITopFoodItem.Type.FOOD:
+                pic = IronIceCreamStepBase.GetImageOfTopFood(idx);
+                break;
+            case UITopFoodItem.Type.SUB_FOOD:
+                pic = IronIceCreamStepBase.GetImageOfTopFoodSubFood(idx);
+                break;
         }
+        info.pic = pic;
+
+
+        RectTransform rctran = this.GetComponent<RectTransform>();
+
+        widthItem = rctran.rect.width;
+        listItem.Add(info);
     }
+
+
 
     public void OnCellItemDidClick(UICellItemBase item)
     {
@@ -160,7 +152,13 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
         {
             return;
         }
-
+        if (callBackDidClick != null)
+        {
+            imageHand.gameObject.SetActive(false);
+            twHand.Pause();
+            FoodItemInfo info = listItem[item.index] as FoodItemInfo;
+            callBackDidClick(this, info);
+        }
 
     }
     #region ITableViewDataSource

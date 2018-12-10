@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 */
 public class IronIceCreamStep1 : IronIceCreamStepBase
 {
+
     public GameObject objChanzi;//铲子
     public GameObject objBlock;
     public GameObject objBlock0;
@@ -19,6 +20,8 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     public GameObject objBlock4;
     public GameObject objBlock5;
 
+
+    GameObject[] listJuan = new GameObject[6];
     public GameObject objJuan;
     public GameObject objJuan0;
     public GameObject objJuan1;
@@ -33,39 +36,122 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     bool isTouchItem;
     void Awake()
     {
-        texBlock = TextureCache.main.Load("APP/UI/Game/test");
+        float x, y, z, w, h;
+        GameObject[] listJuanTmp = { objJuan0, objJuan1, objJuan2, objJuan3, objJuan4, objJuan5 };
+        for (int i = 0; i < listJuanTmp.Length; i++)
+        {
+            listJuan[i] = listJuanTmp[i];
+        }
+
+
         ResetStep();
-        RectTransform rctran = objBlock.GetComponent<RectTransform>();
-        rctran.sizeDelta = new Vector2(texBlock.width / 100f, texBlock.height / 100f);
+
         UITouchEventWithMove ev = objChanzi.AddComponent<UITouchEventWithMove>();
         ev.callBackTouch = OnUITouchEvent;
         BoxCollider box = objChanzi.AddComponent<BoxCollider>();
         box.size = objChanzi.GetComponent<SpriteRenderer>().bounds.size;
         indexBlock = numBlock - 1;
+
+
     }
     void Start()
     {
-        UpdateItem();
         LayOut();
     }
     public override void LayOut()
     {
-        float x, y, w, h;
+        float x, y, z, w, h;
+        float ratio = 0.8f;
+        float scale = 0;
+        RectTransform rectMainWorld = AppSceneBase.main.GetRectMainWorld();
+        SpriteRenderer rdpanzi = objPanzi.GetComponent<SpriteRenderer>();
         LayOutBase();
+        if (texBlock != null)
+        {
+            w = texBlock.width / 100f;
+            h = texBlock.height / 100f;
+            scale = Common.GetBestFitScale(w, h, rectMain.width, rectMain.height) * ratio;
+            objBlock.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+        {
+            SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
+            w = rd.sprite.texture.width / 100f;
+            h = rd.sprite.texture.height / 100f;
+
+
+
+            z = objChanzi.transform.localPosition.z;
+            float w_rect = (rectMainWorld.rect.width - rdpanzi.bounds.size.x) / 2;
+            x = -rdpanzi.bounds.size.x / 2 - w_rect / 2;
+            y = 0;
+            scale = Common.GetBestFitScale(w, h, w_rect, rdpanzi.bounds.size.y) * ratio;
+            objChanzi.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+        if (texBlock != null)
+        {
+            RectTransform rctran = objBlock.GetComponent<RectTransform>();
+            rctran.sizeDelta = new Vector2(texBlock.width / 100f, texBlock.height / 100f);
+        }
+
+        {
+            RectTransform rctran = objJuan.GetComponent<RectTransform>();
+            w = rectMain.width;
+            h = rectMain.height / 4;
+            rctran.sizeDelta = new Vector2(w, h);
+            x = 0;
+            y = rectMain.height / 2 - h / 2;
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
+
+
     }
 
     public override void ResetStep()
     {
         indexBlock = numBlock - 1;
         isTouchItem = false;
+        for (int i = 0; i < listJuan.Length; i++)
+        {
+            GameObject obj = listJuan[i];
+            obj.SetActive(false);
+        }
     }
-    public override void OnUITopFoodItemDidClick(UITopFoodItem item)
-    {
 
-    } 
+    public override void UpdateFood(FoodItemInfo info)
+    {
+        float x, y, z, w, h;
+        string pic = "APP/UI/Game/test";
+        pic = IronIceCreamStepBase.GetImageOfIcecreemPiece(info.index);
+        texBlock = TextureCache.main.Load(pic);
+
+
+
+        UpdateItem();
+
+
+        LayOut();
+        float scale = objBlock.transform.localScale.x;
+        //初始化铲子位置
+        {
+            RectTransform rctran = objBlock.GetComponent<RectTransform>();
+            int idx = 0;
+            GameObject objItem = GetBlock(idx);
+            float w_block = rctran.rect.width * scale;
+            float h_block = rctran.rect.height * scale;
+            z = objChanzi.transform.localPosition.z;
+            w = w_block / numBlock;
+
+            x = objBlock.transform.localPosition.x + (w_block / 2 - (w / 2) * (idx + 1));
+            y = objBlock.transform.localPosition.y - h_block / 2;
+
+            objChanzi.transform.localPosition = new Vector3(x, y, z);
+        }
+
+
+    }
     void UpdateJuanItem(GameObject obj)
     {
-        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic());
         TextureUtil.UpdateSpriteTexture(obj, tex);
     }
     void UpdateBlockItem(GameObject obj, int idx)
@@ -164,6 +250,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                     x = rd.bounds.center.x - w / 2;
                     y = rd.bounds.center.y - h / 2;
                     Rect rc = new Rect(x, y, w, h);
+                    //Debug.Log("rc=" + rc + " poslocal=" + poslocal);
                     if (rc.Contains(poslocal))
                     {
                         isTouchItem = true;
@@ -174,6 +261,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                 {
                     poslocal.z = objChanzi.transform.localPosition.z;
                     objChanzi.transform.localPosition = poslocal;
+                    //Debug.Log("isTouchItem=" + isTouchItem);
                     if (isTouchItem)
                     {
                         BlockItemChan it = objItem.GetComponent<BlockItemChan>();
@@ -188,6 +276,8 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                     BlockItemChan it = objItem.GetComponent<BlockItemChan>();
                     if (it.percent <= 0)
                     {
+                        GameObject obj = listJuan[indexBlock];
+                        obj.SetActive(true);
                         indexBlock--;
                         if (indexBlock < 0)
                         {
