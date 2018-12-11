@@ -28,8 +28,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     public GameObject objJuan2;
     public GameObject objJuan3;
     public GameObject objJuan4;
-    public GameObject objJuan5;
-    public GameObject objHand;//操作提示的手 
+    public GameObject objJuan5; 
     Tween tweenMoveHand;
     Texture2D texBlock;
     int numBlock = 6;

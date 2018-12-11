@@ -18,7 +18,6 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
     public GameObject objBlockItem5;
 
     static public string strImageWan;
-    public GameObject objHand;//操作提示的手 
     int indexStep = 0;
     int totalStep = 4;
 
@@ -72,22 +71,38 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
 
     public override void LayOut()
     {
-        float x, y, w, h;
+        float x, y, z, w, h, scale;
+        float ratio = 0.8f;
         LayOutBase();
-
+        RectTransform rctranBlock = objBlock.GetComponent<RectTransform>();
         {
-            RectTransform rctran = objBlock.GetComponent<RectTransform>();
+
             w = rectMain.width;
             h = rectMain.height / 4;
-            rctran.sizeDelta = new Vector2(w, h);
+            rctranBlock.sizeDelta = new Vector2(w, h);
             x = 0;
             y = rectMain.height / 2 - h / 2;
-            rctran.anchoredPosition = new Vector2(x, y);
+            rctranBlock.anchoredPosition = new Vector2(x, y);
+        }
+        {
+            w = rctranBlock.rect.width / 6;
+            z = objHand.transform.position.z;
+            y = objBlock.transform.localPosition.y;
+            x = objBlock.transform.localPosition.x + rctranBlock.rect.width / 2 - w / 2;
+            objHand.transform.localPosition = new Vector3(x, y, z);
+
+            {
+                SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>();
+                w = rd.sprite.texture.width / 100f;
+                h = rd.sprite.texture.height / 100f;
+                ratio = 0.5f;
+                scale = Common.GetBestFitScale(w, h, w, rctranBlock.rect.height) * ratio;
+                objHand.transform.localScale = new Vector3(scale, scale, 1f);
+            }
         }
 
 
     }
-
     void UpdateBlockItem(GameObject obj)
     {
         Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic());
@@ -121,9 +136,10 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
     public void OnDoStep(int idx)
     {
 
-        objHand.SetActive(false);
+        objHand.SetActive(true);
+        ShowHandFlickerAnimation(true);
         UpdateItem();
-
+        LayOut();
     }
 
 
@@ -136,6 +152,7 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
     public override void UpdateFood(FoodItemInfo info)
     {
         string pic = IronIceCreamStepBase.GetImageOfWan(info.index);
+        Debug.Log("UpdateFood pic=" + pic);
         UpdateWan(pic);
         LayOut();
     }
@@ -174,7 +191,8 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
                 {
                     //  if (objWan.activeSelf)
                     {
-
+                        objHand.SetActive(false);
+                        ShowHandFlickerAnimation(false);
                         ev.gameObject.SetActive(false);
                         if (ev.gameObject == objBlockItem0)
                         {

@@ -32,7 +32,9 @@ public class IronIceCreamStepBase : UIView
     static public UIWanIron uiWanIronPrefab;
     static public UIWanIron uiWanIron;
     public GameObject objPanzi;//盘子
+    public GameObject objHand;//操作提示的手 
     public Rect rectMain;//local 
+    Tween tweenAlpha;
     public OnGameIronIceCreamDidUpdateStatusDelegate callBackDidUpdateStatus { get; set; }
 
     //杯子food
@@ -127,5 +129,43 @@ public class IronIceCreamStepBase : UIView
     public virtual void UpdateFood(FoodItemInfo info)
     {
 
+    }
+    //闪烁动画
+    public void ShowHandFlickerAnimation(bool isAnimation)
+    {
+        if(objHand==null){
+            return;
+        }
+        if (isAnimation)
+        {
+
+            // ActionBlink ac = this.gameObject.AddComponent<ActionBlink>();
+            // ac.duration = 3f;
+            // ac.count = 75;
+            // ac.target = imageHand.gameObject;
+            // ac.isLoop = true;
+            // ac.Run(); 
+            float duration = 1f;
+
+            //ng：这种方法淡入淡出会改变整个ui的alpha
+            // imageHand.material.DOFade(0, duration).SetLoops(-1, LoopType.Yoyo);
+            //imageHand.color = Color.white;
+            if (tweenAlpha == null)
+            {
+                SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>();
+                tweenAlpha = DOTween.ToAlpha(() => rd.color, x => rd.color = x, 0f, duration).SetLoops(-1, LoopType.Yoyo);
+            }
+            tweenAlpha.Play();
+
+        }
+        else
+        {
+
+            if (tweenAlpha != null)
+            {
+                tweenAlpha.Pause();
+            }
+
+        }
     }
 }

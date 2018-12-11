@@ -9,8 +9,6 @@ using UnityEngine.EventSystems;
 public class IronIceCreamStep3 : IronIceCreamStepBase
 {
 
-
-    public GameObject objHand;//操作提示的手 
     int indexStep = 0;
     int totalStep = 4;
     void Awake()
@@ -80,7 +78,7 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
         uiWanIron.ShowJuan(false);
     }
 
- 
+
     public override void UpdateFood(FoodItemInfo info)
     {
         UpdateWan();

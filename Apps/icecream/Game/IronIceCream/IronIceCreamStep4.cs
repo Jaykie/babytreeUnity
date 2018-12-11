@@ -11,11 +11,6 @@ using UnityEngine.EventSystems;
 public class IronIceCreamStep4 : IronIceCreamStepBase
 {
 
-
-
-    public GameObject objHand;//操作提示的手
-
-
     int indexStep = 0;
     int totalStep = 4;
 
@@ -83,7 +78,7 @@ public class IronIceCreamStep4 : IronIceCreamStepBase
 
     }
 
-  
+
     public override void UpdateFood(FoodItemInfo info)
     {
         UpdateWan(info.pic);

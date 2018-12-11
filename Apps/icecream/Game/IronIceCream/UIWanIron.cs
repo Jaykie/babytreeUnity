@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 /*铁板冰淇淋 碗
 */
 public class UIWanIron : UIView
@@ -132,6 +133,8 @@ public class UIWanIron : UIView
     {
         rectMain = rc;
         LayOut();
+
+
     }
 
     public void UpdateStep(int idx)
@@ -248,23 +251,42 @@ public class UIWanIron : UIView
         obj.transform.localPosition = new Vector3(0, 0, -1 * listItem.Count);
     }
 
-    void UpdateJuanItem(GameObject obj)
+    void UpdateJuanItem(GameObject obj, float w, float h)
     {
         Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());
         TextureUtil.UpdateSpriteTexture(obj, tex);
         // BoxCollider box = obj.GetComponent<BoxCollider>();
         // box.size = new Vector3(tex.width / 100f, tex.height / 100f);
+
+        {
+            float ratio = 1.5f;
+            float w_tex = tex.width / 100f;
+            float h_tex = tex.height / 100f;
+            float scale = Common.GetMaxFitScale(w_tex, h_tex, w, h) * ratio;
+            obj.transform.localScale = new Vector3(scale, scale, 1f);
+        }
     }
 
     //放置冰淇凌卷
     public void UpdateJuan()
     {
 
+        SpriteRenderer rd = objWanBg.GetComponent<SpriteRenderer>();
+        float x, y, w, h;
+        float ratio = 0.5f;
+        w = rd.bounds.size.x * ratio;
+        h = rd.bounds.size.y * ratio;
+        GridLayoutGroup gridLayout = objJuan.GetComponent<GridLayoutGroup>();
+
+        gridLayout.cellSize = new Vector2(w / 3, h / 2);
+
+        RectTransform rctran = objJuan.GetComponent<RectTransform>();
+        rctran.sizeDelta = new Vector2(w, h);
+
         foreach (GameObject obj in listJuan)
         {
-            UpdateJuanItem(obj);
+            UpdateJuanItem(obj, gridLayout.cellSize.x, gridLayout.cellSize.y);
         }
-
     }
     public void ShowJuan(bool isShow)
     {
