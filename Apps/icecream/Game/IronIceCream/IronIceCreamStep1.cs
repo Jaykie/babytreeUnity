@@ -29,7 +29,8 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     public GameObject objJuan3;
     public GameObject objJuan4;
     public GameObject objJuan5;
-
+    public GameObject objHand;//操作提示的手 
+    Tween tweenMoveHand;
     Texture2D texBlock;
     int numBlock = 6;
     int indexBlock;
@@ -42,7 +43,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         {
             listJuan[i] = listJuanTmp[i];
         }
-
+        TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
 
         ResetStep();
 
@@ -66,13 +67,17 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         RectTransform rectMainWorld = AppSceneBase.main.GetRectMainWorld();
         SpriteRenderer rdpanzi = objPanzi.GetComponent<SpriteRenderer>();
         LayOutBase();
+        RectTransform rctranBlock = objBlock.GetComponent<RectTransform>();
         if (texBlock != null)
         {
             w = texBlock.width / 100f;
             h = texBlock.height / 100f;
             scale = Common.GetBestFitScale(w, h, rectMain.width, rectMain.height) * ratio;
             objBlock.transform.localScale = new Vector3(scale, scale, 1f);
+
+            rctranBlock.sizeDelta = new Vector2(texBlock.width / 100f, texBlock.height / 100f);
         }
+
         {
             SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
             w = rd.sprite.texture.width / 100f;
@@ -87,15 +92,33 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             scale = Common.GetBestFitScale(w, h, w_rect, rdpanzi.bounds.size.y) * ratio;
             objChanzi.transform.localScale = new Vector3(scale, scale, 1f);
         }
-        if (texBlock != null)
+
+
         {
-            RectTransform rctran = objBlock.GetComponent<RectTransform>();
-            rctran.sizeDelta = new Vector2(texBlock.width / 100f, texBlock.height / 100f);
+            z = objHand.transform.localPosition.z;
+            Vector3 pos = objChanzi.transform.localPosition;
+            SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
+            x = pos.x;
+            y = pos.y - rd.bounds.size.y / 2;
+            objHand.transform.localPosition = new Vector3(x, y, z);
+
         }
 
         {
+            SpriteRenderer rd_chanzi = objChanzi.GetComponent<SpriteRenderer>();
+            SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>();
+            w = rd.sprite.texture.width / 100f;
+            h = rd.sprite.texture.height / 100f;
+            scale = Common.GetBestFitScale(w, h, rd_chanzi.bounds.size.x, rd_chanzi.bounds.size.y) * ratio;
+            objHand.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+
+
+        {
             RectTransform rctran = objJuan.GetComponent<RectTransform>();
-            w = rectMain.width;
+            // w = rectMain.width;
+            w = objBlock.transform.localScale.x * rctranBlock.rect.width;
             h = rectMain.height / 4;
             rctran.sizeDelta = new Vector2(w, h);
             x = 0;
@@ -140,15 +163,50 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             float h_block = rctran.rect.height * scale;
             z = objChanzi.transform.localPosition.z;
             w = w_block / numBlock;
-
+            SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
             x = objBlock.transform.localPosition.x + (w_block / 2 - (w / 2) * (idx + 1));
-            y = objBlock.transform.localPosition.y - h_block / 2;
+            y = objBlock.transform.localPosition.y - h_block / 2 - rd.bounds.size.y / 2;
 
             objChanzi.transform.localPosition = new Vector3(x, y, z);
         }
-
-
+        //重新更新hand位置
+        LayOut();
+        ShowHand(true, true);
     }
+
+    public void ShowHand(bool isShow, bool isAnimation)
+    {
+        float x, y, z, w, h;
+        //Debug.Log("showhand isShow=" + isShow + " isAnimation=" + isAnimation);
+        objHand.SetActive(isShow);
+        if (isAnimation)
+        {
+            if (tweenMoveHand == null)
+            {
+                //  SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>(); 
+                z = objHand.transform.localPosition.z;
+                Vector3 pos = objChanzi.transform.localPosition;
+                SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
+                x = pos.x;
+                y = pos.y + rd.bounds.size.y / 2;
+                Vector3 posEnd = new Vector3(x, y, z);
+                objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Restart);
+
+            }
+            tweenMoveHand.Play();
+
+        }
+        else
+        {
+
+            if (tweenMoveHand != null)
+            {
+                tweenMoveHand.Pause();
+            }
+
+        }
+    }
+
     void UpdateJuanItem(GameObject obj)
     {
         Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic());
@@ -233,6 +291,28 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         return obj;
     }
 
+    void ChcekIsTouchItem()
+    {
+        float x, y, w, h;
+
+        Vector3 pos = Common.GetInputPositionWorld(mainCam);
+        Vector3 poslocal = this.transform.InverseTransformPoint(pos);
+        GameObject objItem = GetBlock(indexBlock);
+        Renderer rd = objItem.GetComponent<Renderer>();
+        w = rd.bounds.size.x;
+        h = rd.bounds.size.y;
+        x = rd.bounds.center.x - w / 2;
+        y = rd.bounds.center.y - h / 2;
+        Rect rc = new Rect(x, y, w, h);
+        //Debug.Log("rc=" + rc + " poslocal=" + poslocal);
+        ShowHand(false, false);
+        if (rc.Contains(poslocal))
+        {
+            isTouchItem = true;
+
+        }
+    }
+
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
         Vector3 pos = Common.GetInputPositionWorld(mainCam);
@@ -244,23 +324,18 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             case UITouchEvent.STATUS_TOUCH_DOWN:
                 {
                     isTouchItem = false;
-                    Renderer rd = objItem.GetComponent<Renderer>();
-                    w = rd.bounds.size.x;
-                    h = rd.bounds.size.y;
-                    x = rd.bounds.center.x - w / 2;
-                    y = rd.bounds.center.y - h / 2;
-                    Rect rc = new Rect(x, y, w, h);
-                    //Debug.Log("rc=" + rc + " poslocal=" + poslocal);
-                    if (rc.Contains(poslocal))
-                    {
-                        isTouchItem = true;
-                    }
+                    ChcekIsTouchItem();
                 }
                 break;
             case UITouchEvent.STATUS_TOUCH_MOVE:
                 {
                     poslocal.z = objChanzi.transform.localPosition.z;
                     objChanzi.transform.localPosition = poslocal;
+                    if (isTouchItem == false)
+                    {
+                        ChcekIsTouchItem();
+                    }
+
                     //Debug.Log("isTouchItem=" + isTouchItem);
                     if (isTouchItem)
                     {
@@ -282,6 +357,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                         if (indexBlock < 0)
                         {
                             indexBlock = 0;
+                            objChanzi.SetActive(false);
                             if (callBackDidUpdateStatus != null)
                             {
                                 callBackDidUpdateStatus(this, STATUS_STEP_END);
