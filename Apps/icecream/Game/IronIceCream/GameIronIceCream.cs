@@ -19,6 +19,7 @@ public class GameIronIceCream : GameIceCream
 
     public const string IMAGE_DIR_ROOT_CupLiquid = "App/UI/Game/IronIceCream/CupLiquid";//  1 2 3 4 5
 
+    public const string IMAGE_LOCK = "App/UI/Game/TopFoodBar/Lock";
 
     public const int INDEX_STEP_CHAO = 0;//炒
     public const int INDEX_STEP_CHAN = 1;//铲
@@ -103,7 +104,7 @@ public class GameIronIceCream : GameIceCream
         {
             uiStep.ResetStep();
         }
-    } 
+    }
     public void UpdateFood(FoodItemInfo info)
     {
         if (uiStep != null)

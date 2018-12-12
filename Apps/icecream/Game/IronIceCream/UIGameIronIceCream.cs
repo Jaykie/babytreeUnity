@@ -380,12 +380,11 @@ public class UIGameIronIceCream : UIGameIceCream
             UIPopSelectBar.indexFoodSort = 0;
             UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0];
             uiPopSelectBar.UpdateItem();
-            FoodItemInfo info = uiPopSelectBar.GetItem(0);
-            if (info != null)
-            {
-                // item.UpdateItem();
-                OnUIPopSelectBarDidClick(uiPopSelectBar, info);
-            }
+            // FoodItemInfo info = uiPopSelectBar.GetItem(0);
+            // if (info != null)
+            // { 
+            //     OnUIPopSelectBarDidClick(uiPopSelectBar, info);
+            // }
 
         }
 

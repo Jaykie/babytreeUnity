@@ -16,7 +16,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     public GameObject objIcecreemBlock;//冰淇凌块
     public GameObject objIcecreemPiece;//冰淇凌片
     public GameObject objIcecreemLiquid;//冰淇凌液体倾倒动画
-    public GameObject objHand;//操作提示的手 
+    
     int indexFood = 0;
     int indexStep = 0;
     int totalStep = 4;

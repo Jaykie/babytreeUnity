@@ -22,6 +22,8 @@ public class UIWanIron : UIView
     public GameObject objJuanitem5;
     public GameObject objErase;//碗  
 
+    GameObject objItemSelect;//选中的顶料
+
     public MeshTexture meshTex;
     Rect rectMain;//local 
     RenderTexture rtMain;
@@ -144,6 +146,8 @@ public class UIWanIron : UIView
         if (indexStep == GameIronIceCream.INDEX_STEP_CHI)
         {
             meshTex.EnableTouch(true);
+
+            //显示到meshtex
             foreach (TopFoodItemInfo info in listItem)
             {
                 info.obj.layer = indexLayer;
@@ -173,6 +177,7 @@ public class UIWanIron : UIView
         {
             case UITouchEvent.STATUS_TOUCH_DOWN:
                 {
+                    objItemSelect = ev.gameObject;
                     posInputTouchDown = posworld;
                     posLocalTouchDown = poslocal;
                 }
@@ -222,6 +227,8 @@ public class UIWanIron : UIView
 
         objErase.transform.localPosition = poslocal;
     }
+
+    //添加顶料
     public void OnAddTopFood(string pic)
     {
         TopFoodItemInfo info = new TopFoodItemInfo();
@@ -241,16 +248,93 @@ public class UIWanIron : UIView
         //AppSceneBase.main.AddObjToMainWorld(obj);
         obj.transform.SetParent(objWanItemRoot.transform);
 
-        obj.transform.localScale = new Vector3(1, 1, 1);
+        SpriteRenderer rdbg = objWanBg.GetComponent<SpriteRenderer>();
+        float scale = 0f;
+        float ratio = 0.25f;
+        scale = Common.GetBestFitScale(tex.width / 100f, tex.height / 100f, rdbg.bounds.size.x * ratio, rdbg.bounds.size.y * ratio);
+        obj.transform.localScale = new Vector3(scale, scale, 1);
 
         info.obj = obj;
         info.pt = Vector3.zero;
-
+        objItemSelect = obj;
         listItem.Add(info);
 
         obj.transform.localPosition = new Vector3(0, 0, -1 * listItem.Count);
     }
 
+    //删除选中顶料
+    public void OnDeleteTopFood()
+    {
+        if (objItemSelect != null)
+        {
+            TopFoodItemInfo infoSel = null;
+            foreach (TopFoodItemInfo info in listItem)
+            {
+                if (info.obj == objItemSelect)
+                {
+                    infoSel = info;
+                    break;
+                }
+            }
+            if (infoSel != null)
+            {
+                listItem.Remove(infoSel);
+            }
+            DestroyImmediate(objItemSelect);
+            objItemSelect = null;
+        }
+    }
+    //逆时针旋转选中顶料
+    public void OnRotationAddTopFood()
+    {
+        float step_angle = 15f;
+        if (objItemSelect != null)
+        {
+            float angle_z = objItemSelect.transform.localRotation.eulerAngles.z;
+            objItemSelect.transform.localRotation = Quaternion.Euler(0, 0, angle_z + step_angle);
+        }
+    }
+
+    //顺时针旋转选中顶料
+    public void OnRotationMinusTopFood()
+    {
+        float step_angle = 15f;
+        if (objItemSelect != null)
+        {
+            float angle_z = objItemSelect.transform.localRotation.eulerAngles.z;
+            objItemSelect.transform.localRotation = Quaternion.Euler(0, 0, angle_z - step_angle);
+        }
+    }
+
+    //缩小选中顶料
+    public void OnScaleMinusTopFood()
+    {
+        float step = 0.1f;
+        if (objItemSelect != null)
+        {
+            float scale = objItemSelect.transform.localScale.x - step;
+            if (scale <= 0)
+            {
+                scale = step;
+            }
+            objItemSelect.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+    }
+    //放大选中顶料
+    public void OnScaleAddTopFood()
+    {
+        float step = 0.1f;
+        float scale_max = 3f;
+        if (objItemSelect != null)
+        {
+            float scale = objItemSelect.transform.localScale.x + step;
+            if (scale > scale_max)
+            {
+                scale = scale_max;
+            }
+            objItemSelect.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+    }
     void UpdateJuanItem(GameObject obj, float w, float h)
     {
         Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());

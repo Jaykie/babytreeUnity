@@ -30,7 +30,6 @@ public class UITopFoodItem : UIView
     public bool enableLock = true;
 
     string strImageCup = "App/UI/Game/TopFoodBar/Cup";
-    string strImageLock = "App/UI/Game/TopFoodBar/Lock";
 
     public const string IMAGE_WAN_BG = "App/UI/Game/TopFoodBar/Wan/WanBg";
 
@@ -94,7 +93,7 @@ public class UITopFoodItem : UIView
 
         {
             RectTransform rctranCup = imageCup.GetComponent<RectTransform>();
-            string pic = strImageLock;
+            string pic = GameIronIceCream.IMAGE_LOCK;
             TextureUtil.UpdateImageTexture(imageLock, pic, true);
             w = imageLock.sprite.texture.width;
             h = imageLock.sprite.texture.height;
