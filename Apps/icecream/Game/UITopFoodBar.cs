@@ -73,6 +73,7 @@ public class UITopFoodBar : UIView
         }
     }
 
+  
     void ClearItems()
     {
         foreach (UITopFoodItem item in listTopItem)
@@ -88,19 +89,57 @@ public class UITopFoodBar : UIView
         FoodItemInfo info = new FoodItemInfo();
         info.type = type;
         info.index = idx;
+        info.isLock = false;
         string pic = "";
+        string key = "";
+
         switch (type)
         {
             case UITopFoodItem.Type.CUP:
                 pic = IronIceCreamStepBase.GetImageOfCupFood(idx);
+                info.id = IronIceCreamStepBase.FOOD_ITEM_ID_liquit;
+                key = UITopFoodItem.GetLockKey(info.id, idx);
+                info.isLock = Common.GetBool(key, true);
+                if (idx < 7)
+                {
+                    if (idx % 2 == 0)
+                    {
+                        //开放
+                        info.isLock = false;
+                    }
+                }
                 break;
             case UITopFoodItem.Type.WAN:
+                info.id = IronIceCreamStepBase.FOOD_ITEM_ID_wan;
                 pic = IronIceCreamStepBase.GetImageOfWan(idx);
+                key = UITopFoodItem.GetLockKey(info.id, idx);
+                info.isLock = Common.GetBool(key, true);
+                if (idx < 7)
+                {
+                    if (idx % 2 == 0)
+                    {
+                        //开放
+                        info.isLock = false;
+                    }
+                }
                 break;
             case UITopFoodItem.Type.FOOD:
                 pic = IronIceCreamStepBase.GetImageOfTopFood(idx);
+                info.id = IronIceCreamStepBase.strTopFoodSort[idx];
+                key = UITopFoodItem.GetLockKey(info.id, idx);
+                info.isLock = Common.GetBool(key, true);
+                if (idx < 5)
+                {
+                    if (idx % 2 == 0)
+                    {
+                        //开放
+                        info.isLock = false;
+                    }
+                }
+
                 break;
             case UITopFoodItem.Type.SUB_FOOD:
+                //  info.id = IronIceCreamStepBase.strTopFoodSort[idx];
                 pic = IronIceCreamStepBase.GetImageOfTopFoodSubFood(idx);
                 break;
         }
@@ -138,8 +177,8 @@ public class UITopFoodBar : UIView
         item.width = widthItem;
         item.height = size.y;
         rctran.sizeDelta = size;
-
-        item.UpdateItem();
+        FoodItemInfo info = listItem[idx] as FoodItemInfo;
+        item.UpdateItem(info);
         listTopItem.Add(item);
     }
 

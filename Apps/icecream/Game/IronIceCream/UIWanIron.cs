@@ -4,6 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using HighlightingSystem;
+
 /*铁板冰淇淋 碗
 */
 public class UIWanIron : UIView
@@ -39,6 +41,30 @@ public class UIWanIron : UIView
     int indexLayer = 8;//Layer8
 
     int indexStep = 0;
+
+    //选中描边高亮
+
+    protected struct Preset
+    {
+        public string name;
+        public int downsampleFactor;
+        public int iterations;
+        public float blurMinSpread;
+        public float blurSpread;
+        public float blurIntensity;
+    }
+
+    List<Preset> presets = new List<Preset>()
+    {
+        new Preset() { name = "Default",    downsampleFactor = 4,   iterations = 2, blurMinSpread = 0.65f,  blurSpread = 0.25f, blurIntensity = 0.3f },
+        new Preset() { name = "Strong",     downsampleFactor = 4,   iterations = 2, blurMinSpread = 0.5f,   blurSpread = 0.15f, blurIntensity = 0.325f },
+        new Preset() { name = "Wide",       downsampleFactor = 4,   iterations = 4, blurMinSpread = 0.5f,   blurSpread = 0.15f, blurIntensity = 0.325f },
+        new Preset() { name = "Speed",      downsampleFactor = 4,   iterations = 1, blurMinSpread = 0.75f,  blurSpread = 0f,    blurIntensity = 0.35f },
+        new Preset() { name = "Quality",    downsampleFactor = 2,   iterations = 3, blurMinSpread = 0.5f,   blurSpread = 0.5f,  blurIntensity = 0.28f },
+        new Preset() { name = "Solid 1px",  downsampleFactor = 1,   iterations = 1, blurMinSpread = 1f,     blurSpread = 0f,    blurIntensity = 1f },
+        new Preset() { name = "Solid 2px",  downsampleFactor = 1,   iterations = 2, blurMinSpread = 1f,     blurSpread = 0f,    blurIntensity = 1f }
+    };
+    //
     void Awake()
     {
         listItem = new List<TopFoodItemInfo>();
@@ -63,6 +89,8 @@ public class UIWanIron : UIView
                                               // mainCam.cullingMask |= (1 << layer);  // 打开层x
 
         objErase.SetActive(false);
+        if (mainCam.GetComponent<HighlightingRenderer>() == null)
+            mainCam.gameObject.AddComponent<HighlightingRenderer>();
 
     }
     void Start()
@@ -131,6 +159,41 @@ public class UIWanIron : UIView
 
     }
 
+    void RemoveHighLight()
+    {
+        if (objItemSelect != null)
+        {
+            //remove
+            TopFoodHighlighterController sc = objItemSelect.GetComponent<TopFoodHighlighterController>();
+            if (sc != null)
+            {
+                DestroyImmediate(sc);
+            }
+
+            Highlighter hl = objItemSelect.GetComponent<Highlighter>();
+            if (hl != null)
+            {
+                DestroyImmediate(hl);
+            }
+
+        }
+    }
+    void SetPresetSettings(Preset p)
+    {
+        HighlightingBase hb = mainCam.GetComponent<HighlightingBase>();//FindObjectOfType<HighlightingBase>();
+        Debug.Log("SetPresetSettings");
+        if (hb == null)
+        {
+            Debug.Log("SetPresetSettings is null");
+            return;
+        }
+
+        hb.downsampleFactor = p.downsampleFactor;
+        hb.iterations = p.iterations;
+        hb.blurMinSpread = p.blurMinSpread;
+        hb.blurSpread = p.blurSpread;
+        hb.blurIntensity = p.blurIntensity;
+    }
     public void UpdateRect(Rect rc)
     {
         rectMain = rc;
@@ -177,7 +240,11 @@ public class UIWanIron : UIView
         {
             case UITouchEvent.STATUS_TOUCH_DOWN:
                 {
+
+                    RemoveHighLight();
                     objItemSelect = ev.gameObject;
+                    objItemSelect.AddComponent<TopFoodHighlighterController>();
+
                     posInputTouchDown = posworld;
                     posLocalTouchDown = poslocal;
                 }
@@ -256,7 +323,10 @@ public class UIWanIron : UIView
 
         info.obj = obj;
         info.pt = Vector3.zero;
+        RemoveHighLight();
         objItemSelect = obj;
+        objItemSelect.AddComponent<TopFoodHighlighterController>();
+        SetPresetSettings(presets[5]);
         listItem.Add(info);
 
         obj.transform.localPosition = new Vector3(0, 0, -1 * listItem.Count);

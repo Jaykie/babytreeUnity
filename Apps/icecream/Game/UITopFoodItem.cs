@@ -39,7 +39,7 @@ public class UITopFoodItem : UIView
     public string strPic;
     UITouchEvent uITouchEvent;
     Tween tweenAlpha;
-
+    public FoodItemInfo infoFood;
     public Type type;
     public OnUITopFoodItemDidClickDelegate callBackDidClick { get; set; }
     private void Awake()
@@ -49,8 +49,24 @@ public class UITopFoodItem : UIView
         TextureUtil.UpdateImageTexture(imageHand, AppRes.IMAGE_HAND, true);
         imageHand.gameObject.SetActive(false);
     }
-    public void UpdateItem()
+
+    static public string GetLockKey(string id, int idx)
     {
+        return "KEY_LOCK_ITEM_" + id + "_" + idx.ToString();
+    }
+    public void OnUnLockItem()
+    {
+        imageLock.gameObject.SetActive(false);
+        if (infoFood != null)
+        {
+            string key = GetLockKey(infoFood.id, index);
+            Common.SetBool(key, false);
+        }
+    }
+
+    public void UpdateItem(FoodItemInfo info)
+    {
+        infoFood = info;
         float x = 0, y = 0, w, h;
         {
             string pic = strImageCup;
@@ -110,7 +126,7 @@ public class UITopFoodItem : UIView
             y = -h_cup / 2 + h_rect / 2;
             rctran.anchoredPosition = new Vector2(x, y);
             imageLock.gameObject.SetActive(false);
-            if ((index % 2 != 0) && enableLock)
+            if (info.isLock && enableLock)
             {
                 imageLock.gameObject.SetActive(true);
             }

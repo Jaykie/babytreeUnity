@@ -13,6 +13,8 @@ public class FoodItemInfo
     public string pic;
     public UITopFoodItem.Type type;
     public int index;
+    public bool isLock;
+    public string id;
 }
 public class UIGameIceCream : UIGameBase
 {

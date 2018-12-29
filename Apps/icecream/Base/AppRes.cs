@@ -8,8 +8,10 @@ public class AppRes
     public const int GOLD_SHARE = 5;
     public const int GOLD_GUANKA = 3;
     public const int GOLD_COMMENT = 3;
-    public const int GOLD_INIT_VALUE = 10;
+    public const int GOLD_INIT_VALUE = 50;
     public const int GOLD_GUANKA_STEP = 4;
+
+    public const int GOLD_CONSUME = 3;//消费
 
     //game name
     public const string GAME_IronIceCream = "IronIceCream";
@@ -45,6 +47,24 @@ public class AppRes
     public const string IMAGE_UIVIEWALERT_BG_BTN = "App/UI/Setting/SettingCellBgOringe";
     static public Vector4 borderUIViewAlertBgBtn = new Vector4(18f, 18f, 18f, 18);
 
+    //trophy
+    public const string IMAGE_ROOT_DIR_TROPHY = "App/UI/Game/Trophy";
+    public const string IMAGE_TROPHY_CELL_BG = IMAGE_ROOT_DIR_TROPHY + "/CellBg";
+    public const string IMAGE_TROPHY_BG1 = IMAGE_ROOT_DIR_TROPHY + "/Bg1";
+    public const string IMAGE_TROPHY_BG2 = IMAGE_ROOT_DIR_TROPHY + "/Bg2";
+    public const string IMAGE_TROPHY_Crown = IMAGE_ROOT_DIR_TROPHY + "/Crown";
+    public const string IMAGE_TROPHY_Crown_small = IMAGE_ROOT_DIR_TROPHY + "/Crown_small";
+    public const string IMAGE_TROPHY_ImageTitle_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_cn";
+    public const string IMAGE_TROPHY_ImageTitle_en = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_en";
+    public const string IMAGE_TROPHY_ImageTips_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_cn";
+    public const string IMAGE_TROPHY_ImageTips_en = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_en";
+
+    public const string IMAGE_TROPHY_Rotation_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Rotation/01_000";
+    public const string IMAGE_TROPHY_LEVEL_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Level/";
+    public const string IMAGE_TROPHY_Flower_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Flower/";
+    public const string IMAGE_TROPHY_Star_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Star/";
+    public const string IMAGE_TROPHY_Medal_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Medal/";
+    public const string IMAGE_TROPHY_Cup_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Cup/";
 
     public const string IMAGE_HOME_BG = Common.GAME_DATA_DIR + "/startup.jpg";
 
@@ -63,7 +83,7 @@ public class AppRes
 
     public const string IMAGE_GAME_BG = IMAGE_HOME_BG;
 
-    public const string IMAGE_HAND= "App/UI/Game/hand";
+    public const string IMAGE_HAND = "App/UI/Game/hand";
 
 
     //string 

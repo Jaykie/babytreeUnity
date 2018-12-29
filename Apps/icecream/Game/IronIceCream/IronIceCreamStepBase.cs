@@ -18,6 +18,8 @@ public class TopFoodItemInfo
 public class IronIceCreamStepBase : UIView
 {
     public const string IMAGE_WAN_DIR_ROOT = "App/UI/Game/TopFoodBar/Wan";
+     public const string FOOD_ITEM_ID_liquit = "liquit";
+     public const string FOOD_ITEM_ID_wan = "wan";
 
     //顶料
     public const string IMAGE_TOPFOOD_DIR_ROOT = "App/UI/Game/IronIceCream/TopFood";
@@ -25,6 +27,15 @@ public class IronIceCreamStepBase : UIView
     public const int STATUS_STEP_START = 1;
     public const int STATUS_STEP_END = 2;
     public const int STATUS_Liquid_Finish = 3;//倒完冰淇凌液
+
+
+    //道具开放
+    /*
+    开放七个道具：冰淇淋液，碗，奶油顶料，糖果，水果，勺子
+    开放5个道具：巧克力，浇丝，蛋卷
+    */
+    public static string[] nameTopFoodLock = { "liquit", "wan", "cream", "sugar", "fruit", "scoop", "chocolate", "wire", "egg" };
+    public static int[] countTopFoodLock = { 7, 7, 7, 7, 7, 7, 5, 5, 5 };
 
     //顶料
     public static string[] strTopFoodSort = { "cream", "sugar", "chocolate", "wire", "egg", "fruit", "scoop" };
@@ -52,7 +63,7 @@ public class IronIceCreamStepBase : UIView
 
     static public string GetImageOfTopFood(int idx)
     {
-        return IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[idx]; ;
+        return IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[idx]; 
     }
     static public string GetImageOfTopFoodSubFood(int idx)
     {
@@ -133,7 +144,8 @@ public class IronIceCreamStepBase : UIView
     //闪烁动画
     public void ShowHandFlickerAnimation(bool isAnimation)
     {
-        if(objHand==null){
+        if (objHand == null)
+        {
             return;
         }
         if (isAnimation)

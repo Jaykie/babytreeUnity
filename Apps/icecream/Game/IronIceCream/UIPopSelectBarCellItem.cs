@@ -8,10 +8,12 @@ public class UIPopSelectBarCellItem : UICellItemBase
     public Image imageBg;
     public Image imageLock;
     public bool enableLock = true;
+    FoodItemInfo infoFood;
     public override void UpdateItem(List<object> list)
     {
         float x, y, w, h;
         FoodItemInfo info = list[index] as FoodItemInfo;
+        infoFood = info;
         Debug.Log("UpdateItem:info.pic=" + info.pic);
         TextureUtil.UpdateImageTexture(imageBg, info.pic, true);
         {
@@ -33,7 +35,7 @@ public class UIPopSelectBarCellItem : UICellItemBase
             y = -h_cup / 2 + h_rect / 2;
             rctran.anchoredPosition = new Vector2(x, y);
             imageLock.gameObject.SetActive(false);
-            if ((index % 2 != 0) && enableLock)
+            if (info.isLock && enableLock)
             {
                 imageLock.gameObject.SetActive(true);
             }
@@ -42,7 +44,7 @@ public class UIPopSelectBarCellItem : UICellItemBase
     }
     public override bool IsLock()
     {
-        return false;
+        return infoFood.isLock;
     }
 
     public override void LayOut()

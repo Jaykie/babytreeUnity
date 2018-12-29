@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGameTopBar : UIView
+public class UIGameTopBar : UIView, IPopViewControllerDelegate
 {
 
     public Button btnShop;
@@ -13,7 +13,12 @@ public class UIGameTopBar : UIView
     public Button btnFree;
     public Button btnHome;
     public Button btnMusic;
+    public Image imageTrophyBg;
+    public Image imageTrophy;
+    public void OnPopViewControllerDidClose(PopViewController controller)
+    {
 
+    }
     public void OnClickBtnShop()
     {
 
@@ -37,5 +42,9 @@ public class UIGameTopBar : UIView
     public void OnClickBtnMusic()
     {
 
+    }
+    public void OnClickBtnTrophy()
+    {
+        TrophyViewController.main.Show(null, null);
     }
 }

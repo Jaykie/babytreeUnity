@@ -11,7 +11,7 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
 
     int indexStep = 0;
     int totalStep = 4;
-    GameObject objItemSelect;
+ 
     void Awake()
     {
 

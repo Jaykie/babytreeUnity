@@ -157,7 +157,9 @@ public class UIGameIronIceCream : UIGameIceCream
         }
 
         uiCup.index = idx;
-        uiCup.UpdateItem();
+        FoodItemInfo info = new FoodItemInfo();
+        info.type = uiCup.type;
+        uiCup.UpdateItem(info);
         uiCup.ShowHand(true, true);
 
     }
@@ -280,6 +282,29 @@ public class UIGameIronIceCream : UIGameIceCream
         {
             uiPopSelectBar.UpdateItem();
         }
+
+        if ((item.infoFood != null) && (item.infoFood.isLock))
+        {
+            if (Common.gold < AppRes.GOLD_CONSUME)
+            {
+                //星星不足
+                StarViewController p = StarViewController.main;
+                p.SetType(StarViewController.TYPE_STAR_NOTENOUGHT);
+                p.Show(null, null);
+            }
+            else
+            {
+                Common.gold -= AppRes.GOLD_CONSUME;
+                if (Common.gold < 0)
+                {
+                    Common.gold = 0;
+                }
+                //执行解锁
+                item.OnUnLockItem();
+            }
+        }
+
+
     }
 
     public void OnUIPopSelectBarDidClick(UIPopSelectBar bar, FoodItemInfo info)
