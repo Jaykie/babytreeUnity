@@ -61,6 +61,12 @@ public class UITopFoodItem : UIView
         {
             string key = GetLockKey(infoFood.id, index);
             Common.SetBool(key, false);
+            int v = PlayerPrefs.GetInt(AppRes.KEY_UNLOCK_PROP, 0);
+            v++;
+            //记录解锁道具数量
+            PlayerPrefs.SetInt(AppRes.KEY_UNLOCK_PROP, v);
+            //   
+
         }
     }
 

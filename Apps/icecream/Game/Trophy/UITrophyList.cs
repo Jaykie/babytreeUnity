@@ -70,6 +70,9 @@ public class UITrophyList : UIView, ITableViewDataSource
     {
         LayOut();
 
+        //显示5s后消失
+        Invoke("HideTips", 5.0f);
+
     }
 
     void LoadPrefab()
@@ -108,6 +111,10 @@ public class UITrophyList : UIView, ITableViewDataSource
         }
     }
 
+    void HideTips()
+    {
+        objTips.SetActive(false);
+    }
     public void OnClickBtnClose()
     {
         PopViewController p = this.controller as PopViewController;

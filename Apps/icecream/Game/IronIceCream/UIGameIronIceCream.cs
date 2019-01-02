@@ -36,6 +36,7 @@ public class UIGameIronIceCream : UIGameIceCream
     void Start()
     {
         UpdateGuankaLevel(GameManager.gameLevel);
+        ShowTrophy();
     }
     // Update is called once per frame
     void Update()
@@ -138,7 +139,10 @@ public class UIGameIronIceCream : UIGameIceCream
     {
         InitUI();
     }
-
+    public void ShowTrophy()
+    {
+        TrophyViewController.main.Show(null, null);
+    }
     void UpdateCup(int idx)
     {
         if (uiCup == null)

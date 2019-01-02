@@ -13,6 +13,7 @@ public class AppRes
 
     public const int GOLD_CONSUME = 3;//消费
 
+    public const string KEY_UNLOCK_PROP = "KEY_UNLOCK_PROP";//解锁道具数量
     //game name
     public const string GAME_IronIceCream = "IronIceCream";
     //color
