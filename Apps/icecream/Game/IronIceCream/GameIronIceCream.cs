@@ -14,12 +14,12 @@ public class GameIronIceCream : GameIceCream
 {
     public const string Prefab_STEP_PREFIX = "App/Prefab/Game/IronIceCream/IronIceCreamStep";
 
-    public const string IMAGE_DIR_ROOT_SingleColor = "App/UI/Game/IronIceCream/SingleColor";//0  0-1 0-2 0-3 
-    public const string IMAGE_DIR_ROOT_MultiColor = "App/UI/Game/IronIceCream/MultiColor";//  0-1 0-4 0-5
+    public const string IMAGE_DIR_ROOT_SingleColor =Common.GAME_RES_DIR+"/image/IronIceCream/SingleColor";//0  0-1 0-2 0-3 
+    public const string IMAGE_DIR_ROOT_MultiColor = Common.GAME_RES_DIR+"/image/IronIceCream/MultiColor";//  0-1 0-4 0-5
 
-    public const string IMAGE_DIR_ROOT_CupLiquid = "App/UI/Game/IronIceCream/CupLiquid";//  1 2 3 4 5
+    public const string IMAGE_DIR_ROOT_CupLiquid = Common.GAME_RES_DIR+"/image/IronIceCream/CupLiquid";//  1 2 3 4 5
 
-    public const string IMAGE_LOCK = "App/UI/Game/TopFoodBar/Lock";
+    public const string IMAGE_LOCK = Common.GAME_RES_DIR+"/image/TopFoodBar/Lock.png";
 
     public const int INDEX_STEP_CHAO = 0;//炒
     public const int INDEX_STEP_CHAN = 1;//铲

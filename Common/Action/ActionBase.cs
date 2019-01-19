@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 //动画
 public delegate void OnActionCompleteDelegate(GameObject obj);
+
+
+/*
+DOTween 用法
+https://blog.csdn.net/rookie0518/article/details/53157730
+ */
+ 
 public class ActionBase : MonoBehaviour
 {
     public GameObject target;
     public float percentage;
     public float duration;//总时间
     public int index;
-    public bool isLoop = false;//
+    public bool isLoop = false;
     public bool isUpdateByPercent = true;
     float runningTime;
 

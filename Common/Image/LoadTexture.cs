@@ -4,13 +4,32 @@ using System.IO;
 
 public class LoadTexture : MonoBehaviour
 {
+    static public Texture2D LoadFileAuto(string filePath)
+    {
+        Texture2D tex = LoadFromResource(filePath);
+        if (tex == null)
+        {
+            if (FileUtil.FileIsExistAsset(filePath))
+            {
+                tex = LoadFromAsset(filePath);
+            }
 
+        }
+        if (tex == null)
+        {
+            if (FileUtil.FileIsExist(filePath))
+            {
+                tex = LoadFromFile(filePath);
+            }
+        }
+        return tex;
+    }
 
     //filePath 为绝对路径
     static public Texture2D LoadFromFile(string filePath)
     {
         Texture2D tex = null;
-        byte[] data = FileUtil.ReadData(filePath);
+        byte[] data = FileUtil.ReadDataFromFile(filePath);
         if (data != null)
         {
             tex = LoadFromData(data);
@@ -85,6 +104,6 @@ public class LoadTexture : MonoBehaviour
         Texture2D tex = LoadFromAsset(file);
         Sprite sp = CreateSprieFromTex(tex);
         return sp;
-    } 
- 
+    }
+
 }

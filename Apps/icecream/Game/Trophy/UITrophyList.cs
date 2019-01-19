@@ -16,6 +16,7 @@ public class UITrophyList : UIView, ITableViewDataSource
     public GameObject objTips;
     public Image imageTitle;
     public Image imageTips;
+    public UITrophyGet uiTrophyGet;
     public int numRows;
     int numInstancesCreated = 0;
     UICellItemBase cellItemPrefab;
@@ -24,6 +25,7 @@ public class UITrophyList : UIView, ITableViewDataSource
     int oneCellNum;
     int heightCell;
     int totalItem;
+
     void Awake()
     {
         LoadPrefab();
@@ -31,10 +33,8 @@ public class UITrophyList : UIView, ITableViewDataSource
 
         //bg
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
-
-
-        TextureUtil.UpdateImageTexture(imageTitle, (Language.main.GetLanguage() == SystemLanguage.Chinese) ? AppRes.IMAGE_TROPHY_ImageTitle_cn : AppRes.IMAGE_TROPHY_ImageTitle_en, true);
-        TextureUtil.UpdateImageTexture(imageTips, (Language.main.GetLanguage() == SystemLanguage.Chinese) ? AppRes.IMAGE_TROPHY_ImageTips_cn : AppRes.IMAGE_TROPHY_ImageTips_en, true);
+        TextureUtil.UpdateImageTexture(imageTitle, Language.main.IsChinese() ? AppRes.IMAGE_TROPHY_ImageTitle_cn : AppRes.IMAGE_TROPHY_ImageTitle_en, true);
+        TextureUtil.UpdateImageTexture(imageTips, Language.main.IsChinese() ? AppRes.IMAGE_TROPHY_ImageTips_cn : AppRes.IMAGE_TROPHY_ImageTips_en, true);
 
         listItem = new List<object>();
 
@@ -69,7 +69,6 @@ public class UITrophyList : UIView, ITableViewDataSource
     void Start()
     {
         LayOut();
-
         //显示5s后消失
         Invoke("HideTips", 5.0f);
 
@@ -124,8 +123,32 @@ public class UITrophyList : UIView, ITableViewDataSource
         }
     }
 
+    //position为屏幕坐标
+    public Vector2 GetPosOfBtnTrophy(int idxcell)
+    {
+        Vector2 pos = Vector2.zero;
+        TableViewCell cell = tableView.GetCellAtRow(idxcell);
+        if (cell != null)
+        {
+            UITrophyCellItem item = cell.transform.GetComponentInChildren<UITrophyCellItem>();
+            if (item != null)
+            {
+                pos = item.GetPosOfBtnTrophy();
+                Debug.Log("UITrophyCellItem pos=" + pos);
+            }
+            else
+            {
+                Debug.Log("UITrophyCellItem is null");
+            }
+        }
+        else
+        {
+            Debug.Log("TableViewCell is null");
+        }
+        return pos;
+    }
 
-    void UpdateTable(bool isLoad)
+    public void UpdateTable(bool isLoad)
     {
         oneCellNum = 1;
         if (Device.isLandscape)

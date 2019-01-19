@@ -62,7 +62,6 @@ public class MeshTexture : MonoBehaviour
         if (meshCollider == null)
         {
             //boxCollider = this.gameObject.AddComponent<BoxCollider>();
-
             //设置网格碰撞体才能通过射线实时获取纹理的uv坐标
             meshCollider = this.gameObject.AddComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;

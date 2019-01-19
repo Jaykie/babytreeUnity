@@ -68,7 +68,7 @@ public class UIPlaceIceCream : UIPlaceBase, ITableViewDataSource
         {
             oneCellNum = 2;
         }
-        listItem = GameManager.ParsePlaceList();
+        listItem = GameManager.main.ParsePlaceList();
         int total = listItem.Count;
         totalItem = total;
         Debug.Log("total:" + total);

@@ -29,9 +29,9 @@ public class UITopFoodItem : UIView
     public float height;
     public bool enableLock = true;
 
-    string strImageCup = "App/UI/Game/TopFoodBar/Cup";
+    string strImageCup = Common.GAME_RES_DIR+"/image/TopFoodBar/Cup.png";
 
-    public const string IMAGE_WAN_BG = "App/UI/Game/TopFoodBar/Wan/WanBg";
+    public const string IMAGE_WAN_BG = Common.GAME_RES_DIR+"/image/TopFoodBar/Wan/WanBg.png";
 
 
 
@@ -61,11 +61,20 @@ public class UITopFoodItem : UIView
         {
             string key = GetLockKey(infoFood.id, index);
             Common.SetBool(key, false);
-            int v = PlayerPrefs.GetInt(AppRes.KEY_UNLOCK_PROP, 0);
-            v++;
+            int num_star = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_STAR, 0);
+            num_star++;
             //记录解锁道具数量
-            PlayerPrefs.SetInt(AppRes.KEY_UNLOCK_PROP, v);
+            PlayerPrefs.SetInt(TrophyRes.KEY_TROPHY_NUM_STAR, num_star);
             //   
+
+            int num_medal = num_star / TrophyRes.ONE_CELL_NUM_STAR;
+            PlayerPrefs.SetInt(TrophyRes.KEY_TROPHY_NUM_MEDAL, num_medal);
+
+            int num_cup = num_medal / TrophyRes.ONE_CELL_NUM_MEDAL;
+            PlayerPrefs.SetInt(TrophyRes.KEY_TROPHY_NUM_CUP, num_cup);
+
+            int num_crown = num_cup / TrophyRes.ONE_CELL_NUM_CUP;
+            PlayerPrefs.SetInt(TrophyRes.KEY_TROPHY_NUM_CROWN, num_crown);
 
         }
     }

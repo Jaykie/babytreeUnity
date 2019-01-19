@@ -6,8 +6,41 @@ public class FileUtil : MonoBehaviour
 {
     public const string JAVA_CLASS_FILEUTIL = "com.moonma.common.FileUtil";
 
+    static public byte[] ReadDataAuto(string filePath)
+    {
+        byte[] data = FileUtil.ReadDataFromResources(filePath);
+        if (data == null)
+        {
+            if (FileUtil.FileIsExistAsset(filePath))
+            {
+                data = FileUtil.ReadDataAsset(filePath);
+            }
+
+        }
+        if (data == null)
+        {
+            if (FileUtil.FileIsExist(filePath))
+            {
+                data = FileUtil.ReadDataFromFile(filePath);
+            }
+
+        }
+        return data;
+    }
+
+
+    static public string ReadStringAuto(string filePath)
+    {
+        byte[] data = ReadDataAuto(filePath);
+        if (data == null)
+        {
+            return null;
+        }
+        string str = Encoding.UTF8.GetString(data);
+        return str;
+    }
     //filePath 为绝对路径
-    static public byte[] ReadData(string filePath)
+    static public byte[] ReadDataFromFile(string filePath)
     {
 
         //FileStream fs = new FileStream(filePath, FileMode.Open);
@@ -56,9 +89,9 @@ public class FileUtil : MonoBehaviour
         return null;
     }
 
-    static public string ReadString(string filePath)
+    static public string ReadStringFromFile(string filePath)
     {
-        byte[] data = ReadData(filePath);
+        byte[] data = ReadDataFromFile(filePath);
         if (data == null)
         {
             return null;
@@ -120,9 +153,18 @@ public class FileUtil : MonoBehaviour
             //StreamAsseting目录 ios真机只读 不可写
             return ReadDataAssetIos(filePath);
         }
-        return ReadData(filePath);
+        return ReadDataFromFile(filePath);
     }
-
+    static public byte[] ReadDataFromResources(string file)
+    {
+        TextAsset text = Resources.Load(GetFileBeforeExtWithOutDot(file)) as TextAsset;
+        if (text == null)
+        {
+            return null;
+        }
+        byte[] data = text.bytes;
+        return data;
+    }
 
     static public string ReadStringAsset(string file)
     {
@@ -132,6 +174,31 @@ public class FileUtil : MonoBehaviour
             return null;
         }
         string str = Encoding.UTF8.GetString(data);
+        return str;
+    }
+    static public string ReadStringFromResources(string file)
+    {
+        TextAsset text = Resources.Load(GetFileBeforeExtWithOutDot(file)) as TextAsset;
+        if (text == null)
+        {
+            return null;
+        }
+        string str = text.text;
+        // byte[] data = text.bytes;
+        // if (data == null)
+        // {
+        //     return null;
+        // }
+        // string str = Encoding.UTF8.GetString(data);
+        return str;
+    }
+    static public string ReadString2(string file)
+    {
+        string str = ReadStringAsset(file);
+        if (str == null)
+        {
+            return null;
+        }
         return str;
     }
 
@@ -202,7 +269,7 @@ public class FileUtil : MonoBehaviour
         return ret;
     }
 
-    //除去文件后缀
+    //除去文件后缀 
     static public string GetFileBeforeExt(string filepath)
     {
         string ret = filepath;
@@ -210,6 +277,17 @@ public class FileUtil : MonoBehaviour
         if (idx >= 0)
         {
             ret = filepath.Substring(0, idx + 1);
+        }
+        return ret;
+    }
+    //除去文件后缀  并去除.
+    static public string GetFileBeforeExtWithOutDot(string filepath)
+    {
+        string ret = filepath;
+        int idx = filepath.LastIndexOf(".");
+        if (idx >= 0)
+        {
+            ret = filepath.Substring(0, idx);
         }
         return ret;
     }

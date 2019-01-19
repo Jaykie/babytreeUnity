@@ -6,6 +6,10 @@ public class TrophyViewController : PopViewController
 {
     public UITrophyList uiPrefab;
     public UITrophyList ui;
+
+    UITrophyGet uiTrophyGetPrefab;
+    public UITrophyGet uiTrophyGet;
+
     static private TrophyViewController _main = null;
     public static TrophyViewController main
     {
@@ -27,6 +31,11 @@ public class TrophyViewController : PopViewController
         string strPrefab = "App/Prefab/Trophy/UITrophyList";
         GameObject obj = PrefabCache.main.Load(strPrefab);
         uiPrefab = obj.GetComponent<UITrophyList>();
+
+        {
+            obj = PrefabCache.main.Load("App/Prefab/Trophy/UITrophyGet");
+            uiTrophyGetPrefab = obj.GetComponent<UITrophyGet>();
+        }
     }
 
     public override void ViewDidLoad()
@@ -44,6 +53,15 @@ public class TrophyViewController : PopViewController
         ui = (UITrophyList)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
         ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+
+        {
+            uiTrophyGet = (UITrophyGet)GameObject.Instantiate(uiTrophyGetPrefab);
+            ui.uiTrophyGet = uiTrophyGet;
+            uiTrophyGet.uiTrophyList = ui;
+            uiTrophyGet.SetController(this);
+
+           ViewControllerManager.ClonePrefabRectTransform(uiTrophyGetPrefab.gameObject, uiTrophyGet.gameObject);
+        }
 
     }
 

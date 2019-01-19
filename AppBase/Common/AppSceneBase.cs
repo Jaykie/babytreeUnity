@@ -22,9 +22,14 @@ public class AppSceneBase : ScriptBase
     public static AppSceneBase main;
 
     bool isReLayout = false;
+    HttpRequest httpReqBg;
 
     void Awake()
     {
+        if (AppSceneBase.main == null)
+        {
+            AppSceneBase.main = this;
+        }
         isReLayout = false;
         IPInfo.main.StartParserInfo();
         InitScalerMatch();
@@ -53,7 +58,10 @@ public class AppSceneBase : ScriptBase
         }
 
 
-
+        if (Common.isWeb)
+        {
+            GameManager.main.PreLoadDataForWeb();
+        }
     }
 
     // Use this for initialization
@@ -70,8 +78,10 @@ public class AppSceneBase : ScriptBase
             isHasStarted = false;
             InitUiScaler();
             UpdateMainWorldRect(0);
-            LayoutChild();
+            //LayoutChild();
             RunCheckApp();
+
+            OnResize();
         }
         if (Device.isScreenDidChange)
         {
@@ -83,20 +93,22 @@ public class AppSceneBase : ScriptBase
         if (isReLayout)
         {
             isReLayout = false;
-            //InitScalerMatch 和 InitUiScaler 异步执行
-            InitUiScaler();
-            UpdateMainWorldRect(_adBannerHeightCanvas);
-            LayoutChild();
-            if (rootViewController != null)
-            {
-                rootViewController.UpdateCanvasSize(sizeCanvas);
-            }
-            // Debug.Log("Device.isScreenDidChange:sizeCanvas = " + sizeCanvas);
-
+            OnResize();
         }
     }
 
-
+    void OnResize()
+    {
+        //InitScalerMatch 和 InitUiScaler 异步执行
+        InitUiScaler();
+        UpdateMainWorldRect(_adBannerHeightCanvas);
+        LayoutChild();
+        if (rootViewController != null)
+        {
+            rootViewController.UpdateCanvasSize(sizeCanvas);
+        }
+        // Debug.Log("Device.isScreenDidChange:sizeCanvas = " + sizeCanvas);
+    }
 
     void OnAppVersionFinished(AppVersion app)
     {
@@ -108,10 +120,7 @@ public class AppSceneBase : ScriptBase
     {
         bool isFirstRun = !Common.GetBool(AppString.STR_KEY_NOT_FIRST_RUN);
         mainCamera = Common.GetMainCamera();
-        if (main == null)
-        {
-            main = this;
-        }
+
 
         Tongji.Init(Config.main.GetString("APPTONGJI_ID", "0"));
         Device.InitOrientation();
@@ -153,7 +162,7 @@ public class AppSceneBase : ScriptBase
         else
         {
             appVersion.callbackFinished = null;
-            RunApp();
+            RunApp(); 
         }
         appVersion.StartParseVersion();
     }
@@ -186,6 +195,8 @@ public class AppSceneBase : ScriptBase
         //rctran.anchoredPosition = new Vector2(x, y);
         rctran.offsetMin = new Vector2(oft_left, oft_bottom);
         rctran.offsetMax = new Vector2(-oft_right, -oft_top);
+
+        OnResize();
     }
 
     public void ClearMainWorld()
@@ -240,6 +251,7 @@ public class AppSceneBase : ScriptBase
         w = size.x - oft_left - oft_right;
         h = size.y - adBannerHeight_world - oft_top - oft_bottom;
         y = mainCamera.orthographicSize - oft_top - h / 2;
+        //y = 0;
         x = 0;
         float z = rctranWorld.position.z;
         rctranWorld.sizeDelta = new Vector2(w, h);
@@ -273,7 +285,8 @@ public class AppSceneBase : ScriptBase
                 Texture2D tex = sp.texture;
                 float w = tex.width / 100f;//render.size.x;
                 float h = tex.height / 100f;//render.size.y;
-                if ((w != 0) && (h != 0)){
+                if ((w != 0) && (h != 0))
+                {
                     float scalex = worldsize.x / w;
                     float scaley = worldsize.y / h;
                     float scale = Mathf.Max(scalex, scaley);
@@ -285,13 +298,51 @@ public class AppSceneBase : ScriptBase
 
         }
     }
+    void OnHttpRequestFinished(HttpRequest req, bool isSuccess, byte[] data)
+    {
+        if (req == httpReqBg)
+        {
+            Texture2D tex = LoadTexture.LoadFromData(data);
+            OnGetBgFileDidFinish(isSuccess, tex, false, req.strUrl);
 
+        }
+    }
+    void OnGetBgFileDidFinish(bool isSuccess, Texture2D tex, bool isLocal, string filepath)
+    {
+        if (isSuccess && (tex != null))
+        {
+            TextureCache.main.AddCache(filepath, tex);
+            SpriteRenderer render = objSpriteBg.GetComponent<SpriteRenderer>();
+            render.sprite = LoadTexture.CreateSprieFromTex(tex);
+            LayoutChild();
+        }
+
+    }
     public void UpdateWorldBg(string pic)
     {
-        Texture2D tex = TextureCache.main.Load(pic);
-        SpriteRenderer render = objSpriteBg.GetComponent<SpriteRenderer>();
-        render.sprite = LoadTexture.CreateSprieFromTex(tex);
-        LayoutChild();
+        bool is_cache = TextureCache.main.IsInCache(pic);
+        if (is_cache)
+        {
+            Texture2D tex = TextureCache.main.Load(pic);
+            OnGetBgFileDidFinish(true, tex, true, pic);
+        }
+        else
+        {
+            if (Common.isWeb)
+            {
+                httpReqBg = new HttpRequest(OnHttpRequestFinished);
+                httpReqBg.Get(HttpRequest.GetWebUrlOfAsset(pic));
+            }
+            else
+            {
+                Texture2D tex = LoadTexture.LoadFileAuto(pic);
+                Debug.Log("UpdateWorldBg::pic=" + pic + " w=" + tex.width + " h=" + tex.height);
+                OnGetBgFileDidFinish(true, tex, true, pic);
+            }
+        }
+
+
+
     }
 
     public void AddObjToMainWorld(GameObject obj)

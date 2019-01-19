@@ -180,6 +180,11 @@ public class Config
             if (Common.isAndroid)
             {
                 ret = false;
+                if (Config.main.channel == Source.GP)
+                {
+                    //GP市场内购
+                    ret = true;
+                }
             }
             if (Common.isWinUWP)
             {
@@ -204,6 +209,12 @@ public class Config
                 if (!IPInfo.isInChina)
                 {
                     ret = Source.XIAOMI;
+                }
+
+                if (Config.main.channel == Source.GP)
+                {
+                    //GP市场内购
+                    ret = Source.GP;
                 }
 
             }
@@ -274,7 +285,10 @@ public class Config
             {
                 ret = GetStringJson(rootJsonChannel, "channel_android", Source.XIAOMI);
             }
-
+            if (Common.isWeb)
+            {
+                ret = Source.FACEBOOK;
+            }
             return ret;
         }
     }
@@ -285,6 +299,15 @@ public class Config
         {
             //jsonShare
             string str = (string)rootJsonCommon["SHARE_APP_URL"];
+            return str;
+        }
+    }
+    public string iapAppKeyGoogle
+    {
+        get
+        {
+            //jsonShare
+            string str = GetString("IAP_APP_KEY_GOOGLE", "0");
             return str;
         }
     }
@@ -372,16 +395,21 @@ public class Config
             return;
         }
 
-        string strDir = Common.GAME_DATA_DIR + "/config";
+        //string strDir = Common.GAME_DATA_DIR + "/config";
+        string strDir = Common.RES_CONFIG_DATA + "/config";
         string fileName = "config_common";
         fileName += ".json";
 
-        string json = FileUtil.ReadStringAsset(strDir + "/" + fileName);
+        string json = FileUtil.ReadStringFromResources(strDir + "/" + fileName);
         rootJsonCommon = JsonMapper.ToObject(json);
     }
 
     void ParseJsonChannel()
     {
+        if (Common.isWeb)
+        {
+            return;
+        }
         if (rootJsonChannel != null)
         {
             return;
@@ -408,7 +436,7 @@ public class Config
         }
         if (FileUtil.FileIsExist(filePath))
         {
-            string json = FileUtil.ReadString(filePath);
+            string json = FileUtil.ReadStringFromFile(filePath);
             rootJsonAppname = JsonMapper.ToObject(json);
         }
     }
@@ -420,7 +448,9 @@ public class Config
             return;
         }
 
-        string strDir = Common.GAME_DATA_DIR + "/config";
+        //string strDir = Common.GAME_DATA_DIR + "/config";
+        string strDir = Common.RES_CONFIG_DATA + "/config";
+
         string fileName = "config_ios";
 
         //Defualt
@@ -454,7 +484,7 @@ public class Config
         }
         fileName += ".json";
 
-        string json = FileUtil.ReadStringAsset(strDir + "/" + fileName);
+        string json = FileUtil.ReadStringFromResources(strDir + "/" + fileName);//ReadStringAsset
         rootJson = JsonMapper.ToObject(json);
 
         //appid

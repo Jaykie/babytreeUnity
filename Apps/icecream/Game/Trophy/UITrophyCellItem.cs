@@ -27,105 +27,97 @@ public class UITrophyCellItem : UICellItemBase
     public Image imageRight9;
 
     Image[] listImage = new Image[10];
-    static Shader shaderGrey;
+    Material matGrey;
+    int type;
     private void Awake()
     {
         //  base.Awake();
-
-        if (shaderGrey == null)
-        {
-            shaderGrey = Shader.Find("Custom/Grey");
-        }
+        matGrey = new Material(Shader.Find("Custom/Grey"));
         Image[] listTmp = { imageRight0, imageRight1, imageRight2, imageRight3, imageRight4, imageRight5, imageRight6, imageRight7, imageRight8, imageRight9 };
         for (int i = 0; i < listTmp.Length; i++)
         {
             listImage[i] = listTmp[i];
         }
+
+
+        Vector4 border = AppRes.borderCellTrophyBg;
+        //TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_TROPHY_CELL_BG, false, border);
+        TextureUtil.UpdateImageTexture(imageIconLeftBg, AppRes.IMAGE_ROOT_DIR_TROPHY + "/IconBoard.png", true);
+
     }
 
-    string GetImageOfIcon(int idx, int group)
-    {
-        if (idx == 0)
-        {
-            return GetImageOfStar(group);
-        }
-        if (idx == 1)
-        {
-            return GetImageOfMedal(group);
-        }
-        if (idx == 2)
-        {
-            return GetImageOfCup(group);
-        }
-
-        if (idx == 3)
-        {
-            //皇冠
-            return AppRes.IMAGE_TROPHY_Crown_small;
-        }
-        return "";
-    }
-    //奖励星
-    string GetImageOfStar(int group)
-    {
-        //1 - 1 - 1
-        return AppRes.IMAGE_TROPHY_Star_PREFIX + group.ToString() + "-1-1";
-    }
-    //奖牌
-    string GetImageOfMedal(int group)
-    {
-        //1 - 2 - 1
-        return AppRes.IMAGE_TROPHY_Medal_PREFIX + group.ToString() + "-2-1";
-    }
-    //奖杯  
-    string GetImageOfCup(int group)
-    {
-        //1-3-big
-        return AppRes.IMAGE_TROPHY_Cup_PREFIX + group.ToString() + "-3-small";
-    }
 
 
     public override void UpdateItem(List<object> list)
     {
+        type = GetTrophyType();
+        int level = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_STAR_DISPLAY, 0) / TrophyRes.ONE_CELL_NUM_STAR + 1;
+        int group = level / TrophyRes.ONE_CELL_NUM_STAR + 1;//1-5
         if (index < list.Count)
         {
             ItemInfo info = list[index] as ItemInfo;
             tagValue = info.tag;
 
-            //  Vector4 border = AppRes.borderCellSettingBg;
-            // TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_TROPHY_CELL_BG, false, border);
+
         }
         //level
         {
             //begain with 1
-            int idx = 1;
-            string pic = AppRes.IMAGE_TROPHY_LEVEL_PREFIX + idx.ToString();
+            int idx = level;
+            string pic = AppRes.IMAGE_TROPHY_LEVEL_PREFIX + idx.ToString() + ".png";
             TextureUtil.UpdateImageTexture(imageLevel, pic, true);
         }
 
         //icon left
         {
             //begain with 1 
-            int group = 1;
-            string pic = GetImageOfIcon(index + 1, group);
-            TextureUtil.UpdateImageTexture(imageIconLeft, pic, true);
-            SetImageGrey(imageIconLeft, true);
+
+            string pic = TrophyRes.GetImageOfIcon(type, group);
+            int num = 0;
+            if (type == TrophyRes.TYPE_Star)
+            {
+                num = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_MEDAL_DISPLAY, 0);
+
+            }
+            if (type == TrophyRes.TYPE_Medal)
+            {
+                num = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_CUP_DISPLAY, 0);
+            }
+            if (type == TrophyRes.TYPE_Cup)
+            {
+                num = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_CROWN_DISPLAY, 0);
+            }
+            SetImageGrey(imageIconLeft, (num >= 1) ? false : true, pic);
         }
 
 
         //icon right 
+
+        int num_hightlight = -1;
+        if (type == TrophyRes.TYPE_Star)
+        {
+            num_hightlight = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_STAR_DISPLAY, 0) % TrophyRes.ONE_CELL_NUM_STAR;
+
+        }
+        if (type == TrophyRes.TYPE_Medal)
+        {
+            num_hightlight = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_MEDAL_DISPLAY, 0) % TrophyRes.ONE_CELL_NUM_MEDAL;
+        }
+        if (type == TrophyRes.TYPE_Cup)
+        {
+            num_hightlight = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_CUP_DISPLAY, 0) % TrophyRes.ONE_CELL_NUM_CUP;
+        }
+        Debug.Log("num_hightlight=" + num_hightlight);
         for (int i = 0; i < listImage.Length; i++)
         {
             Image image = listImage[i];
-            //begain with 1
-            int group = 1;
-            string pic = GetImageOfIcon(index, group);
-            TextureUtil.UpdateImageTexture(image, pic, true);
-            SetImageGrey(image, true);
+            //begain with 1 
+            string pic = TrophyRes.GetImageOfIcon(type, group);
+            SetImageGrey(image, i < num_hightlight ? false : true, pic);
         }
 
 
-        if (index == 2)
+        if (type == TrophyRes.TYPE_Cup)
         {
             //2:奖杯
             for (int i = 5; i < listImage.Length; i++)
@@ -135,22 +127,62 @@ public class UITrophyCellItem : UICellItemBase
             }
 
         }
+
+        imageLevel.gameObject.SetActive(false);
+        if (type == TrophyRes.TYPE_Star)
+        {
+            imageLevel.gameObject.SetActive(true);
+        }
         LayOut();
     }
 
+    int GetTrophyType()
+    {
+        int type = 0;
+        switch (index)
+        {
+            case 0:
+                {
+                    type = TrophyRes.TYPE_Star;
+                }
+                break;
+            case 1:
+                {
+                    type = TrophyRes.TYPE_Medal;
+                }
+                break;
+            case 2:
+                {
+                    type = TrophyRes.TYPE_Cup;
+                }
+                break;
+
+        }
+
+        return type;
+    }
     //变灰
-    void SetImageGrey(Image image, bool enable)
+    void SetImageGrey(Image image, bool enable, string pic)
     {
         //Shader "Custom/Grey" 
+        // if (enable)
+        // {
+        //     image.material = matGrey;
+        // }
+        // else
+        // {
+        //     image.material = null;
+        // }
+        Texture2D tex = null;
         if (enable)
         {
-            image.material = new Material(shaderGrey);
+            tex = TextureCache.main.Load(pic, matGrey);
         }
         else
         {
-            image.material = null;
+            tex = TextureCache.main.Load(pic);
         }
-
+        TextureUtil.UpdateImageTexture(image, tex, true);
     }
 
     public override void LayOut()
@@ -159,15 +191,15 @@ public class UITrophyCellItem : UICellItemBase
         RectTransform rctranLeft = objLeft.GetComponent<RectTransform>();
         RectTransform rctranRight = objRight.GetComponent<RectTransform>();
         GridLayoutGroup grid = objRight.GetComponent<GridLayoutGroup>();
-
+        float height_level = 32;
         float oft_border_x = 48;
         {
             ratio = 0.8f;
-            w = height * ratio;
+            w = height * ratio - height_level * 2;
             h = w;
 
             rctranLeft.sizeDelta = new Vector2(w, h);
-            x = -width / 2 + w /2+oft_border_x;
+            x = -width / 2 + w / 2 + oft_border_x;
             y = 0;
             rctranLeft.anchoredPosition = new Vector2(x, y);
 
@@ -177,6 +209,17 @@ public class UITrophyCellItem : UICellItemBase
             imageIconLeft.transform.localScale = new Vector3(scale, scale, 1f);
         }
 
+        {
+            RectTransform rctran = imageLevel.GetComponent<RectTransform>();
+            w = rctranLeft.rect.width;
+            h = height_level;
+            x = 0;
+            y = -rctranLeft.rect.height / 2 - h / 2;
+            scale = Common.GetBestFitScale(imageLevel.sprite.texture.width, imageLevel.sprite.texture.height, w, h);
+            imageLevel.transform.localScale = new Vector3(scale, scale, 1f);
+            rctran.anchoredPosition = new Vector2(x, y);
+
+        }
         {
             ratio = 0.8f;
 
@@ -208,6 +251,12 @@ public class UITrophyCellItem : UICellItemBase
             scale = Common.GetBestFitScale(image.sprite.texture.width, image.sprite.texture.height, grid.cellSize.x, grid.cellSize.y);
             image.transform.localScale = new Vector3(scale, scale, 1f);
         }
+    }
+
+    public Vector2 GetPosOfBtnTrophy()
+    {
+        Vector2 pos = imageIconLeft.transform.position;
+        return pos;
     }
 }
 

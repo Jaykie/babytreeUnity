@@ -13,8 +13,4 @@ public class AppType
 
 
     //minigame
-
-    //babytree
-    public const string ICECREAM = "icecream";
-
 }

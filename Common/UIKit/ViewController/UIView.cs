@@ -8,6 +8,10 @@ public class UIView : MonoBehaviour
     {
         get
         {
+            if (AppSceneBase.main == null)
+            {
+                Debug.Log("UIView::AppSceneBase.main==null");
+            }
             return AppSceneBase.main.mainCamera;
         }
     }
@@ -66,7 +70,11 @@ public class UIView : MonoBehaviour
     }
     public void OnUIDidFinish()
     {
+        DoUIFinish();
+    }
 
+    void DoUIFinish()
+    {
         if (this.controller != null)
         {
             if (controller.callbackUIFinish != null)

@@ -131,7 +131,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         acImage.isLoop = false;
         for (int i = 0; i < 5; i++)
         {
-            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString();
+            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString()+".png";
             acImage.AddPic(pic);
         }
         acImage.Run();

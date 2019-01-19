@@ -32,6 +32,9 @@ public class UIHomeBase : UIView
     public void Init()
     {
         Debug.Log("UIMainBase Init");
+        //提前加载
+        GameManager.main.ParsePlaceList();
+
         audioClipBtnPlay = AudioCache.main.Load(AppCommon.AUDIO_BTN_CLICK);
         uiHomeAppCenter.gameObject.SetActive(true);
         if (!AppVersion.appCheckHasFinished)
@@ -40,7 +43,7 @@ public class UIHomeBase : UIView
         }
         if (Common.isAndroid)
         {
-            if (Config.main.channel == Source.GP)
+            if ((Config.main.channel == Source.GP) || (Config.main.channel == Source.HUAWEI))
             {
                 //GP市场不显示
                 uiHomeAppCenter.gameObject.SetActive(false);
@@ -60,7 +63,7 @@ public class UIHomeBase : UIView
                 if (Config.main.channel == Source.GP)
                 {
                     //GP市场不显示
-                    //btnAdVideo.gameObject.SetActive(false);
+                    btnAdVideo.gameObject.SetActive(false);
                 }
             }
         }
@@ -97,10 +100,10 @@ public class UIHomeBase : UIView
         appVersion.StartParseVersion();
 
     }
-    public override void LayOut()
-    {
-        LayoutChildBase();
-    }
+    // public override void LayOut()
+    // {
+    //     LayoutChildBase();
+    // }
 
 
     public void LayoutChildBase()
@@ -284,7 +287,7 @@ public class UIHomeBase : UIView
     public void DoBtnNoADIAP()
     {
         IAP.main.SetObjectInfo(this.gameObject.name, "IAPCallBack");
-        IAP.main.StartBuy(IAP.productIdNoAD);
+        IAP.main.StartBuy(IAP.productIdNoAD,false);
     }
 
     public void OnUIShareDidClick(ItemInfo item)

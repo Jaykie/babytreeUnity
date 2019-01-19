@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using DG.Tweening;
 using LitJson;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,8 @@ public class UIGameIronIceCream : UIGameIceCream
 
     UITopFoodItem uiCup;//倒液体的杯子
     public Button btnNext;
+
+    public Image imageTrophy;//获得奖励星动画
     void Awake()
     {
         LoadPrefab();
@@ -31,6 +34,7 @@ public class UIGameIronIceCream : UIGameIceCream
         //  btnNext.gameObject.SetActive(false);
         UpdateCup(0);
         //ShowFPS();
+        imageTrophy.gameObject.SetActive(false);
     }
     // Use this for initialization
     void Start()
@@ -142,6 +146,28 @@ public class UIGameIronIceCream : UIGameIceCream
     public void ShowTrophy()
     {
         TrophyViewController.main.Show(null, null);
+    }
+
+    //每解锁一个道具，会从这个道具飞出一个彩色奖励星到奖杯榜按钮处
+    void RunActionMoveTrophy()
+    {
+        float x, y;
+        string pic = TrophyRes.GetImageOfIcon(TrophyRes.TYPE_Medal, 1);
+        TextureUtil.UpdateImageTexture(imageTrophy, pic, true);
+        imageTrophy.gameObject.SetActive(true);
+        Vector2 posNormal = imageTrophy.transform.position;
+        UIGameIceCream game = GameViewController.main.gameBase as UIGameIceCream;
+        //置顶
+        imageTrophy.transform.SetAsLastSibling();
+        RectTransform rctran = imageTrophy.GetComponent<RectTransform>();
+        Vector2 posEnd = game.uiGameTopBar.GetPosOfBtnTrophy();
+        rctran.DOMove(posEnd, 1f).OnComplete(() =>
+          {
+              imageTrophy.transform.position = posNormal;
+              imageTrophy.gameObject.SetActive(false);
+          });
+
+        AudioPlay.main.PlayFile(TrophyRes.AUDIO_TROPHY_GET_STAR);
     }
     void UpdateCup(int idx)
     {
@@ -289,6 +315,7 @@ public class UIGameIronIceCream : UIGameIceCream
 
         if ((item.infoFood != null) && (item.infoFood.isLock))
         {
+
             if (Common.gold < AppRes.GOLD_CONSUME)
             {
                 //星星不足
@@ -305,6 +332,7 @@ public class UIGameIronIceCream : UIGameIceCream
                 }
                 //执行解锁
                 item.OnUnLockItem();
+                RunActionMoveTrophy();
             }
         }
 

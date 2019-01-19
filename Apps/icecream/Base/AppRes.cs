@@ -13,7 +13,6 @@ public class AppRes
 
     public const int GOLD_CONSUME = 3;//消费
 
-    public const string KEY_UNLOCK_PROP = "KEY_UNLOCK_PROP";//解锁道具数量
     //game name
     public const string GAME_IronIceCream = "IronIceCream";
     //color
@@ -48,17 +47,23 @@ public class AppRes
     public const string IMAGE_UIVIEWALERT_BG_BTN = "App/UI/Setting/SettingCellBgOringe";
     static public Vector4 borderUIViewAlertBgBtn = new Vector4(18f, 18f, 18f, 18);
 
+    public const string IMAGE_BTN_FREE_cn = "App/UI/Home/BtnFree_cn";
+    public const string IMAGE_BTN_FREE_en = "App/UI/Home/BtnFree_en";
+
+    public const string IMAGE_BTN_LANGUAGE_cn = "App/UI/Home/BtnLanguage_cn";
+    public const string IMAGE_BTN_LANGUAGE_en = "App/UI/Home/BtnLanguage_en";
+
     //trophy
-    public const string IMAGE_ROOT_DIR_TROPHY = "App/UI/Game/Trophy";
-    public const string IMAGE_TROPHY_CELL_BG = IMAGE_ROOT_DIR_TROPHY + "/CellBg";
-    public const string IMAGE_TROPHY_BG1 = IMAGE_ROOT_DIR_TROPHY + "/Bg1";
-    public const string IMAGE_TROPHY_BG2 = IMAGE_ROOT_DIR_TROPHY + "/Bg2";
-    public const string IMAGE_TROPHY_Crown = IMAGE_ROOT_DIR_TROPHY + "/Crown";
-    public const string IMAGE_TROPHY_Crown_small = IMAGE_ROOT_DIR_TROPHY + "/Crown_small";
-    public const string IMAGE_TROPHY_ImageTitle_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_cn";
-    public const string IMAGE_TROPHY_ImageTitle_en = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_en";
-    public const string IMAGE_TROPHY_ImageTips_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_cn";
-    public const string IMAGE_TROPHY_ImageTips_en = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_en";
+    public const string IMAGE_ROOT_DIR_TROPHY = Common.GAME_RES_DIR + "/image/Trophy";
+    public const string IMAGE_TROPHY_CELL_BG = IMAGE_ROOT_DIR_TROPHY + "/CellBg.png";
+    public const string IMAGE_TROPHY_BG1 = IMAGE_ROOT_DIR_TROPHY + "/Bg1.png";
+    public const string IMAGE_TROPHY_BG2 = IMAGE_ROOT_DIR_TROPHY + "/Bg2.png";
+    public const string IMAGE_TROPHY_Crown = IMAGE_ROOT_DIR_TROPHY + "/Crown.png";
+    public const string IMAGE_TROPHY_Crown_small = IMAGE_ROOT_DIR_TROPHY + "/Crown_small.png";
+    public const string IMAGE_TROPHY_ImageTitle_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_cn.png";
+    public const string IMAGE_TROPHY_ImageTitle_en = IMAGE_ROOT_DIR_TROPHY + "/ImageTitle_en.png";
+    public const string IMAGE_TROPHY_ImageTips_cn = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_cn.png";
+    public const string IMAGE_TROPHY_ImageTips_en = IMAGE_ROOT_DIR_TROPHY + "/ImageDetail_en.png";
 
     public const string IMAGE_TROPHY_Rotation_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Rotation/01_000";
     public const string IMAGE_TROPHY_LEVEL_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Level/";
@@ -81,7 +86,7 @@ public class AppRes
     public const string IMAGE_CELL_BG_ORINGE = "App/UI/Setting/SettingCellBgOringe";
     public const string IMAGE_CELL_BG_YELLOW = "App/UI/Setting/SettingCellBgYellow";
     static public Vector4 borderCellSettingBg = new Vector4(18f, 18f, 18f, 18f);
-
+    static public Vector4 borderCellTrophyBg = new Vector4(50f, 50f, 50f, 50f);
     public const string IMAGE_GAME_BG = IMAGE_HOME_BG;
 
     public const string IMAGE_HAND = "App/UI/Game/hand";
@@ -90,6 +95,7 @@ public class AppRes
     //string 
     public const string SOURCE_NAVI_GUANKA = "SOURCE_NAVI_GUANKA";
     public const string SOURCE_NAVI_HISTORY = "SOURCE_NAVI_HISTORY";
+
 
 
 }

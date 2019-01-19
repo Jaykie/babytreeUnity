@@ -21,7 +21,7 @@ public class UIGameIceCream : UIGameBase
     public const string STR_KEYNAME_VIEWALERT_SAVE_FINISH = "STR_KEYNAME_VIEWALERT_SAVE_FINISH";
 
     UIGameTopBar uiGameTopBarPrefab;
-    UIGameTopBar uiGameTopBar;
+    public UIGameTopBar uiGameTopBar;
 
 
 

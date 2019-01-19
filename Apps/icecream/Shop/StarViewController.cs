@@ -7,6 +7,7 @@ public class StarViewController : PopViewController
     public const int TYPE_STAR_BUY = 0;
     public const int TYPE_STAR_GET = 1;
     public const int TYPE_STAR_NOTENOUGHT = 2;
+    public const int TYPE_STAR_RESTORE = 3;//恢复购买
     public int starType;
     UIView uiPrefab;
     UIView ui;
@@ -32,7 +33,7 @@ public class StarViewController : PopViewController
         string strPrefab = "";//  
         if (uiPrefab != null)
         {
-            GameObject.DestroyImmediate(uiPrefab);
+            // GameObject.DestroyImmediate(uiPrefab.gameObject, true);
         }
         switch (starType)
         {
@@ -42,12 +43,15 @@ public class StarViewController : PopViewController
             case TYPE_STAR_GET:
                 strPrefab = "App/Prefab/Shop/UIStarGet";
                 break;
+            case TYPE_STAR_RESTORE:
+                strPrefab = "App/Prefab/Shop/UIStarBuy";
+                break;
             case TYPE_STAR_NOTENOUGHT:
                 strPrefab = "App/Prefab/Shop/UIStarNotEnough";
                 break;
         }
+        // PrefabCache.main.DeleteItem
         GameObject obj = PrefabCache.main.Load(strPrefab);
-
         uiPrefab = obj.GetComponent<UIView>();
     }
 

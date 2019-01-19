@@ -17,12 +17,12 @@ public class TopFoodItemInfo
 }
 public class IronIceCreamStepBase : UIView
 {
-    public const string IMAGE_WAN_DIR_ROOT = "App/UI/Game/TopFoodBar/Wan";
+    public const string IMAGE_WAN_DIR_ROOT = Common.GAME_RES_DIR+"/image/TopFoodBar/Wan";
      public const string FOOD_ITEM_ID_liquit = "liquit";
      public const string FOOD_ITEM_ID_wan = "wan";
 
     //顶料
-    public const string IMAGE_TOPFOOD_DIR_ROOT = "App/UI/Game/IronIceCream/TopFood";
+    public const string IMAGE_TOPFOOD_DIR_ROOT =Common.GAME_RES_DIR+"/image/IronIceCream/TopFood";
     public const int STATUS_STEP_NONE = 0;
     public const int STATUS_STEP_START = 1;
     public const int STATUS_STEP_END = 2;
@@ -51,48 +51,48 @@ public class IronIceCreamStepBase : UIView
     //杯子food
     static public string GetImageOfCupFood(int idx)
     {
-        string strImageDirRoot = "App/UI/Game/TopFoodBar/CupFood";
-        return strImageDirRoot + "/" + idx.ToString();
+        string strImageDirRoot =Common.GAME_RES_DIR+"/image/TopFoodBar/CupFood";
+        return strImageDirRoot + "/" + idx.ToString()+".png";
     }
 
     //碗
     static public string GetImageOfWan(int idx)
     {
-        return IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString();
+        return IMAGE_WAN_DIR_ROOT + "/" + GameIronIceCream.indexFood.ToString() + "-" + (idx + 1).ToString()+".png";
     }
 
     static public string GetImageOfTopFood(int idx)
     {
-        return IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[idx]; 
+        return IMAGE_TOPFOOD_DIR_ROOT + "/" + IronIceCreamStepBase.strTopFoodSort[idx]+".png"; 
     }
     static public string GetImageOfTopFoodSubFood(int idx)
     {
         int indexsort = UIPopSelectBar.indexFoodSort;
         string namesort = IronIceCreamStepBase.strTopFoodSort[indexsort];
-        return IMAGE_TOPFOOD_DIR_ROOT + "/" + namesort + "/" + idx.ToString();
+        return IMAGE_TOPFOOD_DIR_ROOT + "/" + namesort + "/" + idx.ToString()+".png";
     }
 
     //冰淇凌块-2
     static public string GetBlockItemPic()
     {
         //0-2
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2";
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2"+".png";
     }
     //冰淇淋液
     static public string GetImageOfIcecreemLiquid(int idx)
     {
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + idx;
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + idx+".png";
     }
     //冰淇淋片-1
     static public string GetImageOfIcecreemPiece(int idx)
     {
-        return GetImageOfIcecreemLiquid(idx) + "-1";
+        return GetImageOfIcecreemLiquid(idx) + "-1"+".png";
     }
     //冰淇凌卷-3
     static public string GetWanJuanPic()
     {
         //0-3
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-3";
+        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-3"+".png";
     }
 
 

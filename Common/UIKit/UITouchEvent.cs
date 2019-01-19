@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public delegate void OnUITouchEventDelegate(UITouchEvent ev,PointerEventData eventData, int status);
+//IDragHandler 会导致scrollview的滑动失效 所以和UITouchEventWithMove分开使用
 public class UITouchEvent: MonoBehaviour, IPointerUpHandler, IPointerDownHandler//, IDragHandler
 {
     public const int STATUS_TOUCH_DOWN = 0;
