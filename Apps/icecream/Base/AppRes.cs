@@ -53,6 +53,8 @@ public class AppRes
     public const string IMAGE_BTN_LANGUAGE_cn = "App/UI/Home/BtnLanguage_cn";
     public const string IMAGE_BTN_LANGUAGE_en = "App/UI/Home/BtnLanguage_en";
 
+    public const string IMAGE_HOME_LOGO = "App/UI/Home/Logo";
+
     //trophy
     public const string IMAGE_ROOT_DIR_TROPHY = Common.GAME_RES_DIR + "/image/Trophy";
     public const string IMAGE_TROPHY_CELL_BG = IMAGE_ROOT_DIR_TROPHY + "/CellBg.png";

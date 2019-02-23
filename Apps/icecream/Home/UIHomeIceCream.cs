@@ -10,12 +10,14 @@ public class UIHomeIceCream : UIHomeBase
     public Button btnPlay;
     public Button btnFree;
     public Button btnLanguae;
-    public Image ImageLogo;
+    public Image imageLogo;
     public Text textGold;
     void Awake()
     {
         //bg
         TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        TextureUtil.UpdateImageTexture(imageLogo, AppRes.IMAGE_HOME_LOGO, true);
+
         UpdateLanguage();
     }
     // Use this for initialization
@@ -48,7 +50,30 @@ public class UIHomeIceCream : UIHomeBase
 
         Vector2 sizeCanvas = this.frame.size;
         RectTransform rctranAppIcon = uiHomeAppCenter.transform as RectTransform;
+        //logo
+        float ratio = 0.7f;
+        w = this.frame.width;
+        h = (this.frame.height / 2 - topBarHeight);
+        RectTransform rctranLogo = imageLogo.GetComponent<RectTransform>();
 
+        if (imageLogo.sprite != null)
+        {
+            float scale = Common.GetBestFitScale(imageLogo.sprite.texture.width, imageLogo.sprite.texture.height, w * ratio, h * ratio);
+            imageLogo.gameObject.transform.localScale = new Vector3(scale, scale, 1f);
+            x = 0;
+            y = h / 2;
+            rctranLogo.anchoredPosition = new Vector2(x, y);
+        }
+        // Debug.Log("Home this.frame="+this.frame.size+"canvas="+AppSceneBase.main.sizeCanvas);
+        //btnPlay
+        {
+            float y_top = rctranLogo.anchoredPosition.y - rctranLogo.rect.height * imageLogo.transform.localScale.y / 2;
+            float y_bottom = -this.frame.height / 2;
+            RectTransform rctran = btnPlay.GetComponent<RectTransform>();
+            x = 0;
+            y = y_bottom + (y_top - y_bottom) / 2;
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
 
         LayoutChildBase();
 
