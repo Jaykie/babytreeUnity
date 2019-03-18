@@ -119,7 +119,7 @@ public class IronIceCreamStepBase : UIView
         UpdateRect();
 
 
-        float ratio = 0.8f;
+        float ratio = 0.6f;
         {
             SpriteRenderer rd = objPanzi.GetComponent<SpriteRenderer>();
             w = rd.sprite.texture.width / 100f;

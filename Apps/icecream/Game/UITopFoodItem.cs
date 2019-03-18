@@ -29,9 +29,9 @@ public class UITopFoodItem : UIView
     public float height;
     public bool enableLock = true;
 
-    string strImageCup = Common.GAME_RES_DIR+"/image/TopFoodBar/Cup.png";
+    string strImageCup = Common.GAME_RES_DIR + "/image/TopFoodBar/Cup.png";
 
-    public const string IMAGE_WAN_BG = Common.GAME_RES_DIR+"/image/TopFoodBar/Wan/WanBg.png";
+    public const string IMAGE_WAN_BG = Common.GAME_RES_DIR + "/image/TopFoodBar/Wan/WanBg.png";
 
 
 
@@ -41,6 +41,7 @@ public class UITopFoodItem : UIView
     Tween tweenAlpha;
     public FoodItemInfo infoFood;
     public Type type;
+    float scaleRatio = 0.65f;
     public OnUITopFoodItemDidClickDelegate callBackDidClick { get; set; }
     private void Awake()
     {
@@ -88,7 +89,7 @@ public class UITopFoodItem : UIView
             TextureUtil.UpdateImageTexture(imageCup, pic, true);
             w = imageCup.sprite.texture.width;
             h = imageCup.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height);
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
             imageCup.transform.localScale = new Vector3(scale, scale, 1f);
 
         }
@@ -118,7 +119,7 @@ public class UITopFoodItem : UIView
             TextureUtil.UpdateImageTexture(imageFood, pic, true);
             w = imageFood.sprite.texture.width;
             h = imageFood.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height);
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
             imageFood.transform.localScale = new Vector3(scale, scale, 1f);
         }
 
@@ -150,10 +151,10 @@ public class UITopFoodItem : UIView
         {
             w = imageHand.sprite.texture.width;
             h = imageHand.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height) * 0.7f;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio) * 0.7f;
             imageHand.transform.localScale = new Vector3(scale, scale, 1f);
             x = -width / 2;
-            y = height / 2;
+            y = height * scaleRatio / 2;
             RectTransform rctran = imageHand.GetComponent<RectTransform>();
             rctran.anchoredPosition = new Vector2(x, y);
         }

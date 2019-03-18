@@ -152,7 +152,7 @@ public class UIGameIronIceCream : UIGameIceCream
     void RunActionMoveTrophy()
     {
         float x, y;
-        string pic = TrophyRes.GetImageOfIcon(TrophyRes.TYPE_Medal, 1);
+        string pic = TrophyRes.GetImageOfIcon(TrophyRes.TYPE_Star, 1);
         TextureUtil.UpdateImageTexture(imageTrophy, pic, true);
         imageTrophy.gameObject.SetActive(true);
         Vector2 posNormal = imageTrophy.transform.position;

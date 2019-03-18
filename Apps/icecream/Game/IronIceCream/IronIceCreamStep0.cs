@@ -16,7 +16,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     public GameObject objIcecreemBlock;//冰淇凌块
     public GameObject objIcecreemPiece;//冰淇凌片
     public GameObject objIcecreemLiquid;//冰淇凌液体倾倒动画
-    
+
     int indexFood = 0;
     int indexStep = 0;
     int totalStep = 4;
@@ -64,7 +64,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             x = -rdpanzi.bounds.size.x / 2 - w_rect / 2;
             y = 0;
             objChanzi.transform.localPosition = new Vector3(x, y, z);
-
+           // ratio = 0.8f;
             scale = Common.GetBestFitScale(w, h, w_rect, rdpanzi.bounds.size.y) * ratio;
             objChanzi.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -112,7 +112,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
 
     }
 
-   
+
 
     // 炒冰淇淋
     public void OnDoStep(int idx)
@@ -131,7 +131,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         acImage.isLoop = false;
         for (int i = 0; i < 5; i++)
         {
-            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString()+".png";
+            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString() + ".png";
             acImage.AddPic(pic);
         }
         acImage.Run();
