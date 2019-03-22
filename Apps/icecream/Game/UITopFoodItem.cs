@@ -19,11 +19,11 @@ public class UITopFoodItem : UIView
         SUB_FOOD,//顶料子项 popselect bar
     }
     public const string PREFAB_TopFoodItem = "App/Prefab/Game/UITopFoodItem";
-    public Image imageCup;
-    public Image imageFood;
-    public Image imageLock;
-    public GameObject objHand;
-    public Image imageHand;
+    public RawImage imageCup;
+    public RawImage imageMultiColor;
+    public RawImage imageFood;
+    public RawImage imageLock;
+    public RawImage imageHand;
     public int index;
     public float width;
     public float height;
@@ -32,9 +32,6 @@ public class UITopFoodItem : UIView
     string strImageCup = Common.GAME_RES_DIR + "/image/TopFoodBar/Cup.png";
 
     public const string IMAGE_WAN_BG = Common.GAME_RES_DIR + "/image/TopFoodBar/Wan/WanBg.png";
-
-
-
     public string strImageWan;
     public string strPic;
     UITouchEvent uITouchEvent;
@@ -47,10 +44,63 @@ public class UITopFoodItem : UIView
     {
         uITouchEvent = this.gameObject.AddComponent<UITouchEvent>();
         uITouchEvent.callBackTouch = OnUITouchEvent;
-        TextureUtil.UpdateImageTexture(imageHand, AppRes.IMAGE_HAND, true);
+        TextureUtil.UpdateRawImageTexture(imageHand, AppRes.IMAGE_HAND, true);
         imageHand.gameObject.SetActive(false);
     }
+    public override void LayOut()
+    {
+        float x = 0, y = 0, w, h;
+        RectTransform rctranCup = imageCup.GetComponent<RectTransform>();
 
+        {
+            w = imageCup.texture.width;
+            h = imageCup.texture.height;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
+            imageCup.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+        if (imageMultiColor.texture != null)
+        {
+            w = imageMultiColor.texture.width;
+            h = imageMultiColor.texture.height;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
+            imageMultiColor.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+        if (imageFood.texture != null)
+        {
+            w = imageFood.texture.width;
+            h = imageFood.texture.height;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
+            imageFood.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+        {
+            w = imageLock.texture.width;
+            h = imageLock.texture.height;
+            float w_cup = rctranCup.rect.width * imageCup.transform.localScale.x;
+            float h_cup = rctranCup.rect.height * imageCup.transform.localScale.y;
+            float w_rect = w_cup / 2;
+            float h_rect = h_cup / 2;
+
+            float scale = Common.GetBestFitScale(w, h, w_rect, h_rect);
+            imageLock.transform.localScale = new Vector3(scale, scale, 1f);
+
+            RectTransform rctran = imageLock.GetComponent<RectTransform>();
+            x = w_cup / 2 - w_rect / 2;
+            y = -h_cup / 2 + h_rect / 2;
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
+
+        {
+            w = imageHand.texture.width;
+            h = imageHand.texture.height;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio) * 0.7f;
+            imageHand.transform.localScale = new Vector3(scale, scale, 1f);
+            x = -width / 2;
+            y = height * scaleRatio / 2;
+            RectTransform rctran = imageHand.GetComponent<RectTransform>();
+            rctran.anchoredPosition = new Vector2(x, y);
+        }
+
+    }
     static public string GetLockKey(string id, int idx)
     {
         return "KEY_LOCK_ITEM_" + id + "_" + idx.ToString();
@@ -86,11 +136,7 @@ public class UITopFoodItem : UIView
         float x = 0, y = 0, w, h;
         {
             string pic = strImageCup;
-            TextureUtil.UpdateImageTexture(imageCup, pic, true);
-            w = imageCup.sprite.texture.width;
-            h = imageCup.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
-            imageCup.transform.localScale = new Vector3(scale, scale, 1f);
+            TextureUtil.UpdateRawImageTexture(imageCup, pic, true);
 
         }
 
@@ -99,7 +145,19 @@ public class UITopFoodItem : UIView
             switch (type)
             {
                 case Type.CUP:
-                    pic = IronIceCreamStepBase.GetImageOfCupFood(index);
+                    pic = info.pic;
+                    imageMultiColor.gameObject.SetActive(false);
+                    if (info.isSingleColor == false)
+                    {
+                        imageMultiColor.gameObject.SetActive(true);
+
+                        if (!Common.BlankString(info.picMultiColor))
+                        {
+                            Debug.Log("info.picMultiColor=" + info.picMultiColor);
+                            TextureUtil.UpdateRawImageTexture(imageMultiColor, info.picMultiColor, true);
+                        }
+
+                    }
                     break;
                 case Type.WAN:
                     imageCup.gameObject.SetActive(false);
@@ -108,7 +166,8 @@ public class UITopFoodItem : UIView
                     break;
                 case Type.FOOD:
                     imageCup.gameObject.SetActive(false);
-                    pic = IronIceCreamStepBase.GetImageOfTopFood(index);
+                    //  pic = IronIceCreamStepBase.GetImageOfTopFood(index);
+                    pic = info.pic;
                     break;
                 case Type.SUB_FOOD:
                     imageCup.gameObject.SetActive(false);
@@ -116,31 +175,18 @@ public class UITopFoodItem : UIView
                     break;
             }
             strPic = pic;
-            TextureUtil.UpdateImageTexture(imageFood, pic, true);
-            w = imageFood.sprite.texture.width;
-            h = imageFood.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
-            imageFood.transform.localScale = new Vector3(scale, scale, 1f);
+            if (!Common.BlankString(info.pic))
+            {
+                TextureUtil.UpdateRawImageTexture(imageFood, pic, true);
+            }
+
         }
 
         {
-            RectTransform rctranCup = imageCup.GetComponent<RectTransform>();
+
             string pic = GameIronIceCream.IMAGE_LOCK;
-            TextureUtil.UpdateImageTexture(imageLock, pic, true);
-            w = imageLock.sprite.texture.width;
-            h = imageLock.sprite.texture.height;
-            float w_cup = rctranCup.rect.width * imageCup.transform.localScale.x;
-            float h_cup = rctranCup.rect.height * imageCup.transform.localScale.y;
-            float w_rect = w_cup / 2;
-            float h_rect = h_cup / 2;
+            TextureUtil.UpdateRawImageTexture(imageLock, pic, true);
 
-            float scale = Common.GetBestFitScale(w, h, w_rect, h_rect);
-            imageLock.transform.localScale = new Vector3(scale, scale, 1f);
-
-            RectTransform rctran = imageLock.GetComponent<RectTransform>();
-            x = w_cup / 2 - w_rect / 2;
-            y = -h_cup / 2 + h_rect / 2;
-            rctran.anchoredPosition = new Vector2(x, y);
             imageLock.gameObject.SetActive(false);
             if (info.isLock && enableLock)
             {
@@ -148,16 +194,8 @@ public class UITopFoodItem : UIView
             }
         }
 
-        {
-            w = imageHand.sprite.texture.width;
-            h = imageHand.sprite.texture.height;
-            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio) * 0.7f;
-            imageHand.transform.localScale = new Vector3(scale, scale, 1f);
-            x = -width / 2;
-            y = height * scaleRatio / 2;
-            RectTransform rctran = imageHand.GetComponent<RectTransform>();
-            rctran.anchoredPosition = new Vector2(x, y);
-        }
+
+        LayOut();
     }
 
     public void ShowHand(bool isShow, bool isAnimation)

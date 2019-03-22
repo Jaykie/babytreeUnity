@@ -8,8 +8,10 @@ public delegate void OnUITopFoodBarDidClickDelegate(UITopFoodBar bar, UITopFoodI
 // 顶料
 public class UITopFoodBar : UIView
 {
-
-    public const int TOTAL_CUP = 42;
+    public const int TOTAL_CUP_SingleColor = 42;
+    public const int TOTAL_CUP_MultiColor = 42;
+    public const int TOTAL_IMAGE_MultiColor = 6;
+    public const int TOTAL_CUP = TOTAL_CUP_SingleColor + TOTAL_CUP_MultiColor;
     public const int TOTAL_WAN = 10;
     public int TOTAL_FOOD = IronIceCreamStepBase.strTopFoodSort.Length;//顶料分类
     public GameObject objScrollView;
@@ -73,7 +75,7 @@ public class UITopFoodBar : UIView
         }
     }
 
-  
+
     void ClearItems()
     {
         foreach (UITopFoodItem item in listTopItem)
@@ -90,13 +92,24 @@ public class UITopFoodBar : UIView
         info.type = type;
         info.index = idx;
         info.isLock = false;
+        info.isSingleColor = true;
+
+
         string pic = "";
         string key = "";
 
         switch (type)
         {
             case UITopFoodItem.Type.CUP:
-                pic = IronIceCreamStepBase.GetImageOfCupFood(idx);
+                if (idx % 2 != 0)
+                {
+                    info.isSingleColor = false;
+                    int idx_multi = ((idx - 1) / 2) % TOTAL_IMAGE_MultiColor;
+                    //idx_multi = 0;
+                    info.picMultiColor = IronIceCreamStepBase.GetImageOfCupMultiColor(idx_multi);
+                
+                }
+                pic = IronIceCreamStepBase.GetImageOfCupFood(idx / 2);
                 info.id = IronIceCreamStepBase.FOOD_ITEM_ID_liquit;
                 key = UITopFoodItem.GetLockKey(info.id, idx);
                 info.isLock = Common.GetBool(key, true);

@@ -8,7 +8,7 @@ using DG.Tweening;
 public class UITrophyGet : UIView
 {
     public Image imageBg;
-    public Image imageAnimate;
+    public RawImage imageAnimate;
 
     public Image imageNumBg;
     public Text textNum;
@@ -34,7 +34,7 @@ public class UITrophyGet : UIView
             CreateImageTrophyItem();
         }
         string pic = GetPicOfAnimate(0);
-        TextureUtil.UpdateImageTexture(imageAnimate, pic, true);
+        TextureUtil.UpdateRawImageTexture(imageAnimate, pic, true);
     }
 
     void Start()

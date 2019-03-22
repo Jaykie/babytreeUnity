@@ -74,6 +74,8 @@ public class AppRes
     public const string IMAGE_TROPHY_Medal_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Medal/";
     public const string IMAGE_TROPHY_Cup_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Cup/";
 
+    public const string IMAGE_CUP_MULTICOLOR_PREFIX = Common.GAME_RES_DIR + "/image/TopFoodBar/CupFood/cup_multi_color_";
+    public const int IMAGE_CUP_MULTICOLOR_TOTAL = 6;
     public const string IMAGE_HOME_BG = Common.GAME_DATA_DIR + "/startup.jpg";
 
     public const string IMAGE_GUANKA_BG = "App/UI/Guanka/GuankaBg";

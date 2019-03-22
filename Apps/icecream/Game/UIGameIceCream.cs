@@ -11,10 +11,13 @@ using DG.Tweening;
 public class FoodItemInfo
 {
     public string pic;
+    public string picMultiColor;
     public UITopFoodItem.Type type;
     public int index;
     public bool isLock;
     public string id;
+    public bool isSingleColor;
+
 }
 public class UIGameIceCream : UIGameBase
 {
