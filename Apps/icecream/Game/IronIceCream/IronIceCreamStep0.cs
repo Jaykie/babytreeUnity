@@ -36,11 +36,10 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         ev.callBackTouch = OnUITouchEvent;
         BoxCollider box = objChanzi.AddComponent<BoxCollider>();
         box.size = objChanzi.GetComponent<SpriteRenderer>().bounds.size;
-
+        // LayOut();
     }
     void Start()
     {
-
         LayOut();
     }
 
@@ -64,7 +63,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             x = -rdpanzi.bounds.size.x / 2 - w_rect / 2;
             y = 0;
             objChanzi.transform.localPosition = new Vector3(x, y, z);
-           // ratio = 0.8f;
+            ratio = 0.8f;
             scale = Common.GetBestFitScale(w, h, w_rect, rdpanzi.bounds.size.y) * ratio;
             objChanzi.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -84,16 +83,19 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>();
             w = rd.sprite.texture.width / 100f;
             h = rd.sprite.texture.height / 100f;
+            ratio = 0.6f;
             scale = Common.GetBestFitScale(w, h, rd_chanzi.bounds.size.x, rd_chanzi.bounds.size.y) * ratio;
             objHand.transform.localScale = new Vector3(scale, scale, 1f);
         }
+
+        float ratio_block = 0.7f;
         {
             SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
             if (rd.sprite != null && rd.sprite.texture != null)
             {
                 w = rd.sprite.texture.width / 100f;
                 h = rd.sprite.texture.height / 100f;
-                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio;
+                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio_block;
                 scaleBlockNormal = scale;
                 objIcecreemBlock.transform.localScale = new Vector3(scale, scale, 1f);
             }
@@ -105,11 +107,23 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             {
                 w = rd.sprite.texture.width / 100f;
                 h = rd.sprite.texture.height / 100f;
-                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio;
+                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio_block;
                 objIcecreemPiece.transform.localScale = new Vector3(scale, scale, 1f);
             }
         }
 
+
+        {
+            SpriteRenderer rd = objIcecreemLiquid.GetComponent<SpriteRenderer>();
+            if (rd.sprite != null && rd.sprite.texture != null)
+            {
+                w = rd.sprite.texture.width / 100f;
+                h = rd.sprite.texture.height / 100f;
+                ratio = 1f;
+                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio;
+                objIcecreemLiquid.transform.localScale = new Vector3(scale, scale, 1f);
+            }
+        }
     }
 
 
@@ -133,6 +147,11 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         {
             string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString() + ".png";
             acImage.AddPic(pic);
+            if (i == 0)
+            {
+                //先初始化
+                TextureUtil.UpdateSpriteTexture(objIcecreemLiquid, pic);
+            }
         }
         acImage.Run();
 
@@ -172,7 +191,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     //淇淋液变淇淋片
     void MakeIceCreamBlock()
     {
-        float duration = 5f;
+        float duration = 8f;
         {
             SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
             Color cr = rd.color;

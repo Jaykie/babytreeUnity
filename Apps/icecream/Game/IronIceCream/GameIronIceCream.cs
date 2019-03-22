@@ -29,7 +29,7 @@ public class GameIronIceCream : GameIceCream
     public const int INDEX_STEP_CHI = 4;//吃
 
     IronIceCreamStepBase uiStepPrefab;
-    IronIceCreamStepBase uiStep;
+    public IronIceCreamStepBase uiStep;
 
     public int indexStep = 0;
     int totalStep = 5;
