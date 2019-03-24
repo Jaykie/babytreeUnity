@@ -320,14 +320,16 @@ public class UIGameIronIceCream : UIGameIceCream
     }
     public void OnUITopFoodBarDidClick(UITopFoodBar bar, UITopFoodItem item)
     {
+        Debug.Log("OnUITopFoodBarDidClick  indexStep=" + gameIronIceCream.indexStep);
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAO)
         {
-            if (GameIronIceCream.status == IronIceCreamStepBase.STATUS_STEP_NONE)
+            // if (GameIronIceCream.status == IronIceCreamStepBase.STATUS_STEP_NONE)
             {
+                gameIronIceCream.ResetStep();
                 uiCup.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 UpdateCup(item.index);
                 uiCup.gameObject.SetActive(true);
-                gameIronIceCream.ResetStep();
+
             }
 
         }

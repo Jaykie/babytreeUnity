@@ -107,7 +107,7 @@ public class UITopFoodBar : UIView
                     int idx_multi = ((idx - 1) / 2) % TOTAL_IMAGE_MultiColor;
                     //idx_multi = 0;
                     info.picMultiColor = IronIceCreamStepBase.GetImageOfCupMultiColor(idx_multi);
-                
+
                 }
                 pic = IronIceCreamStepBase.GetImageOfCupFood(idx / 2);
                 info.id = IronIceCreamStepBase.FOOD_ITEM_ID_liquit;
@@ -206,8 +206,10 @@ public class UITopFoodBar : UIView
     }
     public void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
+       
         if (callBackDidClick != null)
         {
+            Debug.Log("UITopFoodBar: OnUITopFoodItemDidClick callBackDidClick");
             imageHand.gameObject.SetActive(false);
             twHand.Pause();
             callBackDidClick(this, item);

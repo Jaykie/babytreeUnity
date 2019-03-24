@@ -71,7 +71,7 @@ public class UIHomeIceCream : UIHomeBase
             float y_bottom = -this.frame.height / 2;
             RectTransform rctran = btnPlay.GetComponent<RectTransform>();
             x = 0;
-            y = y_bottom + (y_top - y_bottom) / 2;
+            y = y_bottom + (y_top - y_bottom) / 2 + 40;
             rctran.anchoredPosition = new Vector2(x, y);
         }
 

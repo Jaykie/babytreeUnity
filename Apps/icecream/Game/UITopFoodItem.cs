@@ -253,8 +253,7 @@ public class UITopFoodItem : UIView
                     {
                         UIPopSelectBar.indexFoodSort = index;
                         UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[index];
-                    }
-
+                    } 
                     if (callBackDidClick != null)
                     {
                         callBackDidClick(this);

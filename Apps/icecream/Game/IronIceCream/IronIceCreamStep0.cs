@@ -24,6 +24,10 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     Tween tweenAlpha;
     int chanziStatus;
     float scaleBlockNormal;
+    Tweener twHandMove;
+
+    UIDragEventChanzi dragEvChanzi;
+
     void Awake()
     {
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
@@ -36,6 +40,10 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         ev.callBackTouch = OnUITouchEvent;
         BoxCollider box = objChanzi.AddComponent<BoxCollider>();
         box.size = objChanzi.GetComponent<SpriteRenderer>().bounds.size;
+
+        dragEvChanzi = objChanzi.GetComponent<UIDragEventChanzi>();
+        dragEvChanzi.enableDrag = false;
+        dragEvChanzi.callBackALpha = OnAlphaChange;
         // LayOut();
     }
     void Start()
@@ -181,13 +189,82 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         objIcecreemBlock.SetActive(false);
         objIcecreemPiece.SetActive(false);
         chanziStatus = CHANZI_STATUS_NONE;
+
+        //恢复透明度为100%
+        SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
+        rd.color = Color.white;
+
+        if (dragEvChanzi != null)
+        {
+            dragEvChanzi.enableDrag = false;
+        }
+
     }
 
     public override void UpdateFood(FoodItemInfo info)
     {
+        if (twHandMove != null)
+        {
+            twHandMove.Pause();
+        }
         OnDoStep(info.index);
     }
 
+
+    void OnAlphaChange(float alpha)
+    {
+
+
+        {
+            SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
+            Color cr = rd.color;
+
+            cr.r = alpha;
+            rd.color = cr;
+            //  DOTween.ToAlpha(() => rd.color, x => rd.color = x, 0f, duration);
+        }
+        {
+            SpriteRenderer rd = objIcecreemPiece.GetComponent<SpriteRenderer>();
+            Color cr = rd.color;
+            cr.r = 1 - alpha;
+            rd.color = cr;
+        }
+        // {
+        //     SpriteRenderer rd = objIcecreemPiece.GetComponent<SpriteRenderer>();
+        //     Color cr = rd.color;
+        //     cr.a = 0f;
+        //     rd.color = cr;
+        //     objIcecreemPiece.SetActive(true);
+        //     //objIcecreemBlock.SetActive(false);
+        //     DOTween.ToAlpha(() => rd.color, x => rd.color = x, 1f, duration).OnComplete(() =>
+        // {
+        //     GameIronIceCream.status = STATUS_STEP_END;
+        //     //制作淇淋片结束
+        //     if (callBackDidUpdateStatus != null)
+        //     {
+        //         callBackDidUpdateStatus(this, STATUS_STEP_END);
+        //     }
+
+        // });
+
+        // }
+        if (alpha >= 1f)
+        {
+            GameIronIceCream.status = STATUS_STEP_END;
+            //制作淇淋片结束
+            if (callBackDidUpdateStatus != null)
+            {
+                callBackDidUpdateStatus(this, STATUS_STEP_END);
+            }
+            chanziStatus = CHANZI_STATUS_NONE;
+            objHand.SetActive(false);
+            objChanzi.SetActive(false);
+        }
+
+
+
+
+    }
     //淇淋液变淇淋片
     void MakeIceCreamBlock()
     {
@@ -263,9 +340,59 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         }
     }
 
-    public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
+    //进入上下滑动炒冰淇凌操作
+    public void GotoStatusMove()
     {
         float x, y, z, w, h;
+        z = objChanzi.transform.localPosition.z;
+        x = 0;
+        y = 0;
+        objChanzi.transform.localPosition = new Vector3(x, y, z);
+
+        z = objHand.transform.localPosition.z;
+        Vector3 pos = objChanzi.transform.localPosition;
+        SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
+        x = pos.x;
+        y = pos.y + rd.bounds.size.y / 2;
+        objHand.transform.localPosition = new Vector3(x, y, z);
+        y = pos.y - rd.bounds.size.y / 2;
+        Vector3 posEnd = new Vector3(x, y, z);
+        twHandMove = objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Restart);
+        tweenAlpha.Pause();
+
+        rd = objHand.GetComponent<SpriteRenderer>();
+        rd.color = Color.white;
+        chanziStatus = CHANZI_STATUS_MOVE;
+
+        if (dragEvChanzi != null)
+        {
+            dragEvChanzi.enableDrag = true;
+        }
+    }
+
+    //上下滑动炒冰淇凌操作
+    public void OnUITouchEventStatusMove(UITouchEvent ev, PointerEventData eventData, int status)
+    {
+        // Debug.Log("OnUITouchEventStatusMove");
+        if (status == UITouchEvent.STATUS_TOUCH_DOWN)
+        {
+            objHand.SetActive(false);
+            twHandMove.Pause();
+        }
+
+        if (dragEvChanzi != null)
+        {
+            dragEvChanzi.OnUIDragEvent(eventData, status);
+        }
+    }
+    public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
+    {
+
+        if (chanziStatus == CHANZI_STATUS_MOVE)
+        {
+            OnUITouchEventStatusMove(ev, eventData, status);
+            return;
+        }
 
         switch (status)
         {
@@ -274,26 +401,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
                     //铲子移动到盘子上 竖向滑动指导动作
                     if (chanziStatus == CHANZI_STATUS_START)
                     {
-
-                        z = objChanzi.transform.localPosition.z;
-                        x = 0;
-                        y = 0;
-                        objChanzi.transform.localPosition = new Vector3(x, y, z);
-
-                        z = objHand.transform.localPosition.z;
-                        Vector3 pos = objChanzi.transform.localPosition;
-                        SpriteRenderer rd = objChanzi.GetComponent<SpriteRenderer>();
-                        x = pos.x;
-                        y = pos.y + rd.bounds.size.y / 2;
-                        objHand.transform.localPosition = new Vector3(x, y, z);
-                        y = pos.y - rd.bounds.size.y / 2;
-                        Vector3 posEnd = new Vector3(x, y, z);
-                        objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Restart);
-                        tweenAlpha.Pause();
-
-                        rd = objHand.GetComponent<SpriteRenderer>();
-                        rd.color = Color.white;
-                        chanziStatus = CHANZI_STATUS_MOVE;
+                        GotoStatusMove();
                     }
                 }
                 break;
@@ -305,14 +413,14 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
                     // objChanzi.transform.localPosition = poslocal;
                     if (chanziStatus == CHANZI_STATUS_MOVE)
                     {
-                        chanziStatus = CHANZI_STATUS_END;
+                        // chanziStatus = CHANZI_STATUS_END;
                     }
                 }
                 break;
             case UITouchEvent.STATUS_TOUCH_UP:
                 if (chanziStatus == CHANZI_STATUS_END)
                 {
-                    MakeIceCreamBlock();
+                    // MakeIceCreamBlock();
 
                 }
                 break;
