@@ -9,7 +9,7 @@ public delegate void OnActionCompleteDelegate(GameObject obj);
 DOTween 用法
 https://blog.csdn.net/rookie0518/article/details/53157730
  */
- 
+
 public class ActionBase : MonoBehaviour
 {
     public GameObject target;
@@ -88,6 +88,7 @@ public class ActionBase : MonoBehaviour
 
     public void OnFinish()
     {
+        Debug.Log("OnFinish");
 
         if (isLoop)
         {
@@ -101,7 +102,8 @@ public class ActionBase : MonoBehaviour
         {
             callbackComplete(this.gameObject);
         }
-        Destroy(this);
+        Debug.Log("OnFinish DestroyImmediate");
+        DestroyImmediate(this);
 
     }
 

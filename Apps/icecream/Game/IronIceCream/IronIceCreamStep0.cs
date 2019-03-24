@@ -153,7 +153,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         acImage.isLoop = false;
         for (int i = 0; i < 5; i++)
         {
-            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + indexFood.ToString() + "/" + (i + 1).ToString() + ".png";
+            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + (indexFood / 2).ToString() + "/" + (i + 1).ToString() + ".png";
             acImage.AddPic(pic);
             if (i == 0)
             {
@@ -162,6 +162,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             }
         }
         acImage.Run();
+        acImage.callbackComplete = OnIcecreemLiquidActionFinish;
 
 
         LayOut();
@@ -171,8 +172,6 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         objIcecreemBlock.transform.localScale = new Vector3(scale0, scale0, 1f);
         objIcecreemBlock.transform.DOScale(new Vector3(scale1, scale1, 1f), acImage.duration).OnComplete(() =>
         {
-            //倒冰淇凌夜结束
-            objIcecreemLiquid.SetActive(false);
             objChanzi.SetActive(true);
             ShowHand(true, true);
             if (callBackDidUpdateStatus != null)
@@ -182,6 +181,12 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             chanziStatus = CHANZI_STATUS_START;
         });
 
+    }
+
+    public void OnIcecreemLiquidActionFinish(GameObject obj)
+    {
+        //倒冰淇凌夜结束
+        objIcecreemLiquid.SetActive(false);
     }
     public override void ResetStep()
     {
@@ -197,6 +202,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         if (dragEvChanzi != null)
         {
             dragEvChanzi.enableDrag = false;
+            dragEvChanzi.OnReset();
         }
 
     }
@@ -213,20 +219,18 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
 
     void OnAlphaChange(float alpha)
     {
-
-
+        objIcecreemPiece.SetActive(true);
         {
             SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
             Color cr = rd.color;
-
-            cr.r = alpha;
+            cr.a = 1 - alpha;
             rd.color = cr;
             //  DOTween.ToAlpha(() => rd.color, x => rd.color = x, 0f, duration);
         }
         {
             SpriteRenderer rd = objIcecreemPiece.GetComponent<SpriteRenderer>();
             Color cr = rd.color;
-            cr.r = 1 - alpha;
+            cr.a = alpha;
             rd.color = cr;
         }
         // {
@@ -368,6 +372,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         {
             dragEvChanzi.enableDrag = true;
         }
+
     }
 
     //上下滑动炒冰淇凌操作

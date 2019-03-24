@@ -7,19 +7,21 @@ public delegate void UIDragEventChanziOnAlphaChange(float alpha);
 public class UIDragEventChanzi : UIDragEvent//, IPointerUpHandler, IPointerDownHandler//, IDragHandler
 {
 
-    float moveStepYMin = 0.2f;
+    float moveStepYMin = 0.1f;
     float moveY;
 
     public UIDragEventChanziOnAlphaChange callBackALpha { get; set; }
     int count;
-
+    public void OnReset()
+    {
+        count = 0;
+    }
     //相当于touchDown
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerDown(eventData);
         Vector3 posworld = Common.GetInputPositionWorld(mainCam);
         moveY = posworld.y;
-        count = 0;
     }
     //相当于touchUp
     public override void OnPointerUp(PointerEventData eventData)

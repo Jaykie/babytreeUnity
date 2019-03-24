@@ -83,17 +83,28 @@ public class IronIceCreamStepBase : UIView
     static public string GetBlockItemPic()
     {
         //0-2
+        string dir = GameIronIceCream.IMAGE_DIR_ROOT_SingleColor;
+
         return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2" + ".png";
     }
     //冰淇淋液
     static public string GetImageOfIcecreemLiquid(int idx)
     {
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + idx + ".png";
+        string dir = GameIronIceCream.IMAGE_DIR_ROOT_SingleColor;
+        return dir + "/" + idx / 2 + ".png";
     }
     //冰淇淋片-1
     static public string GetImageOfIcecreemPiece(int idx)
     {
-        return FileUtil.GetFileBeforeExtWithOutDot(GetImageOfIcecreemLiquid(idx)) + "-1" + ".png";
+        string dir = GameIronIceCream.IMAGE_DIR_ROOT_SingleColor;
+        if (idx % 2 != 0)
+        {
+            //杂色
+            dir = GameIronIceCream.IMAGE_DIR_ROOT_MultiColor;
+        }
+        return dir + "/" + idx / 2 + "-1.png";
+
+        // return FileUtil.GetFileBeforeExtWithOutDot(GetImageOfIcecreemLiquid(idx)) + "-1" + ".png";
     }
     //冰淇凌卷-3
     static public string GetWanJuanPic()
