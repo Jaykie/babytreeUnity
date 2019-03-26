@@ -156,7 +156,10 @@ public class UIWanIron : UIView
         }
 
 
-
+        {
+            z = objJuan.transform.localPosition.z;
+            objJuan.transform.localPosition = new Vector3(0, 0.15f, z);
+        }
     }
 
     void RemoveHighLight()
@@ -329,7 +332,7 @@ public class UIWanIron : UIView
         SetPresetSettings(presets[5]);
         listItem.Add(info);
 
-        obj.transform.localPosition = new Vector3(0, 0, -1 * listItem.Count);
+        obj.transform.localPosition = new Vector3(0, 0.3f, -1 * listItem.Count);
     }
 
     //删除选中顶料
@@ -407,13 +410,13 @@ public class UIWanIron : UIView
     }
     void UpdateJuanItem(GameObject obj, float w, float h)
     {
-        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic(GameIronIceCream.indexFood));
         TextureUtil.UpdateSpriteTexture(obj, tex);
         // BoxCollider box = obj.GetComponent<BoxCollider>();
         // box.size = new Vector3(tex.width / 100f, tex.height / 100f);
 
         {
-            float ratio = 1.5f;
+            float ratio = 1.8f;
             float w_tex = tex.width / 100f;
             float h_tex = tex.height / 100f;
             float scale = Common.GetMaxFitScale(w_tex, h_tex, w, h) * ratio;

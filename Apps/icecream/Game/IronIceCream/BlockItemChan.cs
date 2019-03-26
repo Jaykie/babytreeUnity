@@ -38,7 +38,7 @@ public class BlockItemChan : UIView
         //indexCol = 0;
         //indexRow = 0;
 
-        Debug.Log("col =" + col + " indexCol=" + indexCol);
+        //Debug.Log("col =" + col + " indexCol=" + indexCol);
     }
 
     // Use this for initialization
@@ -128,7 +128,7 @@ public class BlockItemChan : UIView
         int tri_index = 0;
         int i = 0;
 
-        Debug.Log("Draw col =" + col + " indexCol=" + indexCol);
+      //  Debug.Log("Draw col =" + col + " indexCol=" + indexCol);
         float x, y;
         {
             Vector3[] v = GetverticeOfPoint(posCenter);

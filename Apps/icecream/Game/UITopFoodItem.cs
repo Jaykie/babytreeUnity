@@ -153,7 +153,7 @@ public class UITopFoodItem : UIView
 
                         if (!Common.BlankString(info.picMultiColor))
                         {
-                            Debug.Log("info.picMultiColor=" + info.picMultiColor);
+                           // Debug.Log("info.picMultiColor=" + info.picMultiColor);
                             TextureUtil.UpdateRawImageTexture(imageMultiColor, info.picMultiColor, true);
                         }
 
@@ -161,16 +161,21 @@ public class UITopFoodItem : UIView
                     break;
                 case Type.WAN:
                     imageCup.gameObject.SetActive(false);
+                    imageMultiColor.gameObject.SetActive(false);
                     pic = IronIceCreamStepBase.GetImageOfWan(index);
                     strImageWan = pic;
                     break;
                 case Type.FOOD:
                     imageCup.gameObject.SetActive(false);
+                    imageMultiColor.gameObject.SetActive(false);
+                    //横选择条里的分类是不用加锁的，只有竖选择条里的道具才按规则加锁
+                    info.isLock = false;
                     //  pic = IronIceCreamStepBase.GetImageOfTopFood(index);
                     pic = info.pic;
                     break;
                 case Type.SUB_FOOD:
                     imageCup.gameObject.SetActive(false);
+                    imageMultiColor.gameObject.SetActive(false);
                     pic = IronIceCreamStepBase.GetImageOfTopFoodSubFood(index);
                     break;
             }
@@ -253,7 +258,7 @@ public class UITopFoodItem : UIView
                     {
                         UIPopSelectBar.indexFoodSort = index;
                         UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[index];
-                    } 
+                    }
                     if (callBackDidClick != null)
                     {
                         callBackDidClick(this);

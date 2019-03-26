@@ -44,7 +44,7 @@ public class IronIceCreamStep4 : IronIceCreamStepBase
 
     void UpdateWanItem(GameObject obj)
     {
-        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetWanJuanPic(GameIronIceCream.indexFood));
         TextureUtil.UpdateSpriteTexture(obj, tex);
         // BoxCollider box = obj.GetComponent<BoxCollider>();
         // box.size = new Vector3(tex.width / 100f, tex.height / 100f);

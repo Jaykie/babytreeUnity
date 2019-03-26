@@ -14,7 +14,7 @@ public class UIPopSelectBarCellItem : UICellItemBase
         float x, y, w, h;
         FoodItemInfo info = list[index] as FoodItemInfo;
         infoFood = info;
-        Debug.Log("UpdateItem:info.pic=" + info.pic);
+      //  Debug.Log("UpdateItem:info.pic=" + info.pic);
         TextureUtil.UpdateImageTexture(imageBg, info.pic, true);
         {
             RectTransform rctranCup = imageBg.GetComponent<RectTransform>();

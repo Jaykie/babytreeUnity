@@ -105,7 +105,7 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
     }
     void UpdateBlockItem(GameObject obj)
     {
-        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic(GameIronIceCream.indexFood));
         TextureUtil.UpdateSpriteTexture(obj, tex);
         BoxCollider box = obj.GetComponent<BoxCollider>();
         box.size = new Vector3(tex.width / 100f, tex.height / 100f);

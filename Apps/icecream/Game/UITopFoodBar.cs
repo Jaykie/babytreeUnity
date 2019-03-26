@@ -167,7 +167,7 @@ public class UITopFoodBar : UIView
         AddItemInfo();
         int idx = listTopItem.Count;
         UITopFoodItem item = (UITopFoodItem)GameObject.Instantiate(uiTopFoodItemPrefab);
-        item.transform.parent = objScrollViewContent.transform;
+        item.transform.SetParent(objScrollViewContent.transform);
         item.callBackDidClick = OnUITopFoodItemDidClick;
         //this.transform;
         item.transform.localScale = new Vector3(1, 1, 1);
@@ -206,7 +206,7 @@ public class UITopFoodBar : UIView
     }
     public void OnUITopFoodItemDidClick(UITopFoodItem item)
     {
-       
+
         if (callBackDidClick != null)
         {
             Debug.Log("UITopFoodBar: OnUITopFoodItemDidClick callBackDidClick");

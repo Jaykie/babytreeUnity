@@ -157,9 +157,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         string pic = "APP/UI/Game/test";
         pic = IronIceCreamStepBase.GetImageOfIcecreemPiece(info.index);
         texBlock = TextureCache.main.Load(pic);
-
-
-
+ 
         UpdateItem();
 
 
@@ -220,7 +218,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
 
     void UpdateJuanItem(GameObject obj)
     {
-        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic());
+        Texture2D tex = TextureCache.main.Load(IronIceCreamStepBase.GetBlockItemPic(GameIronIceCream.indexFood));
         TextureUtil.UpdateSpriteTexture(obj, tex);
     }
     void UpdateBlockItem(GameObject obj, int idx)

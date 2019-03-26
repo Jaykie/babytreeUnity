@@ -80,12 +80,20 @@ public class IronIceCreamStepBase : UIView
     }
 
     //冰淇凌块-2
-    static public string GetBlockItemPic()
+    static public string GetBlockItemPic(int idx)
     {
-        //0-2
+        //0-2 
         string dir = GameIronIceCream.IMAGE_DIR_ROOT_SingleColor;
+        string ext = "-2.png";
 
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2" + ".png";
+        if (idx % 2 != 0)
+        {
+            //杂色
+            dir = GameIronIceCream.IMAGE_DIR_ROOT_MultiColor;
+            ext = "-4.png";
+        }
+        return dir + "/" + idx / 2 + ext;
+        // return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-2" + ".png";
     }
     //冰淇淋液
     static public string GetImageOfIcecreemLiquid(int idx)
@@ -107,10 +115,18 @@ public class IronIceCreamStepBase : UIView
         // return FileUtil.GetFileBeforeExtWithOutDot(GetImageOfIcecreemLiquid(idx)) + "-1" + ".png";
     }
     //冰淇凌卷-3
-    static public string GetWanJuanPic()
+    static public string GetWanJuanPic(int idx)
     {
-        //0-3
-        return GameIronIceCream.IMAGE_DIR_ROOT_SingleColor + "/" + GameIronIceCream.indexFood + "-3" + ".png";
+        string dir = GameIronIceCream.IMAGE_DIR_ROOT_SingleColor;
+        string ext = "-3.png";
+
+        if (idx % 2 != 0)
+        {
+            //杂色
+            dir = GameIronIceCream.IMAGE_DIR_ROOT_MultiColor;
+            ext = "-5.png";
+        }
+        return dir + "/" + idx / 2 + ext;
     }
 
 

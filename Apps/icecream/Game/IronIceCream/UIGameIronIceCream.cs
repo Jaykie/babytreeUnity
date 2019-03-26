@@ -185,8 +185,6 @@ public class UIGameIronIceCream : UIGameIceCream
     }
     void UpdateCup(int idx)
     {
-
-
         uiCup.index = idx;
         FoodItemInfo info = new FoodItemInfo();
         info.type = uiCup.type;
@@ -448,23 +446,32 @@ public class UIGameIronIceCream : UIGameIceCream
         uiPopSelectBar.gameObject.SetActive(false);
         uiTopFoodToolBar.gameObject.SetActive(false);
         uiTopFoodBar.gameObject.SetActive(true);
-        IronIceCreamStepBase.uiWanIron.gameObject.SetActive(false);
+        if (IronIceCreamStepBase.uiWanIron != null)
+        {
+            IronIceCreamStepBase.uiWanIron.gameObject.SetActive(false);
+        }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAN)
         {
             uiTopFoodBar.type = UITopFoodItem.Type.CUP;
-            FoodItemInfo info = uiTopFoodBar.GetItem(0);
+            FoodItemInfo info = uiTopFoodBar.GetItem(GameIronIceCream.indexFood);
             gameIronIceCream.UpdateFood(info);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
         {
-            IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+            if (IronIceCreamStepBase.uiWanIron != null)
+            {
+                IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+            }
             uiTopFoodBar.type = UITopFoodItem.Type.WAN;
-            FoodItemInfo info = uiTopFoodBar.GetItem(0);
+            FoodItemInfo info = uiTopFoodBar.GetItem(GameIronIceCream.indexFood);
             gameIronIceCream.UpdateFood(info);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {
-            IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+            if (IronIceCreamStepBase.uiWanIron != null)
+            {
+                IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+            }
             uiTopFoodBar.type = UITopFoodItem.Type.FOOD;
             uiPopSelectBar.gameObject.SetActive(true);
             uiTopFoodToolBar.gameObject.SetActive(true);
@@ -481,13 +488,20 @@ public class UIGameIronIceCream : UIGameIceCream
 
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHI)
         {
-            IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+
+            if (IronIceCreamStepBase.uiWanIron != null)
+            {
+                IronIceCreamStepBase.uiWanIron.gameObject.SetActive(true);
+            }
             uiTopFoodBar.gameObject.SetActive(false);
         }
 
         uiTopFoodBar.UpdateType(uiTopFoodBar.type);
+        if (IronIceCreamStepBase.uiWanIron != null)
+        {
+            IronIceCreamStepBase.uiWanIron.UpdateStep(gameIronIceCream.indexStep);
+        }
 
-        IronIceCreamStepBase.uiWanIron.UpdateStep(gameIronIceCream.indexStep);
     }
 
 

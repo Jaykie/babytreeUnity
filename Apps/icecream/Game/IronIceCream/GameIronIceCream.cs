@@ -14,12 +14,12 @@ public class GameIronIceCream : GameIceCream
 {
     public const string Prefab_STEP_PREFIX = "App/Prefab/Game/IronIceCream/IronIceCreamStep";
 
-    public const string IMAGE_DIR_ROOT_SingleColor =Common.GAME_RES_DIR+"/image/IronIceCream/SingleColor";//0  0-1 0-2 0-3 
-    public const string IMAGE_DIR_ROOT_MultiColor = Common.GAME_RES_DIR+"/image/IronIceCream/MultiColor";//  0-1 0-4 0-5
+    public const string IMAGE_DIR_ROOT_SingleColor = Common.GAME_RES_DIR + "/image/IronIceCream/SingleColor";//0  0-1 0-2 0-3 
+    public const string IMAGE_DIR_ROOT_MultiColor = Common.GAME_RES_DIR + "/image/IronIceCream/MultiColor";//  0-1 0-4 0-5
 
-    public const string IMAGE_DIR_ROOT_CupLiquid = Common.GAME_RES_DIR+"/image/IronIceCream/CupLiquid";//  1 2 3 4 5
+    public const string IMAGE_DIR_ROOT_CupLiquid = Common.GAME_RES_DIR + "/image/IronIceCream/CupLiquid";//  1 2 3 4 5
 
-    public const string IMAGE_LOCK = Common.GAME_RES_DIR+"/image/TopFoodBar/Lock.png";
+    public const string IMAGE_LOCK = Common.GAME_RES_DIR + "/image/TopFoodBar/Lock.png";
 
     public const int INDEX_STEP_CHAO = 0;//炒
     public const int INDEX_STEP_CHAN = 1;//铲
@@ -86,7 +86,7 @@ public class GameIronIceCream : GameIceCream
                 uiStep = (IronIceCreamStepBase)GameObject.Instantiate(uiStepPrefab);
                 uiStep.callBackDidUpdateStatus = OnGameIronIceCreamDidUpdateStatus;
                 RectTransform rctranPrefab = uiStepPrefab.transform as RectTransform;
-                uiStep.transform.parent = this.transform;
+                uiStep.transform.SetParent(this.transform);
                 RectTransform rctran = uiStep.transform as RectTransform;
                 // 初始化rect
                 rctran.offsetMin = rctranPrefab.offsetMin;
