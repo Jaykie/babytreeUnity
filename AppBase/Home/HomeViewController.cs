@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class HomeViewController : UIViewController
 {
-
+    public const int RUN_COUNT_SHOW_AD = 2;
     UIHomeBase uiHomePrefab;
     UIHomeBase uiHome;
 
+    public static bool isAdVideoHasFinish = false;
+    public static int runCount = 0;
 
     static private HomeViewController _main = null;
     public static HomeViewController main
@@ -39,11 +41,25 @@ public class HomeViewController : UIViewController
     public override void ViewDidLoad()
     {
         base.ViewDidLoad();
+
         CreateUI();
+        Debug.Log("HomeViewCon)troller ViewDidLoad");
+
+        if ((!isAdVideoHasFinish) && (runCount >= RUN_COUNT_SHOW_AD))
+        {
+            //至少在home界面显示一次视频广告
+            AdKitCommon.main.callbacAdVideokFinish = OnAdKitAdVideoFinish;
+            if (uiHome != null)
+            {
+                uiHome.OnClickBtnAdVideo();
+            }
+        }
+        runCount++;
     }
     public override void ViewDidUnLoad()
     {
         base.ViewDidUnLoad();
+        Debug.Log("HomeViewController ViewDidUnLoad");
     }
     public override void LayOutView()
     {
@@ -63,7 +79,7 @@ public class HomeViewController : UIViewController
         }
         uiHome = (UIHomeBase)GameObject.Instantiate(uiHomePrefab);
         uiHome.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiHomePrefab.gameObject, uiHome.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiHomePrefab.gameObject, uiHome.gameObject);
         uiHome.Init();
     }
 
@@ -75,4 +91,14 @@ public class HomeViewController : UIViewController
         return name;
     }
 
+    public void OnAdKitAdVideoFinish(AdKitCommon.AdType type, AdKitCommon.AdStatus status, string str)
+    {
+        //if (type == AdKitCommon.AdType.VIDEO)
+        {
+            if (status == AdKitCommon.AdStatus.SUCCESFULL)
+            {
+                isAdVideoHasFinish = true;
+            }
+        }
+    }
 }

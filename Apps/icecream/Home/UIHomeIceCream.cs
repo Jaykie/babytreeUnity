@@ -15,7 +15,7 @@ public class UIHomeIceCream : UIHomeBase
     void Awake()
     {
         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, AppRes.IMAGE_HOME_BG, true);
         TextureUtil.UpdateImageTexture(imageLogo, AppRes.IMAGE_HOME_LOGO, true);
 
         UpdateLanguage();

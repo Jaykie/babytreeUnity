@@ -61,7 +61,6 @@ public class LayOutScale : LayOutBase
 
     void Start()
     {
-        Debug.Log("LayOutScale Start");
         this.LayOut();
     }
     public override void LayOut()
@@ -103,15 +102,7 @@ public class LayOutScale : LayOutBase
         RectTransform rctran = this.transform.parent as RectTransform;
 
         var w_parent = rctran.rect.width;
-        if (w_parent == 0)
-        {
-            // w_parent = rctran.sizeDelta.x;
-        }
         var h_parent = rctran.rect.height;
-        if (h_parent == 0)
-        {
-            // h_parent = rctran.sizeDelta.y;
-        }
         w_parent -= (this.offsetMin.x + this.offsetMax.x);
         h_parent -= (this.offsetMin.y + this.offsetMax.y);
 
@@ -126,7 +117,6 @@ public class LayOutScale : LayOutBase
         {
             scale = Common.GetBestFitScale(w, h, w_parent, h_parent);
         }
-        Debug.Log("LayOutScale scale=" + scale + " w_parent=" + w_parent + " h_parent=" + h_parent + " w=" + w + " h=" + h);
 
         obj.transform.localScale = new Vector3(scale, scale, 1f);
     }

@@ -25,6 +25,8 @@ public class AdKitCommon : MonoBehaviour
     public static AdKitCommon main;
     bool isAdVideoFinish;
     public OnAdKitFinishDelegate callbackFinish { get; set; }
+    public OnAdKitFinishDelegate callbacAdVideokFinish { get; set; }
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -138,6 +140,14 @@ public class AdKitCommon : MonoBehaviour
     }
     public void ShowAdVideo()
     {
+        if (Common.noad)
+        {
+            return;
+        }
+        if (!AppVersion.appCheckHasFinished)
+        {
+            return;
+        }
         //show 之前重新设置广告
         InitAdVideo();
         AdVideo.ShowAd();
@@ -298,7 +308,7 @@ public class AdKitCommon : MonoBehaviour
 
     }
 
-
+    //c++调用c#的回调
     public void AdVideoCallbackUnity(string source, string method)
     {
 
@@ -329,9 +339,9 @@ public class AdKitCommon : MonoBehaviour
         }
         else
         {
-            if (callbackFinish != null)
+            if (callbacAdVideokFinish != null)
             {
-                callbackFinish(AdType.VIDEO, AdStatus.FAIL, null);
+                callbacAdVideokFinish(AdType.VIDEO, AdStatus.FAIL, null);
             }
         }
     }
@@ -339,9 +349,9 @@ public class AdKitCommon : MonoBehaviour
     public void AdVideoDidStart(string str)
     {
         AudioPlay.main.Pause();
-        if (callbackFinish != null)
+        if (callbacAdVideokFinish != null)
         {
-            callbackFinish(AdType.VIDEO, AdStatus.START, null);
+            callbacAdVideokFinish(AdType.VIDEO, AdStatus.START, null);
         }
 
     }
@@ -356,10 +366,12 @@ public class AdKitCommon : MonoBehaviour
             AudioPlay.main.Play();
         }
 
-        if (callbackFinish != null)
+        if (callbacAdVideokFinish != null)
         {
-            callbackFinish(AdType.VIDEO, AdStatus.SUCCESFULL, str);
+            callbacAdVideokFinish(AdType.VIDEO, AdStatus.SUCCESFULL, str);
         }
+
+
     }
 
 
@@ -373,9 +385,9 @@ public class AdKitCommon : MonoBehaviour
             AudioPlay.main.Play();
         }
 
-        if (callbackFinish != null)
+        if (callbacAdVideokFinish != null)
         {
-            callbackFinish(AdType.VIDEO, AdStatus.SUCCESFULL, str);
+            callbacAdVideokFinish(AdType.VIDEO, AdStatus.SUCCESFULL, str);
         }
     }
     //Unity多线程（Thread）和主线程（MainThread）交互使用类——Loom工具分享 http://dsqiu.iteye.com/blog/2028503 

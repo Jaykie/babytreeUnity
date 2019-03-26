@@ -52,7 +52,7 @@ public class TrophyViewController : PopViewController
     {
         ui = (UITrophyList)GameObject.Instantiate(uiPrefab);
         ui.SetController(this);
-        ViewControllerManager.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
+        UIViewController.ClonePrefabRectTransform(uiPrefab.gameObject, ui.gameObject);
 
         {
             uiTrophyGet = (UITrophyGet)GameObject.Instantiate(uiTrophyGetPrefab);
@@ -60,7 +60,7 @@ public class TrophyViewController : PopViewController
             uiTrophyGet.uiTrophyList = ui;
             uiTrophyGet.SetController(this);
 
-           ViewControllerManager.ClonePrefabRectTransform(uiTrophyGetPrefab.gameObject, uiTrophyGet.gameObject);
+           UIViewController.ClonePrefabRectTransform(uiTrophyGetPrefab.gameObject, uiTrophyGet.gameObject);
         }
 
     }

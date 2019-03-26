@@ -342,7 +342,7 @@ public class TextureUtil : MonoBehaviour
         UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
     }
 
-    static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize)
+     static public void UpdateRawImageTexture(RawImage image, Texture2D tex, bool isUpdateSize)
     {
         UpdateRawImageTexture(image, tex, isUpdateSize, Vector4.zero);
     }
