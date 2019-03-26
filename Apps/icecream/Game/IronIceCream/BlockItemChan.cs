@@ -33,7 +33,7 @@ public class BlockItemChan : UIView
         meshMat = new Material(Shader.Find(strshader));
         meshRender.material = meshMat;
         AddPoint(Vector3.zero);
-        boxCollider = this.gameObject.AddComponent<BoxCollider>();
+        // boxCollider = this.gameObject.AddComponent<BoxCollider>();
 
         //indexCol = 0;
         //indexRow = 0;
@@ -105,7 +105,10 @@ public class BlockItemChan : UIView
     {
         width = w;
         height = h;
-        boxCollider.size = new Vector2(w, h);
+        if (boxCollider != null)
+        {
+            boxCollider.size = new Vector2(w, h);
+        }
         RectTransform rctran = this.gameObject.GetComponent<RectTransform>();
         rctran.sizeDelta = new Vector2(w, h);
         Draw();
@@ -219,6 +222,11 @@ public class BlockItemChan : UIView
 
     public void UpdatePercent(int value)
     {
+        if (value > percent)
+        {
+            //单向操作 只能越来越小
+            return;
+        }
         percent = value;
         Draw();
     }

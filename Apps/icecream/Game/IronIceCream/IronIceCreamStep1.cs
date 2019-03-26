@@ -28,7 +28,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     public GameObject objJuan2;
     public GameObject objJuan3;
     public GameObject objJuan4;
-    public GameObject objJuan5; 
+    public GameObject objJuan5;
     Tween tweenMoveHand;
     Texture2D texBlock;
     int numBlock = 6;
@@ -71,6 +71,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         {
             w = texBlock.width / 100f;
             h = texBlock.height / 100f;
+            ratio = 0.65f;
             scale = Common.GetBestFitScale(w, h, rectMain.width, rectMain.height) * ratio;
             objBlock.transform.localScale = new Vector3(scale, scale, 1f);
 
@@ -88,6 +89,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             float w_rect = (rectMainWorld.rect.width - rdpanzi.bounds.size.x) / 2;
             x = -rdpanzi.bounds.size.x / 2 - w_rect / 2;
             y = 0;
+            ratio = 0.7f;
             scale = Common.GetBestFitScale(w, h, w_rect, rdpanzi.bounds.size.y) * ratio;
             objChanzi.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -108,6 +110,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             SpriteRenderer rd = objHand.GetComponent<SpriteRenderer>();
             w = rd.sprite.texture.width / 100f;
             h = rd.sprite.texture.height / 100f;
+            ratio = 0.8f;
             scale = Common.GetBestFitScale(w, h, rd_chanzi.bounds.size.x, rd_chanzi.bounds.size.y) * ratio;
             objHand.transform.localScale = new Vector3(scale, scale, 1f);
         }
@@ -125,6 +128,15 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             rctran.anchoredPosition = new Vector2(x, y);
         }
 
+
+        {
+            ratio = 0.9f;
+            SpriteRenderer rd = objPanzi.GetComponent<SpriteRenderer>();
+            w = rd.sprite.texture.width / 100f;
+            h = rd.sprite.texture.height / 100f;
+            scale = Common.GetBestFitScale(w, h, rectMain.width, rectMain.height) * ratio;
+            objPanzi.transform.localScale = new Vector3(scale, scale, 1f);
+        }
 
     }
 
@@ -312,12 +324,41 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         }
     }
 
+    void OnBlockItemFinish(GameObject objItem, bool isNext)
+    {
+        BlockItemChan it = objItem.GetComponent<BlockItemChan>();
+        if (it.percent <= 0)
+        {
+            GameObject obj = listJuan[indexBlock];
+            if (obj.activeSelf)
+            {
+               // return;
+            }
+            obj.SetActive(true);
+            if (isNext)
+            {
+                indexBlock--;
+                if (indexBlock < 0)
+                {
+                    indexBlock = 0;
+                    objChanzi.SetActive(false);
+                    if (callBackDidUpdateStatus != null)
+                    {
+                        callBackDidUpdateStatus(this, STATUS_STEP_END);
+                    }
+                }
+            }
+
+        }
+    }
+
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
         Vector3 pos = Common.GetInputPositionWorld(mainCam);
         Vector3 poslocal = this.transform.InverseTransformPoint(pos);
         GameObject objItem = GetBlock(indexBlock);
         float x, y, w, h;
+        Debug.Log("OnUITouchEvent status=" + status);
         switch (status)
         {
             case UITouchEvent.STATUS_TOUCH_DOWN:
@@ -340,6 +381,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                     {
                         BlockItemChan it = objItem.GetComponent<BlockItemChan>();
                         it.UpdatePercent(GetPercent(pos));
+                        OnBlockItemFinish(objItem, false);
                     }
 
                 }
@@ -347,22 +389,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             case UITouchEvent.STATUS_TOUCH_UP:
                 if (isTouchItem)
                 {
-                    BlockItemChan it = objItem.GetComponent<BlockItemChan>();
-                    if (it.percent <= 0)
-                    {
-                        GameObject obj = listJuan[indexBlock];
-                        obj.SetActive(true);
-                        indexBlock--;
-                        if (indexBlock < 0)
-                        {
-                            indexBlock = 0;
-                            objChanzi.SetActive(false);
-                            if (callBackDidUpdateStatus != null)
-                            {
-                                callBackDidUpdateStatus(this, STATUS_STEP_END);
-                            }
-                        }
-                    }
+                    OnBlockItemFinish(objItem, true);
                 }
                 break;
 
