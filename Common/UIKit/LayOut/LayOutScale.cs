@@ -5,6 +5,7 @@ using UnityEngine;
 public class LayOutScale : LayOutBase
 {
     public Type _scaleType;
+    public float ratio = 1f;
 
     public Type scaleType
     {
@@ -59,10 +60,25 @@ public class LayOutScale : LayOutBase
         MAX,
     }
 
+    void Awake()
+    {
+        Debug.Log("LayOutScale Awake=");
+    }
     void Start()
     {
+        // Debug.Log("LayOutScale Start=");
+        // this.LayOut();
+
+        //保持和layoutgroup同步
+        StartCoroutine(OnLayOutEnumerator());
+    }
+    IEnumerator OnLayOutEnumerator()
+    {
+        float time = 0;
+        yield return new WaitForSeconds(time);
         this.LayOut();
     }
+
     public override void LayOut()
     {
         UpdateType(scaleType);
@@ -111,13 +127,13 @@ public class LayOutScale : LayOutBase
         float scale = 0;
         if (isMaxFit == true)
         {
-            scale = Common.GetMaxFitScale(w, h, w_parent, h_parent);
+            scale = Common.GetMaxFitScale(w, h, w_parent, h_parent) * ratio;
         }
         else
         {
-            scale = Common.GetBestFitScale(w, h, w_parent, h_parent);
+            scale = Common.GetBestFitScale(w, h, w_parent, h_parent) * ratio;
         }
-
+        //Debug.Log("LayOutScale scale=" + scale + " w_parent=" + w_parent + " h_parent=" + h_parent);
         obj.transform.localScale = new Vector3(scale, scale, 1f);
     }
 }

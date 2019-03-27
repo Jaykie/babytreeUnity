@@ -101,7 +101,6 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
             }
         }
 
-
     }
     void UpdateBlockItem(GameObject obj)
     {
@@ -109,6 +108,7 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
         TextureUtil.UpdateSpriteTexture(obj, tex);
         BoxCollider box = obj.GetComponent<BoxCollider>();
         box.size = new Vector3(tex.width / 100f, tex.height / 100f);
+
     }
 
     void UpdateWan(string pic)
