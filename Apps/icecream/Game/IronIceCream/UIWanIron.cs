@@ -299,12 +299,13 @@ public class UIWanIron : UIView
     }
 
     //添加顶料
-    public void OnAddTopFood(string pic)
+    public void OnAddTopFood(FoodItemInfo info)
     {
-        TopFoodItemInfo info = new TopFoodItemInfo();
-        info.name = FileUtil.GetFileName(pic);
+        string pic = info.pic;
+        TopFoodItemInfo infoTop = new TopFoodItemInfo();
+        infoTop.name = info.id + "_" + FileUtil.GetFileName(pic);
 
-        GameObject obj = new GameObject(info.name);
+        GameObject obj = new GameObject(infoTop.name);
         SpriteRenderer rd = obj.AddComponent<SpriteRenderer>();
         Texture2D tex = TextureCache.main.Load(pic);
         rd.sprite = LoadTexture.CreateSprieFromTex(tex);
@@ -324,15 +325,23 @@ public class UIWanIron : UIView
         scale = Common.GetBestFitScale(tex.width / 100f, tex.height / 100f, rdbg.bounds.size.x * ratio, rdbg.bounds.size.y * ratio);
         obj.transform.localScale = new Vector3(scale, scale, 1);
 
-        info.obj = obj;
-        info.pt = Vector3.zero;
+        infoTop.obj = obj;
+        infoTop.pt = Vector3.zero;
         RemoveHighLight();
         objItemSelect = obj;
         objItemSelect.AddComponent<TopFoodHighlighterController>();
         SetPresetSettings(presets[5]);
-        listItem.Add(info);
-
-        obj.transform.localPosition = new Vector3(0, 0.3f, -1 * listItem.Count);
+        listItem.Add(infoTop);
+        float oft_y = 0.3f;
+        float z_juan = objJuan.transform.localPosition.z;
+        if (info.isUnderJuan)
+        {
+            obj.transform.localPosition = new Vector3(0, oft_y, 1f);
+        }
+        else
+        {
+            obj.transform.localPosition = new Vector3(0, oft_y, -1 * listItem.Count);
+        }
     }
 
     //删除选中顶料

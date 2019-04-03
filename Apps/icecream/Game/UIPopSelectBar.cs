@@ -69,7 +69,7 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
 
     void Start()
     {
-        UpdateItem();
+        //  UpdateItem();
     }
     void LoadPrefab()
     {
@@ -83,7 +83,7 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
         }
 
     }
-    public void UpdateItem()
+    public void UpdateItem(FoodItemInfo info)
     {
         ClearItems();
         int total = countFoodSort;
@@ -91,7 +91,7 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
 
         for (int i = 0; i < total; i++)
         {
-            AddItem();
+            AddItem(info);
         }
         UpdateTable(true);
     }
@@ -113,12 +113,39 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
         }
         return item;
     }
-    public void AddItem()
+
+
+
+    public bool CheckUnderJuan(FoodItemInfo info, int idx)
+    {
+        bool ret = false;
+        /*
+        出现在卷的上方的是：巧克力，浇丝，糖果，奶油花，水果（10-52水果图放在卷图层上方）
+        出现在卷的下方的是：蛋卷，水果（0-9水果图片放在卷图层下方），勺子
+         */
+        if ((info.id == UITopFoodItem.SORT_egg)
+        || (info.id == UITopFoodItem.SORT_scoop))
+        {
+            ret = true;
+        }
+        if (info.id == UITopFoodItem.SORT_fruit)
+        {
+            if (idx <= 9)
+            {
+                ret = true;
+            }
+        }
+
+        return ret;
+    }
+    public void AddItem(FoodItemInfo infosort)
     {
         int idx = listItem.Count;
         FoodItemInfo info = new FoodItemInfo();
         info.type = type;
         info.index = idx;
+        info.id = infosort.id;
+        info.isUnderJuan = CheckUnderJuan(info, idx);
         string pic = "";
         switch (type)
         {

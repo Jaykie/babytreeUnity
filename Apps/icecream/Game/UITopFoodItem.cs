@@ -9,8 +9,14 @@ public delegate void OnUITopFoodItemDidClickDelegate(UITopFoodItem item);
 
 
 public class UITopFoodItem : UIView
-{
-
+{ 
+    public const string SORT_chocolate = "chocolate";
+    public const string SORT_egg = "egg";
+    public const string SORT_wire= "wire";
+    public const string SORT_sugar= "sugar";
+    public const string SORT_cream= "cream";
+    public const string SORT_fruit= "fruit";
+    public const string SORT_scoop= "scoop";
     public enum Type
     {
         CUP,//杯子

@@ -11,15 +11,12 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
 
     int indexStep = 0;
     int totalStep = 4;
- 
+
     void Awake()
     {
-       stepName = STEP_NAME_TOPFOOD;
+        stepName = STEP_NAME_TOPFOOD;
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
         ResetStep();
-
-
-
     }
     void Start()
     {
@@ -83,7 +80,7 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
     public override void UpdateFood(FoodItemInfo info)
     {
         UpdateWan();
-        uiWanIron.OnAddTopFood(info.pic);
+        uiWanIron.OnAddTopFood(info);
         LayOut();
     }
 }

@@ -343,7 +343,7 @@ public class UIGameIronIceCream : UIGameIceCream
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
         {
-            uiPopSelectBar.UpdateItem();
+            uiPopSelectBar.UpdateItem(item.infoFood);
         }
 
         if ((item.infoFood != null) && (item.infoFood.isLock))
@@ -477,8 +477,8 @@ public class UIGameIronIceCream : UIGameIceCream
             uiPopSelectBar.gameObject.SetActive(true);
             uiTopFoodToolBar.gameObject.SetActive(true);
             UIPopSelectBar.indexFoodSort = 0;
-            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0];
-            uiPopSelectBar.UpdateItem();
+            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0]; 
+            uiPopSelectBar.UpdateItem( uiTopFoodBar.GetItem(0));
             // FoodItemInfo info = uiPopSelectBar.GetItem(0);
             // if (info != null)
             // { 

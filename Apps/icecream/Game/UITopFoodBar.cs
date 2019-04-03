@@ -85,6 +85,7 @@ public class UITopFoodBar : UIView
         listTopItem.Clear();
         listItem.Clear();
     }
+
     public void AddItemInfo()
     {
         int idx = listItem.Count;
@@ -141,6 +142,7 @@ public class UITopFoodBar : UIView
                 info.id = IronIceCreamStepBase.strTopFoodSort[idx];
                 key = UITopFoodItem.GetLockKey(info.id, idx);
                 info.isLock = Common.GetBool(key, true);
+                //  info.isUnderJuan = CheckUnderJuan(info);
                 if (idx < 5)
                 {
                     if (idx % 2 == 0)

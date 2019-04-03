@@ -17,6 +17,8 @@ public class FoodItemInfo
     public bool isLock;
     public string id;
     public bool isSingleColor;
+    //卷的下方
+    public bool isUnderJuan;
 
 }
 public class UIGameIceCream : UIGameBase

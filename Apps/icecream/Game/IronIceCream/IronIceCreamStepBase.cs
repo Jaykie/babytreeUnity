@@ -14,6 +14,8 @@ public class TopFoodItemInfo
     public string name;
     public Vector3 pt; //world
     public int type;
+
+    
 }
 public class IronIceCreamStepBase : UIView
 {
@@ -44,7 +46,10 @@ public class IronIceCreamStepBase : UIView
     public static int[] countTopFoodLock = { 7, 7, 7, 7, 7, 7, 5, 5, 5 };
 
     //顶料
-    public static string[] strTopFoodSort = { "cream", "sugar", "chocolate", "wire", "egg", "fruit", "scoop" };
+    //public static string[] strTopFoodSort = { "cream", "sugar", "chocolate", "wire", "egg", "fruit", "scoop" };
+
+    //巧克力，蛋卷，浇丝，糖果，奶油花，水果，勺子
+    public static string[] strTopFoodSort = { UITopFoodItem.SORT_chocolate, UITopFoodItem.SORT_egg, UITopFoodItem.SORT_wire, UITopFoodItem.SORT_sugar, UITopFoodItem.SORT_cream, UITopFoodItem.SORT_fruit, UITopFoodItem.SORT_scoop };
     public static int[] countTopFoodSort = { 142, 98, 29, 20, 27, 53, 40 };
     static public UIWanIron uiWanIronPrefab;
     static public UIWanIron uiWanIron;
