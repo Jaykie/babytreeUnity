@@ -23,7 +23,7 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
 
     void Awake()
     {
-
+       stepName = STEP_NAME_ZHUANG;
         strImageWan = IronIceCreamStepBase.GetImageOfWan(0);
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
 

@@ -49,7 +49,7 @@ public class UITopFoodBar : UIView
         rctranHand.anchoredPosition = new Vector2(-x, 0);
         float scale = Common.GetBestFitScale(rctranHand.rect.width, rctranHand.rect.height, widthItem, widthItem) * 0.8f;
         imageHand.transform.localScale = new Vector3(scale, scale, 1);
-        twHand = rctranHand.DOLocalMove(posEnd, 5f).SetLoops(-1, LoopType.Restart);
+        twHand = rctranHand.DOLocalMove(posEnd, 5f).SetLoops(-1, LoopType.Yoyo);
     }
     public void UpdateType(UITopFoodItem.Type ty)
     {

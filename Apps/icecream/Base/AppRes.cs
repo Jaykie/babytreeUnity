@@ -20,17 +20,17 @@ public class AppRes
     static public Color colorTitle = new Color(248 / 255f, 136 / 255f, 22 / 255f);
 
     //audio 
-    public const string AUDIO_BTN_CLICK = "App/Audio/BtnClick";
-    public const string AUDIO_PINTU_BLOCK_FINISH = "Audio/PintuBlockFinish";
-    public const string AUDIO_WORD_OK = "App/Audio/word_ok";
-    public const string AUDIO_WORD_FAIL = "App/Audio/word-failed";
-    public const string AUDIO_LETTER_DRAG_1 = "App/Audio/letter-drag-1";
-    public const string AUDIO_LETTER_DRAG_2 = "App/Audio/letter-drag-2";
-    public const string AUDIO_LETTER_DRAG_3 = "App/Audio/letter-drag-3";
-    public const string AUDIO_LETTER_DRAG_4 = "App/Audio/letter-drag-4";
-    public const string AUDIO_SELECT = "App/Audio/select";
-    public const string AUDIO_SUCCESS_1 = "App/Audio/success-1";
-    public const string AUDIO_SUCCESS_2 = "App/Audio/success-2";
+    public const string AUDIO_DIR_ROOT = "App/Audio/";
+    public const string AUDIO_BG = AUDIO_DIR_ROOT + "Bg";
+    public const string AUDIO_BTN_CLICK = AUDIO_DIR_ROOT + "BtnClick";
+    public const string AUDIO_GAME_camera = AUDIO_DIR_ROOT + "game/camera";
+    public const string AUDIO_GAME_liquid = AUDIO_DIR_ROOT + "game/liquid";
+    public const string AUDIO_GAME_minus_star = AUDIO_DIR_ROOT + "game/minus_star";
+    public const string AUDIO_GAME_move_chanzi = AUDIO_DIR_ROOT + "game/move_chanzi";
+    public const string AUDIO_GAME_place_topfood = AUDIO_DIR_ROOT + "game/place_topfood";
+    public const string AUDIO_GAME_remove_sugar = AUDIO_DIR_ROOT + "game/remove_sugar";
+    public const string AUDIO_GAME_chan = AUDIO_DIR_ROOT + "game/chan";
+    public const string AUDIO_GAME_eat = AUDIO_DIR_ROOT + "game/eat";
 
 
     //prefab  
@@ -49,6 +49,11 @@ public class AppRes
 
     public const string IMAGE_BTN_FREE_cn = "App/UI/Home/BtnFree_cn";
     public const string IMAGE_BTN_FREE_en = "App/UI/Home/BtnFree_en";
+
+
+    public const string IMAGE_BtnMusicOn = "App/UI/Home/BtnMusicOn";
+    public const string IMAGE_BtnMusicOff = "App/UI/Home/BtnMusicOff";
+
 
     public const string IMAGE_BTN_LANGUAGE_cn = "App/UI/Home/BtnLanguage_cn";
     public const string IMAGE_BTN_LANGUAGE_en = "App/UI/Home/BtnLanguage_en";

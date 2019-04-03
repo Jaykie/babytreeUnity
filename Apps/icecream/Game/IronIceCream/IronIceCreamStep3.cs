@@ -14,7 +14,7 @@ public class IronIceCreamStep3 : IronIceCreamStepBase
  
     void Awake()
     {
-
+       stepName = STEP_NAME_TOPFOOD;
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
         ResetStep();
 

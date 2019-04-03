@@ -12,7 +12,7 @@ public class UIGameTopBar : UIView, IPopViewControllerDelegate
     public Button btnStar;
     public Text textGold;
     public Button btnFree;
-    
+
     public Button btnHome;
     public Button btnMusic;
     public Image imageTrophyBg;
@@ -22,7 +22,7 @@ public class UIGameTopBar : UIView, IPopViewControllerDelegate
     {
         UpdateGold();
         TextureUtil.UpdateButtonTexture(btnFree, Language.main.IsChinese() ? AppRes.IMAGE_BTN_FREE_cn : AppRes.IMAGE_BTN_FREE_en, true);
-      
+        UpdateBtnMusic();
     }
 
     void Start()
@@ -64,6 +64,12 @@ public class UIGameTopBar : UIView, IPopViewControllerDelegate
         // sizeDelta.x = str_w + fontsize;
         // rctran.sizeDelta = sizeDelta; 
     }
+
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, true);
+    }
     public void OnPopViewControllerDidClose(PopViewController controller)
     {
 
@@ -94,7 +100,18 @@ public class UIGameTopBar : UIView, IPopViewControllerDelegate
     }
     public void OnClickBtnMusic()
     {
-
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
     }
     public void OnClickBtnTrophy()
     {

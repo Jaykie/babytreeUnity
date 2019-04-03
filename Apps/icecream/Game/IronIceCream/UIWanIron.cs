@@ -110,7 +110,7 @@ public class UIWanIron : UIView
     {
         float x, y, z, w, h;
         float scale = 0;
-        float ratio = 0.8f;
+        float ratio = 0.95f;
 
 
 

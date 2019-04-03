@@ -30,6 +30,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
 
     void Awake()
     {
+        stepName = STEP_NAME_CHAO;
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
         ResetStep();
         objHand.SetActive(false);
@@ -163,7 +164,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         }
         acImage.Run();
         acImage.callbackComplete = OnIcecreemLiquidActionFinish;
-
+        AudioPlay.main.PlayFile(AppRes.AUDIO_GAME_liquid);
 
         LayOut();
 
@@ -361,7 +362,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         objHand.transform.localPosition = new Vector3(x, y, z);
         y = pos.y - rd.bounds.size.y / 2;
         Vector3 posEnd = new Vector3(x, y, z);
-        twHandMove = objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Restart);
+        twHandMove = objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Yoyo);
         tweenAlpha.Pause();
 
         rd = objHand.GetComponent<SpriteRenderer>();

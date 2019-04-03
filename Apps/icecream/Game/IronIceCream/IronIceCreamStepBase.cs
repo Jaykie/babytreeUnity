@@ -17,6 +17,12 @@ public class TopFoodItemInfo
 }
 public class IronIceCreamStepBase : UIView
 {
+    public const string STEP_NAME_CHAO = "chao";
+    public const string STEP_NAME_CHAN = "chan";
+    public const string STEP_NAME_ZHUANG = "zhuang";
+    public const string STEP_NAME_TOPFOOD = "topfood";
+    public const string STEP_NAME_EAT = "eat";
+
     public const string IMAGE_WAN_DIR_ROOT = Common.GAME_RES_DIR + "/image/TopFoodBar/Wan";
     public const string FOOD_ITEM_ID_liquit = "liquit";
     public const string FOOD_ITEM_ID_wan = "wan";
@@ -45,6 +51,8 @@ public class IronIceCreamStepBase : UIView
     public GameObject objPanzi;//盘子
     public GameObject objHand;//操作提示的手 
     public Rect rectMain;//local 
+    public string stepName;
+
     Tween tweenAlpha;
     public OnGameIronIceCreamDidUpdateStatusDelegate callBackDidUpdateStatus { get; set; }
 
@@ -136,8 +144,15 @@ public class IronIceCreamStepBase : UIView
         RectTransform rctranMainWorld = AppSceneBase.main.GetRectMainWorld();
 
         float topbar_canvas_h = 160f;
+        float oft_w = Common.CanvasToWorldWidth(mainCam, AppSceneBase.main.sizeCanvas, topbar_canvas_h + 16 * 2) * 2;
         float oft_h = Common.CanvasToWorldHeight(mainCam, AppSceneBase.main.sizeCanvas, topbar_canvas_h) * 2;
         w = rctranMainWorld.rect.width;
+        //if (stepName == STEP_NAME_TOPFOOD)
+        if (uiWanIron.gameObject.activeSelf)
+        {
+            //防止碗口左边缘和竖选择条有点重叠
+            w = rctranMainWorld.rect.width - oft_w;
+        }
         h = rctranMainWorld.rect.height - oft_h;
         x = -w / 2;
         y = rctranMainWorld.rect.height / 2 - oft_h - h;

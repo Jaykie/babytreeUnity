@@ -56,7 +56,8 @@ public class UIGameIronIceCream : UIGameIceCream
     void Start()
     {
         UpdateGuankaLevel(GameManager.gameLevel);
-        ShowTrophy();
+
+        Invoke("ShowTrophy", 2.0f);
     }
     // Update is called once per frame
     void Update()

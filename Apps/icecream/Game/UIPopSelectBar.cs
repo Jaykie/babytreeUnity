@@ -61,7 +61,7 @@ public class UIPopSelectBar : UIView, ITableViewDataSource
         rctranHand.anchoredPosition = new Vector2(x, y);
         float scale = Common.GetBestFitScale(rctranHand.rect.width, rctranHand.rect.height, widthItem, widthItem) * 0.8f;
         imageHand.transform.localScale = new Vector3(scale, scale, 1);
-        twHand = rctranHand.DOLocalMove(posEnd, 5f).SetLoops(-1, LoopType.Restart);
+        twHand = rctranHand.DOLocalMove(posEnd, 5f).SetLoops(-1, LoopType.Yoyo);
 
         UpdateTable(false);
         tableView.dataSource = this;

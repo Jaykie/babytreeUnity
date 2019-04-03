@@ -37,6 +37,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     void Awake()
     {
         float x, y, z, w, h;
+        stepName = STEP_NAME_CHAN;
         GameObject[] listJuanTmp = { objJuan0, objJuan1, objJuan2, objJuan3, objJuan4, objJuan5 };
         for (int i = 0; i < listJuanTmp.Length; i++)
         {
@@ -157,7 +158,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         string pic = "APP/UI/Game/test";
         pic = IronIceCreamStepBase.GetImageOfIcecreemPiece(info.index);
         texBlock = TextureCache.main.Load(pic);
- 
+
         UpdateItem();
 
 
@@ -199,7 +200,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
                 x = pos.x;
                 y = pos.y + rd.bounds.size.y / 2;
                 Vector3 posEnd = new Vector3(x, y, z);
-                objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Restart);
+                objHand.transform.DOLocalMove(posEnd, 2f).SetLoops(-1, LoopType.Yoyo);
 
             }
             tweenMoveHand.Play();
@@ -330,7 +331,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
             GameObject obj = listJuan[indexBlock];
             if (obj.activeSelf)
             {
-               // return;
+                // return;
             }
             obj.SetActive(true);
             if (isNext)

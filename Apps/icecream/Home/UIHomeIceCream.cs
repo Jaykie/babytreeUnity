@@ -9,6 +9,7 @@ public class UIHomeIceCream : UIHomeBase
 
     public Button btnPlay;
     public Button btnFree;
+    public Button btnMusic;
     public Button btnLanguae;
     public Image imageLogo;
     public Text textGold;
@@ -19,6 +20,8 @@ public class UIHomeIceCream : UIHomeBase
         TextureUtil.UpdateImageTexture(imageLogo, AppRes.IMAGE_HOME_LOGO, true);
 
         UpdateLanguage();
+        UpdateBtnMusic();
+
     }
     // Use this for initialization
     void Start()
@@ -44,6 +47,13 @@ public class UIHomeIceCream : UIHomeBase
         TextureUtil.UpdateButtonTexture(btnFree, Language.main.IsChinese() ? AppRes.IMAGE_BTN_FREE_cn : AppRes.IMAGE_BTN_FREE_en, true);
         TextureUtil.UpdateButtonTexture(btnLanguae, Language.main.IsChinese() ? AppRes.IMAGE_BTN_LANGUAGE_cn : AppRes.IMAGE_BTN_LANGUAGE_en, true);
     }
+
+    public void UpdateBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        TextureUtil.UpdateButtonTexture(btnMusic, ret ? AppRes.IMAGE_BtnMusicOn : AppRes.IMAGE_BtnMusicOff, true);
+    }
+
     public override void LayOut()
     {
         float x = 0, y = 0, w = 0, h = 0;
@@ -61,7 +71,7 @@ public class UIHomeIceCream : UIHomeBase
             float scale = Common.GetBestFitScale(imageLogo.sprite.texture.width, imageLogo.sprite.texture.height, w * ratio, h * ratio);
             imageLogo.gameObject.transform.localScale = new Vector3(scale, scale, 1f);
             x = 0;
-            y = h / 2;
+            y = h / 2 - 80;
             rctranLogo.anchoredPosition = new Vector2(x, y);
         }
         // Debug.Log("Home this.frame="+this.frame.size+"canvas="+AppSceneBase.main.sizeCanvas);
@@ -115,6 +125,21 @@ public class UIHomeIceCream : UIHomeBase
 
     }
 
+    public void OnClickBtnMusic()
+    {
+        bool ret = Common.GetBool(AppString.STR_KEY_BACKGROUND_MUSIC);
+        bool value = !ret;
+        Common.SetBool(AppString.STR_KEY_BACKGROUND_MUSIC, value);
+        if (value)
+        {
+            AudioPlay.main.Play();
+        }
+        else
+        {
+            AudioPlay.main.Stop();
+        }
+        UpdateBtnMusic();
+    }
     public void OnClickBtnShop()
     {
         StarViewController p = StarViewController.main;
@@ -148,9 +173,6 @@ public class UIHomeIceCream : UIHomeBase
         Language.main.SetLanguage(lan);
         PlayerPrefs.SetInt(AppString.STR_KEY_LANGUAGE, (int)lan);
         UpdateLanguage();
-    }
-    public void OnClickBtnMusic()
-    {
     }
     public void OnClickBtnPlay()
     {

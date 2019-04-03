@@ -33,6 +33,7 @@ public class AudioPlay : MonoBehaviour
         Debug.Log("AudioPlay Start");
         if (ret)
         {
+            audioSource.clip = AudioCache.main.Load("App/Audio/Bg");
             Play();
         }
     }

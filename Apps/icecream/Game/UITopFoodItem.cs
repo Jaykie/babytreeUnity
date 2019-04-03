@@ -22,6 +22,7 @@ public class UITopFoodItem : UIView
     public RawImage imageCup;
     public RawImage imageMultiColor;
     public RawImage imageFood;
+    public RawImage imageWanBg;
     public RawImage imageLock;
     public RawImage imageHand;
     public int index;
@@ -46,6 +47,8 @@ public class UITopFoodItem : UIView
         uITouchEvent.callBackTouch = OnUITouchEvent;
         TextureUtil.UpdateRawImageTexture(imageHand, AppRes.IMAGE_HAND, true);
         imageHand.gameObject.SetActive(false);
+
+        TextureUtil.UpdateRawImageTexture(imageWanBg, IMAGE_WAN_BG, true);
     }
     public override void LayOut()
     {
@@ -71,6 +74,14 @@ public class UITopFoodItem : UIView
             h = imageFood.texture.height;
             float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
             imageFood.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+        if (imageWanBg.texture != null)
+        {
+            w = imageWanBg.texture.width;
+            h = imageWanBg.texture.height;
+            float scale = Common.GetBestFitScale(w, h, width, height * scaleRatio);
+            imageWanBg.transform.localScale = new Vector3(scale, scale, 1f);
         }
         {
             w = imageLock.texture.width;
@@ -139,7 +150,7 @@ public class UITopFoodItem : UIView
             TextureUtil.UpdateRawImageTexture(imageCup, pic, true);
 
         }
-
+        imageWanBg.gameObject.SetActive(false);
         {
             string pic = "";
             switch (type)
@@ -153,13 +164,14 @@ public class UITopFoodItem : UIView
 
                         if (!Common.BlankString(info.picMultiColor))
                         {
-                           // Debug.Log("info.picMultiColor=" + info.picMultiColor);
+                            // Debug.Log("info.picMultiColor=" + info.picMultiColor);
                             TextureUtil.UpdateRawImageTexture(imageMultiColor, info.picMultiColor, true);
                         }
 
                     }
                     break;
                 case Type.WAN:
+                    imageWanBg.gameObject.SetActive(true);
                     imageCup.gameObject.SetActive(false);
                     imageMultiColor.gameObject.SetActive(false);
                     pic = IronIceCreamStepBase.GetImageOfWan(index);
