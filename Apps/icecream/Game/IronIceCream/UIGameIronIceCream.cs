@@ -164,7 +164,7 @@ public class UIGameIronIceCream : UIGameIceCream
     }
 
     //每解锁一个道具，会从这个道具飞出一个彩色奖励星到奖杯榜按钮处
-    void RunActionMoveTrophy()
+    void RunActionMoveTrophy(UITopFoodItem item)
     {
         float x, y;
         string pic = TrophyRes.GetImageOfIcon(TrophyRes.TYPE_Star, 1);
@@ -180,6 +180,7 @@ public class UIGameIronIceCream : UIGameIceCream
           {
               imageTrophy.transform.position = posNormal;
               imageTrophy.gameObject.SetActive(false);
+              DoClickFoodItem(item);
           });
 
         AudioPlay.main.PlayFile(TrophyRes.AUDIO_TROPHY_GET_STAR);
@@ -317,9 +318,9 @@ public class UIGameIronIceCream : UIGameIceCream
             btnNext.gameObject.SetActive(true);
         }
     }
-    public void OnUITopFoodBarDidClick(UITopFoodBar bar, UITopFoodItem item)
+
+    void DoClickFoodItem(UITopFoodItem item)
     {
-        Debug.Log("OnUITopFoodBarDidClick  indexStep=" + gameIronIceCream.indexStep);
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_CHAO)
         {
             // if (GameIronIceCream.status == IronIceCreamStepBase.STATUS_STEP_NONE)
@@ -338,7 +339,7 @@ public class UIGameIronIceCream : UIGameIceCream
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_WAN)
         {
-            FoodItemInfo info = bar.GetItem(item.index);
+            FoodItemInfo info = uiTopFoodBar.GetItem(item.index);
             gameIronIceCream.UpdateFood(info);
         }
         if (gameIronIceCream.indexStep == GameIronIceCream.INDEX_STEP_ZHUANG)
@@ -346,6 +347,10 @@ public class UIGameIronIceCream : UIGameIceCream
             uiPopSelectBar.UpdateItem(item.infoFood);
         }
 
+    }
+    public void OnUITopFoodBarDidClick(UITopFoodBar bar, UITopFoodItem item)
+    {
+        Debug.Log("OnUITopFoodBarDidClick  indexStep=" + gameIronIceCream.indexStep);
         if ((item.infoFood != null) && (item.infoFood.isLock))
         {
 
@@ -365,8 +370,12 @@ public class UIGameIronIceCream : UIGameIceCream
                 }
                 //执行解锁
                 item.OnUnLockItem();
-                RunActionMoveTrophy();
+                RunActionMoveTrophy(item);
             }
+        }
+        else
+        {
+            DoClickFoodItem(item);
         }
 
         LayOut();
@@ -477,8 +486,8 @@ public class UIGameIronIceCream : UIGameIceCream
             uiPopSelectBar.gameObject.SetActive(true);
             uiTopFoodToolBar.gameObject.SetActive(true);
             UIPopSelectBar.indexFoodSort = 0;
-            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0]; 
-            uiPopSelectBar.UpdateItem( uiTopFoodBar.GetItem(0));
+            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[0];
+            uiPopSelectBar.UpdateItem(uiTopFoodBar.GetItem(0));
             // FoodItemInfo info = uiPopSelectBar.GetItem(0);
             // if (info != null)
             // { 

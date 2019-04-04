@@ -128,9 +128,12 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             {
                 w = rd.sprite.texture.width / 100f;
                 h = rd.sprite.texture.height / 100f;
-                ratio = 1f;
+                ratio = 0.8f;
                 scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio;
                 objIcecreemLiquid.transform.localScale = new Vector3(scale, scale, 1f);
+                z = objIcecreemLiquid.transform.localPosition.z;
+                y = h * scale / 2;
+                objIcecreemLiquid.transform.localPosition = new Vector3(0, y, z);
             }
         }
     }
@@ -144,28 +147,42 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         GameIronIceCream.status = STATUS_STEP_START;
         GameIronIceCream.indexFood = idx;
         objHand.SetActive(false);
-        objIcecreemLiquid.SetActive(true);
-        objIcecreemBlock.SetActive(true);
+
         //objChanzi.SetActive(false);
         TextureUtil.UpdateSpriteTexture(objIcecreemBlock, IronIceCreamStepBase.GetImageOfIcecreemLiquid(indexFood));
         TextureUtil.UpdateSpriteTexture(objIcecreemPiece, IronIceCreamStepBase.GetImageOfIcecreemPiece(indexFood));
+
+        string pic = GetLiquidImage(0);
+        //LayOut 前先初始化
+        TextureUtil.UpdateSpriteTexture(objIcecreemLiquid, pic);
+
+        LayOut();
+
+        Invoke("RunActionLiquid", 1f);
+    }
+
+    string GetLiquidImage(int idx)
+    {
+        return GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + (indexFood / 2).ToString() + "/" + (idx + 1).ToString() + ".png";
+
+    }
+
+    //倾倒冰淇淋液体动画
+    void RunActionLiquid()
+    {
+        objIcecreemBlock.SetActive(true);
+        objIcecreemLiquid.SetActive(true);
         ActionImage acImage = objIcecreemLiquid.AddComponent<ActionImage>();
-        acImage.duration = 1f;
+        acImage.duration = 3f;
         acImage.isLoop = false;
         for (int i = 0; i < 5; i++)
         {
-            string pic = GameIronIceCream.IMAGE_DIR_ROOT_CupLiquid + "/" + (indexFood / 2).ToString() + "/" + (i + 1).ToString() + ".png";
+            string pic = GetLiquidImage(i);
             acImage.AddPic(pic);
-            if (i == 0)
-            {
-                //先初始化
-                TextureUtil.UpdateSpriteTexture(objIcecreemLiquid, pic);
-            }
         }
         acImage.Run();
         acImage.callbackComplete = OnIcecreemLiquidActionFinish;
         AudioPlay.main.PlayFile(AppRes.AUDIO_GAME_liquid);
-
         LayOut();
 
         float scale0 = 0.1f;
@@ -181,9 +198,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             }
             chanziStatus = CHANZI_STATUS_START;
         });
-
     }
-
     public void OnIcecreemLiquidActionFinish(GameObject obj)
     {
         //倒冰淇凌夜结束

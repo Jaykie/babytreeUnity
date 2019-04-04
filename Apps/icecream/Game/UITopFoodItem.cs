@@ -120,7 +120,7 @@ public class UITopFoodItem : UIView
     }
     static public string GetLockKey(string id, int idx)
     {
-        return "KEY_LOCK_ITEM_" + id + "_" + idx.ToString();
+        return "KEY_LOCK_ITEM2_" + id + "_" + idx.ToString();
     }
     public void OnUnLockItem()
     {
