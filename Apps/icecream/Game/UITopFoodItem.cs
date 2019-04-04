@@ -9,14 +9,14 @@ public delegate void OnUITopFoodItemDidClickDelegate(UITopFoodItem item);
 
 
 public class UITopFoodItem : UIView
-{ 
+{
     public const string SORT_chocolate = "chocolate";
     public const string SORT_egg = "egg";
-    public const string SORT_wire= "wire";
-    public const string SORT_sugar= "sugar";
-    public const string SORT_cream= "cream";
-    public const string SORT_fruit= "fruit";
-    public const string SORT_scoop= "scoop";
+    public const string SORT_wire = "wire";
+    public const string SORT_sugar = "sugar";
+    public const string SORT_cream = "cream";
+    public const string SORT_fruit = "fruit";
+    public const string SORT_scoop = "scoop";
     public enum Type
     {
         CUP,//杯子
@@ -50,7 +50,7 @@ public class UITopFoodItem : UIView
     private void Awake()
     {
         uITouchEvent = this.gameObject.AddComponent<UITouchEvent>();
-        uITouchEvent.callBackTouch = OnUITouchEvent;
+        // uITouchEvent.callBackTouch = OnUITouchEvent;
         TextureUtil.UpdateRawImageTexture(imageHand, AppRes.IMAGE_HAND, true);
         imageHand.gameObject.SetActive(false);
 
@@ -256,6 +256,19 @@ public class UITopFoodItem : UIView
         }
     }
 
+    public void OnClickItem()
+    {
+        if (type == Type.FOOD)
+        {
+            UIPopSelectBar.indexFoodSort = index;
+            UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[index];
+        }
+        if (callBackDidClick != null)
+        {
+            callBackDidClick(this);
+        }
+    }
+
     public void OnUITouchEvent(UITouchEvent ev, PointerEventData eventData, int status)
     {
         switch (status)
@@ -272,15 +285,7 @@ public class UITopFoodItem : UIView
                 break;
             case UITouchEvent.STATUS_TOUCH_UP:
                 {
-                    if (type == Type.FOOD)
-                    {
-                        UIPopSelectBar.indexFoodSort = index;
-                        UIPopSelectBar.countFoodSort = IronIceCreamStepBase.countTopFoodSort[index];
-                    }
-                    if (callBackDidClick != null)
-                    {
-                        callBackDidClick(this);
-                    }
+
                 }
                 break;
         }

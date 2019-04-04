@@ -256,7 +256,14 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
     int GetPercent(Vector3 pos)
     {
         int percent = 0;
-        Vector3 poslocal = objBlock.transform.InverseTransformPoint(pos);
+
+        //判断铲子顶部接触块
+        Renderer rdChanzi = objChanzi.GetComponent<Renderer>();
+        float h = rdChanzi.bounds.size.y;
+        Vector3 posnew = pos;
+        posnew.y = pos.y + h / 2;
+        
+        Vector3 poslocal = objBlock.transform.InverseTransformPoint(posnew);
         RectTransform rctran = objBlock.GetComponent<RectTransform>();
         float h_block = rctran.rect.height * objBlock.transform.localScale.y;
         percent = (int)(100 * (h_block / 2 - poslocal.y) / h_block);
@@ -301,12 +308,19 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         return obj;
     }
 
+    //判断铲子是否碰到块
     void ChcekIsTouchItem()
     {
         float x, y, w, h;
 
         Vector3 pos = Common.GetInputPositionWorld(mainCam);
         Vector3 poslocal = this.transform.InverseTransformPoint(pos);
+        //判断铲子顶部接触块
+        Renderer rdChanzi = objChanzi.GetComponent<Renderer>();
+        h = rdChanzi.bounds.size.y;
+
+        poslocal.y += h / 2;
+
         GameObject objItem = GetBlock(indexBlock);
         Renderer rd = objItem.GetComponent<Renderer>();
         w = rd.bounds.size.x;
@@ -316,6 +330,8 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         Rect rc = new Rect(x, y, w, h);
         //Debug.Log("rc=" + rc + " poslocal=" + poslocal);
         ShowHand(false, false);
+
+        Debug.Log("ChcekIsTouchItem:poslocal=" + poslocal + " rc" + rc + " sz=" + rdChanzi.bounds.size);
         if (rc.Contains(poslocal))
         {
             isTouchItem = true;
@@ -357,7 +373,7 @@ public class IronIceCreamStep1 : IronIceCreamStepBase
         Vector3 poslocal = this.transform.InverseTransformPoint(pos);
         GameObject objItem = GetBlock(indexBlock);
         float x, y, w, h;
-        Debug.Log("OnUITouchEvent status=" + status);
+        //  Debug.Log("OnUITouchEvent status=" + status);
         switch (status)
         {
             case UITouchEvent.STATUS_TOUCH_DOWN:
