@@ -35,14 +35,17 @@ public class UIGameIronIceCream : UIGameIceCream
 
         if (uiCup == null)
         {
+
+            Texture2D tex = TextureCache.main.Load(AppRes.IMAGE_CUP);
+
             uiCup = (UITopFoodItem)GameObject.Instantiate(uiTopFoodItemPrefab);
             uiCup.transform.parent = this.transform;
             uiCup.transform.localScale = new Vector3(1, 1, 1);
             uiCup.transform.localPosition = new Vector3(0, 0, 0);
             //uiCup.callBackDidClick = OnUITopFoodItemDidClick;
             uiCup.gameObject.SetActive(false);
-            uiCup.width = 320;
-            uiCup.height = uiCup.width;
+            uiCup.width = tex.width;
+            uiCup.height = tex.height;
             uiCup.enableLock = false;
             RectTransform rctran = uiCup.GetComponent<RectTransform>();
             rctran.sizeDelta = new Vector2(uiCup.width, uiCup.height);
@@ -239,7 +242,11 @@ public class UIGameIronIceCream : UIGameIceCream
                 RectTransform rctran = uiCup.GetComponent<RectTransform>();
                 float oft_bottom = 160;
                 //  Debug.Log("LayOut 3 y="+y+" pt="+pt+" sizeCanvas="+sizeCanvas);
-                rctran.anchoredPosition = new Vector2(pt.x - sizeCanvas.x / 2, pt.y - sizeCanvas.y / 2 - oft_bottom / 2);
+                w = rctran.rect.width;
+                h = rctran.rect.height;
+                x = pt.x - sizeCanvas.x / 2 - w / 2;
+                y = pt.y - sizeCanvas.y / 2 - oft_bottom / 2-32;
+                rctran.anchoredPosition = new Vector2(x, y);
             }
         }
 

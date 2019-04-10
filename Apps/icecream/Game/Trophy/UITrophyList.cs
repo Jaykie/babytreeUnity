@@ -6,7 +6,7 @@ using UnityEngine.UI;
 //奖杯榜
 public class UITrophyList : UIView, ITableViewDataSource
 {
-    public Image imageBg;
+    public RawImage imageBg;
     public Image imageBoard;
     public Button btnClose;
     public GameObject objContent;
@@ -32,7 +32,7 @@ public class UITrophyList : UIView, ITableViewDataSource
         heightCell = 384;
 
         //bg
-        TextureUtil.UpdateImageTexture(imageBg, AppRes.IMAGE_GUANKA_BG, true);
+        TextureUtil.UpdateRawImageTexture(imageBg, TrophyRes.IMAGE_TROPHY_BG, true);
         TextureUtil.UpdateImageTexture(imageTitle, Language.main.IsChinese() ? AppRes.IMAGE_TROPHY_ImageTitle_cn : AppRes.IMAGE_TROPHY_ImageTitle_en, true);
         TextureUtil.UpdateImageTexture(imageTips, Language.main.IsChinese() ? AppRes.IMAGE_TROPHY_ImageTips_cn : AppRes.IMAGE_TROPHY_ImageTips_en, true);
 

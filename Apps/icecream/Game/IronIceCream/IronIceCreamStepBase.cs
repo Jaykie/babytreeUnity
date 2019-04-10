@@ -15,7 +15,7 @@ public class TopFoodItemInfo
     public Vector3 pt; //world
     public int type;
 
-    
+
 }
 public class IronIceCreamStepBase : UIView
 {
@@ -71,10 +71,15 @@ public class IronIceCreamStepBase : UIView
 
     static public string GetImageOfCupMultiColor(int idx)
     {
-        string pic = Common.GAME_RES_DIR + "/image/TopFoodBar/CupFood/cup_multi_color_" + idx + ".png";
+        string pic = AppRes.IMAGE_CUP_MULTICOLOR_PREFIX + idx + ".png";
         return pic;
     }
 
+    static public string GetImageOfIceCreamBlockMultiColor(int idx)
+    {
+        string pic = AppRes.IMAGE_ICECREAM_MULTICOLOR_PREFIX + idx + ".png";
+        return pic;
+    }
     //碗
     static public string GetImageOfWan(int idx)
     {

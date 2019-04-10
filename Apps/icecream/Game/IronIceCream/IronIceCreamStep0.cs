@@ -14,6 +14,8 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     public const int CHANZI_STATUS_END = 3;
     public GameObject objChanzi;//铲子
     public GameObject objIcecreemBlock;//冰淇凌块
+    public GameObject objMultiColor;//
+
     public GameObject objIcecreemPiece;//冰淇凌片
     public GameObject objIcecreemLiquid;//冰淇凌液体倾倒动画
 
@@ -24,7 +26,9 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     Tween tweenAlpha;
     int chanziStatus;
     float scaleBlockNormal;
+    float scaleMultiNormal;
     Tweener twHandMove;
+    FoodItemInfo infoItem;
 
     UIDragEventChanzi dragEvChanzi;
 
@@ -45,7 +49,8 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         dragEvChanzi = objChanzi.GetComponent<UIDragEventChanzi>();
         dragEvChanzi.enableDrag = false;
         dragEvChanzi.callBackALpha = OnAlphaChange;
-        // LayOut();
+        // LayOut(); 
+
     }
     void Start()
     {
@@ -110,6 +115,20 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             }
 
         }
+
+        {
+            SpriteRenderer rd = objMultiColor.GetComponent<SpriteRenderer>();
+            if (rd.sprite != null && rd.sprite.texture != null)
+            {
+                w = rd.sprite.texture.width / 100f;
+                h = rd.sprite.texture.height / 100f;
+                scale = Common.GetBestFitScale(w, h, rdpanzi.bounds.size.x, rdpanzi.bounds.size.y) * ratio_block;
+                scaleMultiNormal = scale;
+                objMultiColor.transform.localScale = new Vector3(scale, scale, 1f);
+            }
+
+        }
+
         {
             SpriteRenderer rd = objIcecreemPiece.GetComponent<SpriteRenderer>();
             if (rd.sprite != null && rd.sprite.texture != null)
@@ -147,9 +166,13 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
         GameIronIceCream.status = STATUS_STEP_START;
         GameIronIceCream.indexFood = idx;
         objHand.SetActive(false);
-
+        objMultiColor.SetActive(false);
         //objChanzi.SetActive(false);
         TextureUtil.UpdateSpriteTexture(objIcecreemBlock, IronIceCreamStepBase.GetImageOfIcecreemLiquid(indexFood));
+
+        int idx_multi = ((indexFood - 1) / 2) % UITopFoodBar.TOTAL_IMAGE_MultiColor;
+        TextureUtil.UpdateSpriteTexture(objMultiColor, IronIceCreamStepBase.GetImageOfIceCreamBlockMultiColor(idx_multi));
+
         TextureUtil.UpdateSpriteTexture(objIcecreemPiece, IronIceCreamStepBase.GetImageOfIcecreemPiece(indexFood));
 
         string pic = GetLiquidImage(0);
@@ -171,6 +194,8 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     void RunActionLiquid()
     {
         objIcecreemBlock.SetActive(true);
+        objMultiColor.SetActive(!infoItem.isSingleColor);
+
         objIcecreemLiquid.SetActive(true);
         ActionImage acImage = objIcecreemLiquid.AddComponent<ActionImage>();
         acImage.duration = 3f;
@@ -198,6 +223,14 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
             }
             chanziStatus = CHANZI_STATUS_START;
         });
+
+        scale0 = 0.1f;
+        scale1 = scaleMultiNormal;
+        objMultiColor.transform.localScale = new Vector3(scale0, scale0, 1f);
+        objMultiColor.transform.DOScale(new Vector3(scale1, scale1, 1f), acImage.duration).OnComplete(() =>
+        {
+        });
+
     }
     public void OnIcecreemLiquidActionFinish(GameObject obj)
     {
@@ -208,11 +241,15 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
     {
         GameIronIceCream.status = STATUS_STEP_NONE;
         objIcecreemBlock.SetActive(false);
+        objMultiColor.SetActive(false);
         objIcecreemPiece.SetActive(false);
         chanziStatus = CHANZI_STATUS_NONE;
 
         //恢复透明度为100%
         SpriteRenderer rd = objIcecreemBlock.GetComponent<SpriteRenderer>();
+        rd.color = Color.white;
+
+        rd = objMultiColor.GetComponent<SpriteRenderer>();
         rd.color = Color.white;
 
         if (dragEvChanzi != null)
@@ -225,6 +262,7 @@ public class IronIceCreamStep0 : IronIceCreamStepBase
 
     public override void UpdateFood(FoodItemInfo info)
     {
+        infoItem = info;
         if (twHandMove != null)
         {
             twHandMove.Pause();

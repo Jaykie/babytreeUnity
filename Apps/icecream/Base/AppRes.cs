@@ -51,6 +51,8 @@ public class AppRes
     public const string IMAGE_BTN_FREE_en = "App/UI/Home/BtnFree_en";
 
 
+    public const string IMAGE_CUP = Common.GAME_RES_DIR + "/image/TopFoodBar/Cup.png";
+
     public const string IMAGE_BtnMusicOn = "App/UI/Home/BtnMusicOn";
     public const string IMAGE_BtnMusicOff = "App/UI/Home/BtnMusicOff";
 
@@ -78,7 +80,7 @@ public class AppRes
     public const string IMAGE_TROPHY_Star_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Star/";
     public const string IMAGE_TROPHY_Medal_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Medal/";
     public const string IMAGE_TROPHY_Cup_PREFIX = IMAGE_ROOT_DIR_TROPHY + "/Cup/";
-
+    public const string IMAGE_ICECREAM_MULTICOLOR_PREFIX = Common.GAME_RES_DIR + "/image/IronIceCream/MultiColor/multi_color_";
     public const string IMAGE_CUP_MULTICOLOR_PREFIX = Common.GAME_RES_DIR + "/image/TopFoodBar/CupFood/cup_multi_color_";
     public const int IMAGE_CUP_MULTICOLOR_TOTAL = 6;
     public const string IMAGE_HOME_BG = Common.GAME_DATA_DIR + "/startup.jpg";

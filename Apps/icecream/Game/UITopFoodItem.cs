@@ -36,7 +36,7 @@ public class UITopFoodItem : UIView
     public float height;
     public bool enableLock = true;
 
-    string strImageCup = Common.GAME_RES_DIR + "/image/TopFoodBar/Cup.png";
+   
 
     public const string IMAGE_WAN_BG = Common.GAME_RES_DIR + "/image/TopFoodBar/Wan/WanBg.png";
     public string strImageWan;
@@ -152,7 +152,7 @@ public class UITopFoodItem : UIView
         infoFood = info;
         float x = 0, y = 0, w, h;
         {
-            string pic = strImageCup;
+            string pic = AppRes.IMAGE_CUP;
             TextureUtil.UpdateRawImageTexture(imageCup, pic, true);
 
         }

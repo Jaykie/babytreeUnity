@@ -8,6 +8,8 @@ public class TrophyRes
     public const string AUDIO_TROPHY_GET_STAR = "App/Audio/TrophyGetStar";
     public const string AUDIO_TROPHY_GET_MEDAL_CUP = "App/Audio/TrophyGetMedalCup";
     public const string AUDIO_TROPHY = "App/Audio/Trophy";
+    //image
+    public const string IMAGE_TROPHY_BG = "App/UI/Game/Trophy/Bg";
 
     //idx :奖励星,奖牌,奖杯 
     public const string KEY_TROPHY_NUM_STAR = "KEY_TROPHY_NUM_STAR";
@@ -56,19 +58,19 @@ public class TrophyRes
     static public string GetImageOfStar(int group)
     {
         //1 - 1 - 1
-        return AppRes.IMAGE_TROPHY_Star_PREFIX + group.ToString() + "-1-1"+".png";
+        return AppRes.IMAGE_TROPHY_Star_PREFIX + group.ToString() + "-1-1" + ".png";
     }
     //奖牌
     static public string GetImageOfMedal(int group)
     {
         //1 - 2 - 1
-        return AppRes.IMAGE_TROPHY_Medal_PREFIX + group.ToString() + "-2-1"+".png";
+        return AppRes.IMAGE_TROPHY_Medal_PREFIX + group.ToString() + "-2-1" + ".png";
     }
     //奖杯  
     static public string GetImageOfCup(int group)
     {
         //1-3-big
-        return AppRes.IMAGE_TROPHY_Cup_PREFIX + group.ToString() + "-3-small"+".png";
+        return AppRes.IMAGE_TROPHY_Cup_PREFIX + group.ToString() + "-3-small" + ".png";
     }
 
 
