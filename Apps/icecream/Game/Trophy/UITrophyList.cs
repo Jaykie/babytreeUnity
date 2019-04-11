@@ -6,6 +6,11 @@ using UnityEngine.UI;
 //奖杯榜
 public class UITrophyList : UIView, ITableViewDataSource
 {
+    public const int IMAGE_BG_BOARD_LEFT = 72;
+    public const int IMAGE_BG_BOARD_RIGHT = 72;
+    public const int IMAGE_BG_BOARD_TOP = 248;
+    public const int IMAGE_BG_BOARD_BOTTOM = 72;
+
     public RawImage imageBg;
     public Image imageBoard;
     public Button btnClose;
@@ -25,6 +30,7 @@ public class UITrophyList : UIView, ITableViewDataSource
     int oneCellNum;
     int heightCell;
     int totalItem;
+
 
     void Awake()
     {
@@ -69,6 +75,9 @@ public class UITrophyList : UIView, ITableViewDataSource
     void Start()
     {
         LayOut();
+
+        uiTrophyGet.gameObject.SetActive(false);
+
         //显示5s后消失
         Invoke("HideTips", 5.0f);
 
@@ -92,9 +101,26 @@ public class UITrophyList : UIView, ITableViewDataSource
         float x, y, w, h, ratio, scale;
         RectTransform rctranTopBar = objTopBar.GetComponent<RectTransform>();
         RectTransform rctranTips = objTips.GetComponent<RectTransform>();
+        LayOutScale ly = imageBg.GetComponent<LayOutScale>();
+        if (ly != null)
+        {
+            ly.LayOut();
+        }
 
         {
-            ratio = 1f;
+            scale = imageBg.transform.localScale.x;
+            // scale = 0.9f;
+            w = (imageBg.texture.width) * scale;
+            h = IMAGE_BG_BOARD_TOP * scale;
+            rctranTopBar.sizeDelta = new Vector2(w, h);
+            x = 0;
+            y = rctranTopBar.offsetMin.y;
+            rctranTopBar.offsetMin = new Vector2(x, y);
+            x = 0;
+            y = h;
+            rctranTopBar.offsetMax = new Vector2(x, y);
+
+            ratio = 0.5f;
             w = rctranTopBar.rect.width * ratio;
             h = rctranTopBar.rect.height * ratio;
             scale = Common.GetBestFitScale(imageTitle.sprite.texture.width, imageTitle.sprite.texture.height, w, h);
@@ -107,6 +133,18 @@ public class UITrophyList : UIView, ITableViewDataSource
             h = rctranTips.rect.height * ratio;
             scale = Common.GetBestFitScale(imageTips.sprite.texture.width, imageTips.sprite.texture.height, w, h);
             imageTips.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+        {
+            scale = imageBg.transform.localScale.x;
+            // scale = 0.9f;
+            w = (imageBg.texture.width - IMAGE_BG_BOARD_LEFT - IMAGE_BG_BOARD_RIGHT) * scale;
+            h = (imageBg.texture.height - IMAGE_BG_BOARD_TOP - IMAGE_BG_BOARD_BOTTOM) * scale;
+            RectTransform rctran = objContent.GetComponent<RectTransform>();
+            rctran.sizeDelta = new Vector2(w, h);
+            x = (IMAGE_BG_BOARD_LEFT - IMAGE_BG_BOARD_RIGHT) * scale / 2;
+            y = (IMAGE_BG_BOARD_BOTTOM - IMAGE_BG_BOARD_TOP) * scale / 2;
+            rctran.anchoredPosition = new Vector2(x, y);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class LayOutScale : LayOutBase
 {
     public Type _scaleType;
@@ -115,6 +115,24 @@ public class LayOutScale : LayOutBase
             w = rd.sprite.texture.width / 100f;
             h = rd.sprite.texture.height / 100f;
         }
+        else
+        {
+            RawImage rawimage = obj.GetComponent<RawImage>();
+            if (rawimage != null)
+            {
+                w = rawimage.texture.width;
+                h = rawimage.texture.height;
+            }
+            else
+            {
+                Image image = obj.GetComponent<Image>();
+                if (image != null)
+                {
+                    w = image.sprite.texture.width;
+                    h = image.sprite.texture.height;
+                }
+            }
+        }
         RectTransform rctran = this.transform.parent as RectTransform;
 
         var w_parent = rctran.rect.width;
@@ -124,16 +142,20 @@ public class LayOutScale : LayOutBase
 
 
 
-        float scale = 0;
-        if (isMaxFit == true)
+        float scale = 1f;
+        if (w != 0 && h != 0)
         {
-            scale = Common.GetMaxFitScale(w, h, w_parent, h_parent) * ratio;
+            if (isMaxFit == true)
+            {
+                scale = Common.GetMaxFitScale(w, h, w_parent, h_parent) * ratio;
+            }
+            else
+            {
+                scale = Common.GetBestFitScale(w, h, w_parent, h_parent) * ratio;
+            }
         }
-        else
-        {
-            scale = Common.GetBestFitScale(w, h, w_parent, h_parent) * ratio;
-        }
-        //Debug.Log("LayOutScale scale=" + scale + " w_parent=" + w_parent + " h_parent=" + h_parent);
+
+        Debug.Log("LayOutScale scale=" + scale + " w_parent=" + w_parent + " h_parent=" + h_parent);
         obj.transform.localScale = new Vector3(scale, scale, 1f);
     }
 }

@@ -37,7 +37,7 @@ public class UIWanIron : UIView
     Material matEat;
     Texture2D texBrush;
 
-    GameObject[] listJuan = new GameObject[6];
+    public GameObject[] listJuan = new GameObject[6];
     int indexLayer = 8;//Layer8
 
     int indexStep = 0;
@@ -159,6 +159,31 @@ public class UIWanIron : UIView
         {
             z = objJuan.transform.localPosition.z;
             objJuan.transform.localPosition = new Vector3(0, 0.15f, z);
+        }
+
+        {
+            for (int i = 0; i < listJuan.Length; i++)
+            {
+                GameObject obj = listJuan[i];
+                SpriteRenderer rd = obj.GetComponent<SpriteRenderer>();
+                if ((rd != null) && (rd.sprite != null))
+                {
+                    Vector2 sizeRc = GetJuanRectSize();
+                    w = sizeRc.x / 3;
+                    h = sizeRc.y / 2;
+                    ratio = 2f;// 1.8f;
+                    float w_tex = rd.sprite.texture.width / 100f;
+                    float h_tex = rd.sprite.texture.height / 100f;
+                    scale = Common.GetMaxFitScale(w_tex, h_tex, w, h) * ratio;
+                    //scale = Common.GetBestFitScale(w_tex, h_tex, w, h);
+                    obj.transform.localScale = new Vector3(scale, scale, 1f);
+                    int r = i / 3;
+                    int c = i % 3;
+                    Vector2 pt = GetJuanItemPostion(r, c);
+                    z = obj.transform.localPosition.z;
+                    obj.transform.localPosition = new Vector3(pt.x, pt.y, z);
+                }
+            }
         }
     }
 
@@ -301,6 +326,7 @@ public class UIWanIron : UIView
     //添加顶料
     public void OnAddTopFood(FoodItemInfo info)
     {
+        float x, y, w, h;
         string pic = info.pic;
         TopFoodItemInfo infoTop = new TopFoodItemInfo();
         infoTop.name = info.id + "_" + FileUtil.GetFileName(pic);
@@ -321,7 +347,7 @@ public class UIWanIron : UIView
 
         SpriteRenderer rdbg = objWanBg.GetComponent<SpriteRenderer>();
         float scale = 0f;
-        float ratio = 0.25f;
+        float ratio = 0.33f;//0.25f;
         scale = Common.GetBestFitScale(tex.width / 100f, tex.height / 100f, rdbg.bounds.size.x * ratio, rdbg.bounds.size.y * ratio);
         obj.transform.localScale = new Vector3(scale, scale, 1);
 
@@ -336,7 +362,12 @@ public class UIWanIron : UIView
         float z_juan = objJuan.transform.localPosition.z;
         if (info.isUnderJuan)
         {
-            obj.transform.localPosition = new Vector3(0, oft_y, 1f);
+            //统一放在碗的右上角 
+            w = rd.bounds.size.x;
+            h = rd.bounds.size.y;
+            x = rdbg.bounds.size.x / 2 - w;
+            y = rdbg.bounds.size.y / 2 - h/2;
+            obj.transform.localPosition = new Vector3(x, y, 1f);
         }
         else
         {
@@ -424,15 +455,36 @@ public class UIWanIron : UIView
         // BoxCollider box = obj.GetComponent<BoxCollider>();
         // box.size = new Vector3(tex.width / 100f, tex.height / 100f);
 
-        {
-            float ratio = 1.8f;
-            float w_tex = tex.width / 100f;
-            float h_tex = tex.height / 100f;
-            float scale = Common.GetMaxFitScale(w_tex, h_tex, w, h) * ratio;
-            obj.transform.localScale = new Vector3(scale, scale, 1f);
-        }
+
     }
 
+
+    // r 行 ; c 列  返回中心位置
+    public Vector2 GetJuanRectSize()
+    {
+        float w, h;
+        SpriteRenderer rd = objWanBg.GetComponent<SpriteRenderer>();
+        float ratio = 0.5f;
+        w = rd.bounds.size.x * ratio;
+        h = rd.bounds.size.y * ratio;
+        return new Vector2(w, h);
+    }
+
+    public Vector2 GetJuanItemPostion(int r, int c)
+    {
+        float x, y, w, h;
+        int row = 2;
+        int col = 3;
+        Vector2 sizeRc = GetJuanRectSize();
+        float item_w = sizeRc.x / col;
+        float item_h = sizeRc.y / row;
+
+        x = -sizeRc.x / 2 + item_w * c + item_w / 2;
+        y = -sizeRc.y / 2 + item_h * r + item_h / 2;
+
+        return new Vector2(x, y);
+
+    }
     //放置冰淇凌卷
     public void UpdateJuan()
     {
@@ -442,26 +494,25 @@ public class UIWanIron : UIView
         float ratio = 0.5f;
         w = rd.bounds.size.x * ratio;
         h = rd.bounds.size.y * ratio;
-        GridLayoutGroup gridLayout = objJuan.GetComponent<GridLayoutGroup>();
+        //  GridLayoutGroup gridLayout = objJuan.GetComponent<GridLayoutGroup>();
 
-        gridLayout.cellSize = new Vector2(w / 3, h / 2);
+        ///  gridLayout.cellSize = new Vector2(w / 3, h / 2);
 
         RectTransform rctran = objJuan.GetComponent<RectTransform>();
         rctran.sizeDelta = new Vector2(w, h);
 
         foreach (GameObject obj in listJuan)
         {
-            UpdateJuanItem(obj, gridLayout.cellSize.x, gridLayout.cellSize.y);
+            UpdateJuanItem(obj, w / 3, h / 2);
         }
+        LayOut();
     }
     public void ShowJuan(bool isShow)
     {
-        ShowJuanItem(isShow, 0);
-        ShowJuanItem(isShow, 1);
-        ShowJuanItem(isShow, 2);
-        ShowJuanItem(isShow, 3);
-        ShowJuanItem(isShow, 4);
-        ShowJuanItem(isShow, 5);
+        for (int i = 0; i < listJuan.Length; i++)
+        {
+            ShowJuanItem(isShow, i);
+        }
 
     }
     public void ShowJuanItem(bool isShow, int idx)

@@ -23,40 +23,48 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
 
     void Awake()
     {
-       stepName = STEP_NAME_ZHUANG;
+        stepName = STEP_NAME_ZHUANG;
         strImageWan = IronIceCreamStepBase.GetImageOfWan(0);
         TextureUtil.UpdateSpriteTexture(objHand, AppRes.IMAGE_HAND);
 
         ResetStep();
+
+        int idx = 0;
         {
             UITouchEvent ev = objBlockItem0.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem0.AddComponent<BoxCollider>();
         }
 
         {
             UITouchEvent ev = objBlockItem1.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem1.AddComponent<BoxCollider>();
         }
         {
             UITouchEvent ev = objBlockItem2.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem2.AddComponent<BoxCollider>();
         }
         {
             UITouchEvent ev = objBlockItem3.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem3.AddComponent<BoxCollider>();
         }
         {
             UITouchEvent ev = objBlockItem4.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem4.AddComponent<BoxCollider>();
         }
         {
             UITouchEvent ev = objBlockItem5.AddComponent<UITouchEvent>();
             ev.callBackTouch = OnUITouchEvent;
+            ev.index = idx++;
             BoxCollider box = objBlockItem5.AddComponent<BoxCollider>();
         }
 
@@ -194,31 +202,8 @@ public class IronIceCreamStep2 : IronIceCreamStepBase
                         objHand.SetActive(false);
                         ShowHandFlickerAnimation(false);
                         ev.gameObject.SetActive(false);
-                        if (ev.gameObject == objBlockItem0)
-                        {
-                            uiWanIron.ShowJuanItem(true, 0);
-                        }
-                        if (ev.gameObject == objBlockItem1)
-                        {
-                            uiWanIron.ShowJuanItem(true, 1);
-                        }
-                        if (ev.gameObject == objBlockItem2)
-                        {
-                            uiWanIron.ShowJuanItem(true, 2);
-                        }
-                        if (ev.gameObject == objBlockItem3)
-                        {
-                            uiWanIron.ShowJuanItem(true, 3);
-                        }
-                        if (ev.gameObject == objBlockItem4)
-                        {
-                            uiWanIron.ShowJuanItem(true, 4);
-                        }
-                        if (ev.gameObject == objBlockItem5)
-                        {
-                            uiWanIron.ShowJuanItem(true, 5);
-
-                        }
+                        int idx = ev.index;
+                        uiWanIron.ShowJuanItem(true,idx);
                         CheckFinish();
                     }
                 }

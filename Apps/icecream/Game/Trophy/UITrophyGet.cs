@@ -31,10 +31,12 @@ public class UITrophyGet : UIView
         }
         for (int i = 0; i < 2; i++)
         {
-            CreateImageTrophyItem();
+            // CreateImageTrophyItem();
         }
         string pic = GetPicOfAnimate(0);
         TextureUtil.UpdateRawImageTexture(imageAnimate, pic, true);
+
+        imageAnimate.gameObject.SetActive(false);
     }
 
     void Start()
@@ -44,9 +46,9 @@ public class UITrophyGet : UIView
         numNewAddCup = PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_CUP, 0) - PlayerPrefs.GetInt(TrophyRes.KEY_TROPHY_NUM_CUP_DISPLAY, 0);
 
         LayOut();
-        RunAction();
+        // RunAction();
         LayOut();
-        Invoke("RunActionMoveTrophy", 0.5f);
+        //  Invoke("RunActionMoveTrophy", 0.5f);
     }
 
     void CreateImageTrophyItem()
@@ -66,6 +68,7 @@ public class UITrophyGet : UIView
     }
     void RunAction()
     {
+        imageAnimate.gameObject.SetActive(true);
         acImage = imageAnimate.gameObject.AddComponent<ActionImage>();
         acImage.duration = 10f;
         acImage.isLoop = true;
